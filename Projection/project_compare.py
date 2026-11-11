@@ -2,10 +2,11 @@
 
     ..\\.venv\\Scripts\\python project_compare.py
 
-Reads  ../Embedding/results/{chunks_embedded.parquet, embeddings.npy, embeddings_source_centred.npy}
-Writes output/projection_compare.html   interactive, self-contained (hover, linked highlight, filters)
-       output/projection_compare.png    static version
-       output/coords.parquet            chunk_id + 2D coordinates for both variants
+Reads  Embedding/results_<variant>/{chunks_embedded.parquet, embeddings.npy, embeddings_source_centred.npy}
+       (run Embedding/analyze.py --variant <variant> first)
+Writes Projection/output/projection_compare_<variant>.html   interactive, self-contained
+       Projection/output/projection_compare_<variant>.png    static version
+       Projection/output/coords_<variant>.parquet            chunk_id + 2D coordinates, raw and centred
 """
 import json
 import sys
@@ -16,7 +17,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 HERE = Path(__file__).resolve().parent
-EMB = HERE.parent / "Embedding" / "results"
+EMB_ROOT = HERE.parent / "Embedding"
 OUT = HERE / "output"
 SOURCES = ["article", "book", "video"]
 COLORS = {"article": "#2a78d6", "book": "#eb6834", "video": "#1baf7a"}  # validated slots 1–3
@@ -43,6 +44,13 @@ def same_source_rate(X, src, k=10):
 
 
 def main():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--variant", default="withsource", help="embedding variant (see Embedding/variants.py)")
+    variant = ap.parse_args().variant
+    EMB = EMB_ROOT / f"results_{variant}"
+    if not (EMB / "embeddings_source_centred.npy").exists():
+        sys.exit(f"Run first: python Embedding/analyze.py --variant {variant}")
     sys.stdout.reconfigure(encoding="utf-8")
     meta = pq.read_table(EMB / "chunks_embedded.parquet",
                          columns=["chunk_id", "doc_id", "source", "kind", "title", "year", "book",
@@ -68,9 +76,9 @@ def main():
     OUT.mkdir(exist_ok=True)
     pq.write_table(pa.table({"chunk_id": ids,
                              "x_raw": p_raw[:, 0], "y_raw": p_raw[:, 1],
-                             "x_centred": p_cen[:, 0], "y_centred": p_cen[:, 1]}), OUT / "coords.parquet")
-    png(p_raw, p_cen, src, OUT / "projection_compare.png")
-    html(meta, p_raw, p_cen, rates, OUT / "projection_compare.html")
+                             "x_centred": p_cen[:, 0], "y_centred": p_cen[:, 1]}), OUT / f"coords_{variant}.parquet")
+    png(p_raw, p_cen, src, OUT / f"projection_compare_{variant}.png")
+    html(meta, p_raw, p_cen, rates, OUT / f"projection_compare_{variant}.html", variant)
     print(f"Wrote {OUT}")
 
 
@@ -94,7 +102,7 @@ def png(a, b, src, path):
     plt.close(fig)
 
 
-def html(meta, a, b, rates, path):
+def html(meta, a, b, rates, path, variant):
     def norm(P):
         lo, hi = P.min(0), P.max(0)
         return (P - lo) / (hi - lo).max()
@@ -113,6 +121,7 @@ def html(meta, a, b, rates, path):
     worst = max(SOURCES, key=lambda s: er[s])
     label = {"article": "articles", "book": "book sections", "video": "video descriptions"}
     page = page.replace("__N__", f"{len(meta):,}")
+    page = page.replace("__VARIANT__", variant)
     page = page.replace("__TABLE_READING__", (
         f"<strong>Reading it:</strong> a book chunk's 10 nearest neighbours are {p(r['book'])} books in the raw "
         f"vectors, against {p(rnd['book'])} expected by chance. After centring it is {p(c['book'])}. The 2D maps "
@@ -165,7 +174,7 @@ p.cap{color:var(--ink2);font-size:13px;margin:8px 2px 0;max-width:900px}
 code{background:var(--line);padding:1px 5px;border-radius:4px;font-size:12.5px}
 @media (max-width:820px){.grid{grid-template-columns:1fr}}
 </style></head><body><div class="wrap">
-<h1>Raw vs. source-centred embeddings</h1>
+<h1>Raw vs. source-centred embeddings <span style="font-weight:400;color:var(--ink2)">· variant <code>__VARIANT__</code></span></h1>
 <p class="sub">Does the embedding place Urza's texts by <em>topic</em>, or by <em>kind of text</em> (book prose, blog
 post, video description)? For a coverage map we need the first. This page compares the embeddings as they come
 from the model with a corrected version.</p>

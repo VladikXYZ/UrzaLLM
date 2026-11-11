@@ -2,10 +2,11 @@
 
 # Python
 .venv/
+.venv-*/
 __pycache__/
 
-# Embedding package build and local test runs
-dist/
-Embedding/output/
-Embedding/.venv/
-Embedding/DRYRUN_*.zip
+# Embedding: resumable partial batches, dry runs, and files analyze.py rebuilds
+Embedding/.partial/
+Embedding/.dryrun_*/
+Embedding/results_*/chunks_embedded.parquet
+Embedding/results_*/embeddings_source_centred.npy

@@ -1,4 +1,4 @@
-# Embedding report
+# Embedding report: variant `withsource`
 
 Model **BAAI/bge-m3** on **cuda** (Linux-7.3.3-1-cachyos-x86_64-with-glibc2.44), 121.3 s, 2,528 chunks × 1024 dimensions. Created 2026-11-11T20:33:47.
 
@@ -7,12 +7,12 @@ Model **BAAI/bge-m3** on **cuda** (Linux-7.3.3-1-cachyos-x86_64-with-glibc2.44),
 | Check | Result | Detail |
 |---|---|---|
 | not a dry run | OK |  |
-| input checksum matches data/chunks.parquet | OK |  |
-| embeddings checksum | OK |  |
-| shape | OK | (2528, 1024) |
+| variant matches | OK | (withsource) |
+| embedded text = current chunks.parquet | OK |  |
 | chunk ids and order match | OK |  |
+| shape | OK | (2528, 1024) |
 | finite | OK |  |
-| normalised | OK | (norm 1.0000–1.0000) |
+| normalised | OK | (norm 1.0000-1.0000) |
 | no truncated chunks | OK | (longest 834 tokens) |
 
 ## Similarity distribution

@@ -1,77 +1,68 @@
-"""Check a returned results zip and join the vectors with the chunk metadata.
+"""Check a variant's embeddings and write the analysis files and report.
 
-    ..\\.venv\\Scripts\\python import_results.py ..\\results_20261111_2033.zip
+    python Embedding/analyze.py --variant nosource      # from the repo root
 
-Checks: input checksum matches data/chunks.parquet, embeddings checksum, shape,
-chunk ids and order, finite and normalised vectors. Then writes
-    results/embeddings.npy, results/chunk_ids.txt, results/manifest.json
-    results/chunks_embedded.parquet   all chunk metadata + an `embedding` column
-    results/embedding_report.md       checks and quality sanity tests
+Reads   Embedding/results_<variant>/{embeddings.npy, chunk_ids.txt, manifest.json}
+        Preprocessing/output/chunks.parquet
+Checks  the embedded text is exactly the current chunks (text fingerprint), ids and order,
+        shape, finite and normalised vectors, no truncation.
+Writes  Embedding/results_<variant>/chunks_embedded.parquet      chunk metadata + `embedding` column
+        Embedding/results_<variant>/embeddings_source_centred.npy each source's mean subtracted
+        Embedding/results_<variant>/embedding_report.md          checks and quality sanity tests
 """
-import hashlib
+import argparse
 import json
 import sys
-import zipfile
 from collections import Counter
-from pathlib import Path
 
 import numpy as np
 import pyarrow as pa
 import pyarrow.parquet as pq
 
-HERE = Path(__file__).resolve().parent
-DATA = HERE / "data" / "chunks.parquet"
-FULL = HERE.parent / "Preprocessing" / "output" / "chunks.parquet"
-RES = HERE / "results"
+from variants import CHUNKS, HERE, VARIANTS, fingerprint, load_texts, results_dir
 
 
-def sha(b: bytes) -> str:
-    return hashlib.sha256(b).hexdigest()
-
-
-def main(zpath: Path):
+def main():
+    global RES
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--variant", choices=VARIANTS, required=True)
+    ap.add_argument("--dry-run", action="store_true", help="analyse the dry-run output instead")
+    args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
-    z = zipfile.ZipFile(zpath)
-    man = json.loads(z.read("manifest.json"))
-    emb_bytes = z.read("embeddings.npy")
-    ids = z.read("chunk_ids.txt").decode("utf-8").split()
+    RES = results_dir(args.variant) if not args.dry_run else HERE / f".dryrun_{args.variant}"
+    if not (RES / "manifest.json").exists():
+        sys.exit(f"{RES} has no results. Run: python Embedding/embed.py --variant {args.variant}")
+    man = json.loads((RES / "manifest.json").read_text(encoding="utf-8"))
+    emb = np.load(RES / "embeddings.npy")
+    ids = (RES / "chunk_ids.txt").read_text(encoding="utf-8").split()
+    cur_ids, _, texts = load_texts(args.variant)
     checks = []
 
     def check(name, ok, detail=""):
         checks.append((name, ok, detail))
         print(f"  [{'OK' if ok else 'FAIL'}] {name} {detail}")
 
-    print(f"Checking {zpath.name}")
-    check("not a dry run", not man.get("dry_run"))
-    check("input checksum matches data/chunks.parquet", man["input_sha256"] == sha(DATA.read_bytes()))
-    check("embeddings checksum", man["embeddings_sha256"] == sha(emb_bytes))
-    RES.mkdir(exist_ok=True)
-    (RES / "embeddings.npy").write_bytes(emb_bytes)
-    emb = np.load(RES / "embeddings.npy")
-    data_ids = pq.read_table(DATA, columns=["chunk_id"]).column("chunk_id").to_pylist()
-    check("shape", emb.shape == (len(data_ids), man["dim"]), str(emb.shape))
-    check("chunk ids and order match", ids == data_ids)
+    print(f"Checking {RES.relative_to(HERE.parent)}")
+    if not args.dry_run:
+        check("not a dry run", not man.get("dry_run"))
+    check("variant matches", man.get("variant") == args.variant, f"({man.get('variant')})")
+    check("embedded text = current chunks.parquet", man.get("text_fingerprint") == fingerprint(cur_ids, texts),
+          "" if man.get("text_fingerprint") == fingerprint(cur_ids, texts)
+          else "(preprocessing changed since embedding: re-embed)")
+    check("chunk ids and order match", ids == cur_ids)
+    check("shape", emb.shape == (len(cur_ids), man["dim"]), str(emb.shape))
     check("finite", bool(np.isfinite(emb).all()))
     norms = np.linalg.norm(emb, axis=1)
-    check("normalised", bool(np.allclose(norms, 1, atol=1e-3)), f"(norm {norms.min():.4f}–{norms.max():.4f})")
+    check("normalised", bool(np.allclose(norms, 1, atol=1e-3)), f"(norm {norms.min():.4f}-{norms.max():.4f})")
     check("no truncated chunks", man["truncated_chunks"] == 0, f"(longest {man['token_length_max']} tokens)")
     if not all(ok for _, ok, _ in checks):
-        sys.exit("Some checks failed; results not imported.")
+        sys.exit("Some checks failed.")
 
-    (RES / "chunk_ids.txt").write_text("\n".join(ids) + "\n", encoding="utf-8")
-    (RES / "manifest.json").write_text(json.dumps(man, indent=2), encoding="utf-8")
-
-    # Join with the full chunk metadata from preprocessing.
-    full = pq.read_table(FULL).to_pylist()
-    by_id = {r["chunk_id"]: r for r in full}
-    missing = [i for i in ids if i not in by_id]
-    if missing:
-        sys.exit(f"{len(missing)} chunk ids are not in {FULL} (preprocessing rerun since packaging?)")
-    rows = [dict(by_id[i], embedding=emb[k].tolist()) for k, i in enumerate(ids)]
+    full = pq.read_table(CHUNKS).to_pylist()
+    rows = [dict(r, embedding=emb[k].tolist()) for k, r in enumerate(full)]
     pq.write_table(pa.Table.from_pylist(rows), RES / "chunks_embedded.parquet", compression="zstd")
-
     report(emb, rows, man, checks)
-    print(f"Imported to {RES}")
+    print(f"Wrote analysis to {RES}")
 
 
 def report(emb, rows, man, checks):
@@ -81,7 +72,7 @@ def report(emb, rows, man, checks):
     src = np.array([r["source"] for r in rows])
     doc = np.array([r["doc_id"] for r in rows])
     title = [r["title"] for r in rows]
-    L = ["# Embedding report", "",
+    L = [f"# Embedding report: variant `{man.get('variant')}`", "",
          f"Model **{man['model']}** on **{man['device']}** ({man['platform']}), {man['seconds']} s, "
          f"{man['count']:,} chunks × {man['dim']} dimensions. Created {man['created']}.", "",
          "## Checks", "", "| Check | Result | Detail |", "|---|---|---|"]
@@ -159,4 +150,4 @@ def report(emb, rows, man, checks):
 
 
 if __name__ == "__main__":
-    main(Path(sys.argv[1]))
+    main()

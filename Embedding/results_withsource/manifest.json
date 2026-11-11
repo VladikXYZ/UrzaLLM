@@ -1,4 +1,7 @@
 {
+  "variant": "withsource",
+  "text_column": "embed_text",
+  "text_fingerprint": "c1d222b643655af981e4b72bd8280d51066cb5fc9baa83114f8d84314b9090be",
   "model": "BAAI/bge-m3",
   "model_revision": null,
   "dim": 1024,

@@ -1,6 +1,6 @@
 # UrzaLLM – preprocessing report
 
-Generated 2026-11-11 21:09 from `C:\Users\mardo\Desktop\CUM\UrzaLLM\jsons` in 1.24 s. Every raw record appears in `documents.jsonl` with a `status`; nothing is silently dropped.
+Generated 2026-11-11 21:18 from `C:\Users\mardo\Desktop\CUM\UrzaLLM\jsons` in 1.11 s. Every raw record appears in `documents.jsonl` with a `status`; nothing is silently dropped.
 
 ## 1. Summary
 

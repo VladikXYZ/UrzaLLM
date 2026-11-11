@@ -65,9 +65,15 @@ def split_text(text: str, p: dict) -> list[str]:
     return ["\n\n".join(c) for c in chunks]
 
 
-def header(doc: dict) -> str:
+def header(doc: dict, with_source: bool = True) -> str:
+    """Context line put in front of each chunk before embedding.
+
+    with_source=True:  "Kniha Anarchokapitalismus › 10. Zdravotnictví", "Článek „…“ (2017)", "Video „…“ (…)"
+    with_source=False: the same without the word naming the source
+                       ("Anarchokapitalismus › 10. Zdravotnictví", "„…“ (2017)").
+    """
     if doc["source"] == "book":
-        parts = [f"Kniha {doc['book']}", doc.get("chapter")]
+        parts = [f"Kniha {doc['book']}" if with_source else doc["book"], doc.get("chapter")]
         if doc.get("subchapter"):
             parts.append(doc["subchapter"])
         return " › ".join(p for p in parts if p)
@@ -75,7 +81,8 @@ def header(doc: dict) -> str:
     extra = [str(doc["year"])] if doc.get("year") else []
     if doc.get("guests"):
         extra.append("hosté: " + ", ".join(doc["guests"]))
-    return f"{label} „{doc['title']}“" + (f" ({'; '.join(extra)})" if extra else "")
+    line = f"„{doc['title']}“" + (f" ({'; '.join(extra)})" if extra else "")
+    return f"{label} {line}" if with_source else line
 
 
 def chunk_documents(docs: list[dict]) -> list[dict]:
@@ -85,6 +92,7 @@ def chunk_documents(docs: list[dict]) -> list[dict]:
             continue
         texts = split_text(d["text"], C.CHUNKING[d["source"]])
         h = header(d)
+        h_ns = header(d, with_source=False)
         for i, t in enumerate(texts):
             chunks.append({
                 "chunk_id": f"{d['doc_id']}#{i:02d}",
@@ -109,5 +117,8 @@ def chunk_documents(docs: list[dict]) -> list[dict]:
                 "words": words(t),
                 "text": t,
                 "embed_text": f"{h}\n\n{t}",
+                # Same text without the word naming the source (Kniha/Článek/Oznámení/Video),
+                # to test how much that word makes chunks cluster by source.
+                "embed_text_nosource": f"{h_ns}\n\n{t}",
             })
     return chunks
