@@ -1,1 +1,11 @@
 .idea
+
+# Python
+.venv/
+__pycache__/
+
+# Embedding package build and local test runs
+dist/
+Embedding/output/
+Embedding/.venv/
+Embedding/DRYRUN_*.zip

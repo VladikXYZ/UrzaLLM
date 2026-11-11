@@ -1,0 +1,4 @@
+# PyTorch is installed separately by run.bat / run.sh (see README for GPU builds).
+sentence-transformers>=3.0
+pyarrow>=14
+numpy>=1.24

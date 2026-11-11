@@ -1,0 +1,502 @@
+{
+  "run_seconds": 1.24,
+  "raw_records": {
+    "article": 1953,
+    "video": 978,
+    "book": 142
+  },
+  "documents": {
+    "article": {
+      "raw": 1953,
+      "included": 945,
+      "excluded": 1008,
+      "words_raw": 163307,
+      "words_included": 163066
+    },
+    "book": {
+      "raw": 142,
+      "included": 113,
+      "excluded": 29,
+      "words_raw": 106242,
+      "words_included": 98909
+    },
+    "video": {
+      "raw": 978,
+      "included": 978,
+      "excluded": 0,
+      "words_raw": 137637,
+      "words_included": 93919
+    }
+  },
+  "exclusions": [
+    {
+      "source": "article",
+      "reason": "duplicate_text",
+      "count": 3
+    },
+    {
+      "source": "article",
+      "reason": "no_text_no_title",
+      "count": 4
+    },
+    {
+      "source": "article",
+      "reason": "video_only",
+      "count": 1001
+    },
+    {
+      "source": "book",
+      "reason": "back_matter",
+      "count": 11
+    },
+    {
+      "source": "book",
+      "reason": "front_matter",
+      "count": 8
+    },
+    {
+      "source": "book",
+      "reason": "heading_only",
+      "count": 10
+    }
+  ],
+  "kinds": [
+    {
+      "source": "article",
+      "kind": "announcement",
+      "count": 189
+    },
+    {
+      "source": "article",
+      "kind": "article",
+      "count": 756
+    },
+    {
+      "source": "book",
+      "kind": "book_faq",
+      "count": 46
+    },
+    {
+      "source": "book",
+      "kind": "book_section",
+      "count": 64
+    },
+    {
+      "source": "book",
+      "kind": "book_story",
+      "count": 3
+    },
+    {
+      "source": "video",
+      "kind": "video",
+      "count": 978
+    }
+  ],
+  "flags": [
+    {
+      "source": "article",
+      "flag": "accompanies_video",
+      "count": 31
+    },
+    {
+      "source": "article",
+      "flag": "contains_video",
+      "count": 183
+    },
+    {
+      "source": "book",
+      "flag": "merged_sections",
+      "count": 4
+    },
+    {
+      "source": "video",
+      "flag": "has_chapters",
+      "count": 15
+    },
+    {
+      "source": "video",
+      "flag": "has_guests",
+      "count": 542
+    },
+    {
+      "source": "video",
+      "flag": "short",
+      "count": 48
+    },
+    {
+      "source": "video",
+      "flag": "thin_description",
+      "count": 12
+    },
+    {
+      "source": "video",
+      "flag": "was_live",
+      "count": 74
+    }
+  ],
+  "chunks": {
+    "total": 2528,
+    "by_source": {
+      "article": 956,
+      "book": 592,
+      "video": 980
+    },
+    "by_kind": {
+      "article": 767,
+      "announcement": 189,
+      "book_story": 27,
+      "book_section": 494,
+      "book_faq": 71,
+      "video": 980
+    },
+    "words_total": 358555,
+    "words_quantiles": {
+      "article": {
+        "p0": 11,
+        "p5": 30,
+        "p25": 102,
+        "p50": 146,
+        "p75": 259,
+        "p95": 368,
+        "p100": 458
+      },
+      "book": {
+        "p0": 53,
+        "p5": 98,
+        "p25": 143,
+        "p50": 169,
+        "p75": 206,
+        "p95": 240,
+        "p100": 254
+      },
+      "video": {
+        "p0": 2,
+        "p5": 47,
+        "p25": 67,
+        "p50": 94,
+        "p75": 110,
+        "p95": 171,
+        "p100": 405
+      }
+    },
+    "docs_split": {
+      "article": 11,
+      "book": 90,
+      "video": 1
+    }
+  },
+  "per_year": {
+    "2015": {
+      "article": {
+        "docs": 76,
+        "words": 27205
+      },
+      "video": {
+        "docs": 0,
+        "words": 0
+      }
+    },
+    "2016": {
+      "article": {
+        "docs": 200,
+        "words": 43510
+      },
+      "video": {
+        "docs": 5,
+        "words": 275
+      }
+    },
+    "2017": {
+      "article": {
+        "docs": 122,
+        "words": 21930
+      },
+      "video": {
+        "docs": 50,
+        "words": 3682
+      }
+    },
+    "2018": {
+      "article": {
+        "docs": 70,
+        "words": 13040
+      },
+      "video": {
+        "docs": 77,
+        "words": 5221
+      }
+    },
+    "2019": {
+      "article": {
+        "docs": 123,
+        "words": 20827
+      },
+      "video": {
+        "docs": 74,
+        "words": 5419
+      }
+    },
+    "2020": {
+      "article": {
+        "docs": 106,
+        "words": 14353
+      },
+      "video": {
+        "docs": 93,
+        "words": 10361
+      }
+    },
+    "2021": {
+      "article": {
+        "docs": 38,
+        "words": 4219
+      },
+      "video": {
+        "docs": 91,
+        "words": 10661
+      }
+    },
+    "2022": {
+      "article": {
+        "docs": 37,
+        "words": 3596
+      },
+      "video": {
+        "docs": 107,
+        "words": 11115
+      }
+    },
+    "2023": {
+      "article": {
+        "docs": 57,
+        "words": 4293
+      },
+      "video": {
+        "docs": 118,
+        "words": 10949
+      }
+    },
+    "2024": {
+      "article": {
+        "docs": 28,
+        "words": 1963
+      },
+      "video": {
+        "docs": 137,
+        "words": 13352
+      }
+    },
+    "2025": {
+      "article": {
+        "docs": 47,
+        "words": 4505
+      },
+      "video": {
+        "docs": 119,
+        "words": 12434
+      }
+    },
+    "2026": {
+      "article": {
+        "docs": 41,
+        "words": 3625
+      },
+      "video": {
+        "docs": 107,
+        "words": 10450
+      }
+    }
+  },
+  "video_hours_per_year": {
+    "2016": 1.4,
+    "2017": 45.2,
+    "2018": 107.4,
+    "2019": 109.4,
+    "2020": 149.9,
+    "2021": 128.7,
+    "2022": 174.4,
+    "2023": 186.2,
+    "2024": 213.8,
+    "2025": 211.2,
+    "2026": 213.5
+  },
+  "sources": {
+    "articles": {
+      "embed_lines_removed": 16,
+      "line_joins": 2340,
+      "articles_with_line_joins": 579,
+      "video_links_youtube_other": 12,
+      "video_links_youtube_on_channel": 1168,
+      "video_links_other_video": 4,
+      "has_video_field": true
+    },
+    "videos": {
+      "donation_block_removed": 590,
+      "bio_lines_removed": 1462,
+      "description_words_raw": 130289,
+      "description_words_clean": 79323,
+      "donation_lines_removed": 207,
+      "raw_distinct_tags": 3091,
+      "kept_distinct_tags": 3044,
+      "generic_tags_dropped": [
+        "anarchokapitalismus",
+        "kanál svobodného přístavu",
+        "studio svobodného přístavu",
+        "svoboda",
+        "svobodný přístav",
+        "urza"
+      ],
+      "synonym_merges": {
+        "NAP → princip neagrese": 36,
+        "svoboda projevu → svoboda slova": 29,
+        "rakouská ekonomie → rakouská ekonomická škola": 22,
+        "kryptopeníze → kryptoměny": 11,
+        "COVID-19 → koronavirus": 8,
+        "covid → koronavirus": 3,
+        "COVID → koronavirus": 3,
+        "kryptoměna → kryptoměny": 1
+      }
+    },
+    "books": {
+      "ankap": {
+        "sections_parsed": 78,
+        "merged_sections": 0,
+        "excluded": 21,
+        "included": 57
+      },
+      "anag": {
+        "sections_parsed": 69,
+        "merged_sections": 5,
+        "excluded": 8,
+        "included": 56
+      }
+    }
+  },
+  "config": {
+    "ANNOUNCEMENT_CUES": [
+      "\\bdnes\\b",
+      "\\bzítra\\b",
+      "\\bpozítří\\b",
+      "\\bpřijďte\\b",
+      "\\bzváni\\b",
+      "\\bbudu (?:besedovat|mluvit|přednášet|povídat)",
+      "\\bvystoupí",
+      "\\bvystoupíme",
+      "\\bzrušen",
+      "\\brušíme\\b",
+      "\\bruší\\b",
+      "\\bse koná\\b",
+      "\\bpozvání\\b",
+      "\\blivestream",
+      "\\bnakupujte\\b",
+      "\\bupgrad",
+      "\\bkampaň",
+      "\\bpřednášk"
+    ],
+    "ANNOUNCEMENT_MAX_WORDS": 100,
+    "ARTICLES_FILE": "urza_articles.json",
+    "ARTICLE_MIN_WORDS": 5,
+    "BOOK_KINDS": [
+      [
+        "AMEN",
+        "book_faq"
+      ],
+      [
+        "Tři příběhy",
+        "book_story"
+      ]
+    ],
+    "BOOK_MERGE_MAX_WORDS": 8,
+    "CHUNKING": {
+      "book": {
+        "target": 150,
+        "max": 250,
+        "min_tail": 50,
+        "overlap": 30
+      },
+      "article": {
+        "target": 300,
+        "max": 450,
+        "min_tail": 80,
+        "overlap": 40
+      },
+      "video": {
+        "target": 300,
+        "max": 450,
+        "min_tail": 80,
+        "overlap": 40
+      }
+    },
+    "DONATION_LINE_PATTERNS": [
+      "^\\s*(?:BTC|LTC|XMR|ETH|LN)\\s*:",
+      "číslo účtu",
+      "variabilní symbol",
+      "pravidelná podpora",
+      "opristavu\\.urza\\.cz",
+      "chcete-li podpořit",
+      "pokud se vám .* líbil",
+      "pošlete dobrovolný příspěvek",
+      "dobrovolný příspěvek",
+      "podpořit .* (?:v krypt|korun)"
+    ],
+    "GENERIC_TAGS": [
+      "svoboda",
+      "anarchokapitalismus",
+      "kanál svobodného přístavu",
+      "studio svobodného přístavu",
+      "svobodný přístav",
+      "urza"
+    ],
+    "GENERIC_TAG_SHARE": 0.5,
+    "LINK_TIERS": [
+      [
+        2,
+        0.65
+      ],
+      [
+        30,
+        0.85
+      ]
+    ],
+    "SERIES_MIN_COUNT": 2,
+    "SHORT_VIDEO_SECONDS": 180,
+    "TAG_SYNONYMS": {
+      "nap": "princip neagrese",
+      "kryptopeníze": "kryptoměny",
+      "kryptoměna": "kryptoměny",
+      "rakouská ekonomie": "rakouská ekonomická škola",
+      "svoboda projevu": "svoboda slova",
+      "vzdělání": "vzdělávání",
+      "anarchoagorism": "anarchoagorismus",
+      "covid": "koronavirus",
+      "covid-19": "koronavirus"
+    },
+    "THIN_DESCRIPTION_WORDS": 15,
+    "TITLE_NOISE": [
+      "^ve? \\d{1,4}(?: hodin)? (?:živě|začíná)\\s*",
+      "^ankap přednáška\\s*[–-]?\\s*",
+      "^o\\s+"
+    ],
+    "TITLE_PREFIXES": [
+      "kanál svobodného přístavu",
+      "studio svobodného přístavu",
+      "livestream svobodného přístavu",
+      "svobodný přístav",
+      "anarchokapitalismus"
+    ],
+    "VIDEOS_FILE": "channel_metadata.json",
+    "VIDEO_EMBED_LINES": [
+      "Váš prohlížeč nepodporuje přehrávání videa.",
+      "Nejde-li video přehrát, prosím, zkuste to tady.",
+      "Video v nižší kvalitě v menším souboru můžete stáhnout tady.",
+      "Nefunguje-li předchozí link, prosím, zkuste to tady."
+    ]
+  },
+  "video_coverage": {
+    "videos": 978,
+    "by_video_link": 961,
+    "by_title_only": 6,
+    "covered": 967,
+    "uncovered": 11
+  }
+}

@@ -1,0 +1,20 @@
+# Local environment for UrzaLLM (repo root .venv):
+#   python -m venv .venv
+#   .venv\Scripts\python -m pip install -r requirements.txt      (Windows)
+#   .venv/bin/python -m pip install -r requirements.txt          (Mac/Linux)
+#
+# The embedding itself runs elsewhere (GPU) from the package built by
+# Embedding/build_package.py, which has its own requirements.
+
+# scrapers (stoky_scraper.py, yt_scraper.py, epub_parser.py)
+requests
+beautifulsoup4
+yt-dlp
+
+# Preprocessing/
+pyarrow
+matplotlib
+
+# Embedding/import_results.py, Projection/
+numpy
+umap-learn
