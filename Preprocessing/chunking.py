@@ -120,5 +120,8 @@ def chunk_documents(docs: list[dict]) -> list[dict]:
                 # Same text without the word naming the source (Kniha/Článek/Oznámení/Video),
                 # to test how much that word makes chunks cluster by source.
                 "embed_text_nosource": f"{h_ns}\n\n{t}",
+                # Only the chunk's own text, no context line: no shared chapter path or title
+                # that could group chunks for the model.
+                "embed_text_textonly": t,
             })
     return chunks

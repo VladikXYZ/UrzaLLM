@@ -10,6 +10,7 @@ pipeline steps; copy them here again after a rerun.
 | [embedding_report_nosource.md](embedding_report_nosource.md) | The same for the embeddings without the source word in the context line | `Embedding/analyze.py --variant nosource` |
 | [projection_compare_withsource.html](projection_compare_withsource.html) | 2D maps (UMAP) of raw vs. source-centred embeddings, method, captions, conclusions | `Projection/project_compare.py --variant withsource` |
 | [projection_compare_nosource.html](projection_compare_nosource.html) | The same for the `nosource` embeddings | `Projection/project_compare.py --variant nosource` |
+| [book_map_nosource.html](book_map_nosource.html) | Books only, raw embeddings: map labelled by chapter, nearest-neighbour shares (section / chapter / book), how tightly each chapter clusters, conclusions | `Projection/book_map.py --variant nosource` |
 
 ## Variant comparison: does the source word cause the clustering?
 
