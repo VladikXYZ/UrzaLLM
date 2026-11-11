@@ -24,10 +24,49 @@ def clean_text(text):
     return unicodedata.normalize("NFKC", text).replace("\u00ad", "").strip()
 
 
-def scrape_article_text(session, url, article_title=""):
-    """Fetches an individual article URL and extracts the main text
+# Hosts and file types that count as a video link.
+VIDEO_LINK_RE = re.compile(
+    r"(youtube\.com/(watch|embed|live|shorts)|youtu\.be/|youtube-nocookie\.com/embed|"
+    r"vimeo\.com/|odysee\.com/|rumble\.com/|bitchute\.com/|dailymotion\.com/|"
+    r"\.(mp4|webm|mov|m4v|ogv)(\?|#|$))",
+    re.IGNORECASE,
+)
+YOUTUBE_ID_RE = re.compile(r"(?:youtube(?:-nocookie)?\.com/(?:embed/|live/|shorts/|watch\?(?:.*&)?v=)|youtu\.be/)([\w-]{11})")
 
-    without using any regular expressions.
+
+def normalize_video_url(url):
+    """YouTube embeds and short links \u2192 https://www.youtube.com/watch?v=ID; other URLs unchanged."""
+    m = YOUTUBE_ID_RE.search(url)
+    return f"https://www.youtube.com/watch?v={m.group(1)}" if m else url
+
+
+def find_video(body):
+    """Return the post's video link, or "" if it has none.
+
+    Looks only inside the post body (div.dripBody), never in reader comments.
+    An embedded player (<iframe>, <video>) wins over a plain link; otherwise
+    the first link to a video host or video file is used.
+    """
+    if body is None:
+        return ""
+    for tag in body.find_all(["iframe", "embed"]):
+        src = tag.get("src") or tag.get("data-src") or ""
+        if VIDEO_LINK_RE.search(src):
+            return normalize_video_url(src)
+    for video in body.find_all("video"):
+        src = video.get("src") or next((s.get("src") for s in video.find_all("source") if s.get("src")), "")
+        if src:
+            return normalize_video_url(src)
+    for a in body.find_all("a", href=True):
+        if VIDEO_LINK_RE.search(a["href"]):
+            return normalize_video_url(a["href"])
+    return ""
+
+
+def scrape_article(session, url, article_title=""):
+    """Fetches an individual article URL; returns (text, video).
+
+    `video` is the link to the post's video (see find_video) or "".
     """
     resp = session.get(url, headers=HEADERS, timeout=15)
     resp.raise_for_status()
@@ -35,7 +74,17 @@ def scrape_article_text(session, url, article_title=""):
 
     main = soup.find("main")
     if not main:
-        return ""
+        return "", ""
+
+    video = find_video(main.find("div", class_="dripBody"))
+    return extract_text(main, article_title), video
+
+
+def extract_text(main, article_title=""):
+    """Extracts the main text of an article page's <main> element
+
+    without using any regular expressions.
+    """
 
     # Remove unwanted metadata wrappers, menus, and side navigation elements
     for unwanted in main.find_all(
@@ -140,7 +189,7 @@ def scrape_urza(fetch_full_text=False, output_file="urza_articles.json"):
 
             if fetch_full_text:
                 print(f"  -> Fetching text: {title}")
-                item["text"] = scrape_article_text(session, article_url)
+                item["text"], item["video"] = scrape_article(session, article_url)
                 time.sleep(0.3)  # Polite delay between article requests
 
             articles.append(item)
@@ -154,5 +203,8 @@ def scrape_urza(fetch_full_text=False, output_file="urza_articles.json"):
 
 
 if __name__ == "__main__":
+    import sys
+
     # Set fetch_full_text=True if you also want to open every article link and save its body
-    scrape_urza(fetch_full_text=True)
+    # (and its video link, in the "video" field). Optional argument: output file path.
+    scrape_urza(fetch_full_text=True, output_file=sys.argv[1] if len(sys.argv) > 1 else "urza_articles.json")
