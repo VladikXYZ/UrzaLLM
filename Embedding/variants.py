@@ -2,6 +2,8 @@
 
 withsource  context line names the source: "Kniha …", "Článek „…“", "Video „…“" (first run, 2026-11-11)
 nosource    the same text without that word, to test how much it makes chunks cluster by source
+textonly    only the chunk's own text, no context line at all (no chapter path, title, year or guests),
+            so nothing outside the text can group chunks
 """
 import hashlib
 from pathlib import Path
@@ -14,6 +16,7 @@ CHUNKS = HERE.parent / "Preprocessing" / "output" / "chunks.parquet"
 VARIANTS = {
     "withsource": "embed_text",
     "nosource": "embed_text_nosource",
+    "textonly": "embed_text_textonly",
 }
 
 

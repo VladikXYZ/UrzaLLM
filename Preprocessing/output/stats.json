@@ -491,12 +491,5 @@
       "Video v nižší kvalitě v menším souboru můžete stáhnout tady.",
       "Nefunguje-li předchozí link, prosím, zkuste to tady."
     ]
-  },
-  "video_coverage": {
-    "videos": 978,
-    "by_video_link": 961,
-    "by_title_only": 6,
-    "covered": 967,
-    "uncovered": 11
   }
 }

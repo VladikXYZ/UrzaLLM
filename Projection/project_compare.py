@@ -78,6 +78,7 @@ def main():
                              "x_raw": p_raw[:, 0], "y_raw": p_raw[:, 1],
                              "x_centred": p_cen[:, 0], "y_centred": p_cen[:, 1]}), OUT / f"coords_{variant}.parquet")
     png(p_raw, p_cen, src, OUT / f"projection_compare_{variant}.png")
+    (OUT / f"rates_{variant}.json").write_text(json.dumps(rates, indent=2), encoding="utf-8")
     html(meta, p_raw, p_cen, rates, OUT / f"projection_compare_{variant}.html", variant)
     print(f"Wrote {OUT}")
 
@@ -122,6 +123,25 @@ def html(meta, a, b, rates, path, variant):
     label = {"article": "articles", "book": "book sections", "video": "video descriptions"}
     page = page.replace("__N__", f"{len(meta):,}")
     page = page.replace("__VARIANT__", variant)
+    # Does the source word in the context line matter? Compare with the other variant if it has been run.
+    other = {"withsource": "nosource", "nosource": "withsource"}.get(variant)
+    other_path = OUT / f"rates_{other}.json"
+    if other and other_path.exists():
+        o = json.loads(other_path.read_text(encoding="utf-8"))
+        ws, ns = (rates, o) if variant == "withsource" else (o, rates)
+        label_txt = (
+            "<strong>The source word in the context line is not the cause.</strong> The same chunks were "
+            "embedded a second time without “Kniha / Článek / Oznámení / Video” at the start (variant "
+            "<code>nosource</code>). Same-source neighbours in the raw vectors changed only from "
+            + ", ".join(f"{p(ws['raw_1024d'][s])} to {p(ns['raw_1024d'][s])} ({label[s]})" for s in SOURCES)
+            + "; after centring the two variants are practically identical ("
+            + ", ".join(f"{p(ws['centred_1024d'][s])} vs {p(ns['centred_1024d'][s])}" for s in SOURCES)
+            + "). The clustering comes from the texts themselves: their style, length and the way each "
+              "source writes about a topic.")
+    else:
+        label_txt = ("Part may be the context line at the start of each chunk (“Kniha …”, “Video „…“”, "
+                     "“Článek …”), which names the source; the <code>nosource</code> variant tests that.")
+    page = page.replace("__LABEL_BULLET__", label_txt)
     page = page.replace("__TABLE_READING__", (
         f"<strong>Reading it:</strong> a book chunk's 10 nearest neighbours are {p(r['book'])} books in the raw "
         f"vectors, against {p(rnd['book'])} expected by chance. After centring it is {p(c['book'])}. The 2D maps "
@@ -232,9 +252,7 @@ rather than the topic, decides who is similar. “Full vectors” uses cosine si
  The reason: subtracting an average removes the shift that pushed each source into its own region (hence the
  single connected map), but the closest neighbours of a chunk are still mostly texts of the same kind.</li>
  <li><strong>Some of the remaining same-source grouping is genuine.</strong> Sections of one book chapter, a
- series of lecture announcements or the yearly Rothbard posts really are about the same thing. Part is probably
- the context line at the start of each chunk (“Kniha …”, “Video „…“”, “Článek …”), which names the source
- outright; re-embedding without that word (about 2 minutes on a GPU) would show how much.</li>
+ series of lecture announcements or the yearly Rothbard posts really are about the same thing. __LABEL_BULLET__</li>
  <li><strong>For the coverage map, use the centred vectors</strong>: the map is organised by subject, which is
  what “which political issues does Urza cover” needs. Expect sources to still appear as small same-colour
  patches inside each subject area. <strong>For scoring a question against chunks</strong>, keep the raw vectors:

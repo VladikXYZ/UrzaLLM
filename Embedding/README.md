@@ -13,9 +13,12 @@ The text in front of each chunk (the context line) comes in two versions; see
 | Variant | Context line | Results |
 |---|---|---|
 | `withsource` | `Kniha Anarchokapitalismus › 10. Zdravotnictví`, `Článek „…“ (2017)`, `Video „…“ (2026; hosté: …)` | `results_withsource/` (done 2026-11-11) |
-| `nosource` | the same without the word naming the source | `results_nosource/` |
+| `nosource` | the same without the word naming the source | `results_nosource/` (done 2026-11-11) |
+| `textonly` | no context line at all: only the chunk's own text | `results_textonly/` |
 
-The `nosource` run tests how much that word makes chunks cluster by source.
+The `nosource` run tests how much that word makes chunks cluster by source. The
+`textonly` run removes everything we add to the text (chapter path, title, year,
+guests), so chunks can only group by what they actually say.
 
 ## Run (on a machine with a GPU)
 

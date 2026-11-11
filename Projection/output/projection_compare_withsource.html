@@ -90,9 +90,7 @@ rather than the topic, decides who is similar. “Full vectors” uses cosine si
  The reason: subtracting an average removes the shift that pushed each source into its own region (hence the
  single connected map), but the closest neighbours of a chunk are still mostly texts of the same kind.</li>
  <li><strong>Some of the remaining same-source grouping is genuine.</strong> Sections of one book chapter, a
- series of lecture announcements or the yearly Rothbard posts really are about the same thing. Part is probably
- the context line at the start of each chunk (“Kniha …”, “Video „…“”, “Článek …”), which names the source
- outright; re-embedding without that word (about 2 minutes on a GPU) would show how much.</li>
+ series of lecture announcements or the yearly Rothbard posts really are about the same thing. <strong>The source word in the context line is not the cause.</strong> The same chunks were embedded a second time without “Kniha / Článek / Oznámení / Video” at the start (variant <code>nosource</code>). Same-source neighbours in the raw vectors changed only from 79% to 75% (articles), 90% to 88% (book sections), 88% to 84% (video descriptions); after centring the two variants are practically identical (75% vs 75%, 75% vs 76%, 70% vs 70%). The clustering comes from the texts themselves: their style, length and the way each source writes about a topic.</li>
  <li><strong>For the coverage map, use the centred vectors</strong>: the map is organised by subject, which is
  what “which political issues does Urza cover” needs. Expect sources to still appear as small same-colour
  patches inside each subject area. <strong>For scoring a question against chunks</strong>, keep the raw vectors:
