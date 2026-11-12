@@ -1,8 +1,14 @@
 # Search the map
 
 `search_map.py` is a small local web app. Write a topic or a question, and it highlights the top-k
-most relevant passages on the two maps from `projection_compare_textonly.html` (raw and
+most relevant passages on the two maps from `FinalReports/projection_compare_textonly.html` (raw and
 source-centred), lists them with their full text, and marks where the question itself lands.
+
+It uses the final corpus (`Chunks/`, 2,910 chunks) and shows everything in **English**: passages,
+titles, chapter names and book names come from the English translation of each chunk. The search
+itself runs on the Czech originals, because those are what was embedded; bge-m3 is multilingual, so
+a query can be in English or Czech. Each passage has a **Czech original** fold-out for quoting.
+`--corpus earlier` switches back to the earlier corpus (`Preprocessing/`, 2,528 chunks, Czech only).
 
 ```bash
 python Projection/search_map.py          # from the repo root, then open http://127.0.0.1:8765
@@ -26,8 +32,10 @@ python Projection/search_map.py --online           # first run only: downloads B
 
 Then open http://127.0.0.1:8765. From then on, start it without `--online`: activate the
 environment, run `python Projection/search_map.py`, and stop it with Ctrl+C. A GPU isn't needed:
-on a CPU a search takes about a second instead of a fraction of one. Options: `--port 9000`, `--device cpu` (no GPU; a query then takes
-about a second), `--host 0.0.0.0` (let others on your network open it), and `--online` (see below).
+on a CPU a search takes about a second instead of a fraction of one.
+
+Options: `--port 9000`, `--device cpu`, `--host 0.0.0.0` (let others on your network open it),
+`--corpus earlier`, and `--online` (see below).
 
 ## What it does
 
@@ -66,7 +74,14 @@ starts a background download of a 2.3 GB safetensors copy whenever the model is 
 
 ## Inputs
 
-`Preprocessing/output/chunks.parquet`, `Embedding/results_textonly/{embeddings.npy, chunk_ids.txt}`
-and `Projection/output/coords_textonly.parquet`. The script refuses to start if they don't hold
-the same chunks in the same order. After re-chunking or re-embedding, rerun
-`Projection/project_compare.py --variant textonly` to rebuild the coordinates.
+| | Final corpus (default) | Earlier corpus (`--corpus earlier`) |
+|---|---|---|
+| Chunks | `Chunks/output/chunks.parquet` (with `text_en`, `title_en`, `chapter_en`, `subchapter_en`) | `Preprocessing/output/chunks.parquet` |
+| Embeddings | `Chunks/output/results_textonly/` | `Embedding/results_textonly/` |
+| Map | `Chunks/output/projection/coords_textonly.parquet`, else the data inside `FinalReports/projection_compare_textonly.html` | `Projection/output/coords_textonly.parquet` |
+
+The final corpus's coordinates file isn't in git, so the map is normally read from the published
+report; the dots sit exactly where they do there. Book titles are translated with
+`Chunks/output/names_en.json` (plus "Anarchoagorism" for the second book). The script refuses to
+start if the chunks, the embeddings and the map don't hold the same chunks in the same order. After
+re-chunking or re-embedding, rebuild the report (`Chunks/build_reports.py`).

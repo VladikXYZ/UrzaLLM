@@ -2,25 +2,34 @@
 
     python Projection/search_map.py              # from the repo root, then open http://127.0.0.1:8765
     python Projection/search_map.py --port 9000 --device cpu
+    python Projection/search_map.py --corpus earlier   # the earlier pipeline (Czech only)
 
-Same two maps as projection_compare_textonly.html (raw and source-centred UMAP, coordinates from
-Projection/output/coords_textonly.parquet). A query is embedded with the same model as the chunks
-(BAAI/bge-m3), scored against the raw textonly vectors by cosine similarity (raw vectors are the ones
-the model was trained for, see Reports/README.md), and the top k passages are highlighted.
+Corpus (default `final`): the final chunks (Chunks/output/chunks.parquet, 2,910 chunks) with their
+textonly bge-m3 embeddings, shown on the two maps of FinalReports/projection_compare_textonly.html
+(raw and source-centred UMAP). Everything is displayed in English (the `*_en` columns: the English twin
+of each chunk); the Czech original of a passage is one click away. The search itself runs on the Czech
+embeddings, which is what was embedded; bge-m3 is multilingual, so queries in Czech or English both work.
+
+A query is embedded with the same model as the chunks (BAAI/bge-m3), scored against the raw textonly
+vectors by cosine similarity (raw vectors are the ones the model was trained for, see Reports/README.md),
+and the top k passages are highlighted.
 
 Where the question lands: UMAP is not re-fitted, so the question is placed at the similarity-weighted
 average position of its PLACE_K best passages on each map (weights exp((s - s_best) / PLACE_TAU), so the
 closest passages dominate). This is how UMAP itself initialises new points; if the best passages sit in
 two distant regions, the point lands between them, and the lines to the hits show that.
 
-Reads  Preprocessing/output/chunks.parquet, Embedding/results_textonly/{embeddings.npy, chunk_ids.txt},
-       Projection/output/coords_textonly.parquet
+Map coordinates: coords_textonly.parquet from Projection/project_compare.py if present (it is not in git
+for the final corpus), otherwise read from the published report's own data, so the dots sit exactly where
+they do in that report.
+
 Needs  sentence-transformers + torch (Embedding/requirements.txt) and the model in the local Hugging Face
        cache. It loads offline; on a machine without the model, run once with --online (~2.3 GB download).
 """
 import argparse
 import json
 import os
+import re
 import sys
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -30,9 +39,20 @@ import numpy as np
 import pyarrow.parquet as pq
 
 ROOT = Path(__file__).resolve().parent.parent
-CHUNKS = ROOT / "Preprocessing" / "output" / "chunks.parquet"
-EMB = ROOT / "Embedding" / "results_textonly"
-COORDS = ROOT / "Projection" / "output" / "coords_textonly.parquet"
+CORPORA = {
+    "final": {"chunks": ROOT / "Chunks" / "output" / "chunks.parquet",
+              "emb": ROOT / "Chunks" / "output" / "results_textonly",
+              "coords": ROOT / "Chunks" / "output" / "projection" / "coords_textonly.parquet",
+              "report": ROOT / "FinalReports" / "projection_compare_textonly.html",
+              "english": True},
+    "earlier": {"chunks": ROOT / "Preprocessing" / "output" / "chunks.parquet",
+                "emb": ROOT / "Embedding" / "results_textonly",
+                "coords": ROOT / "Projection" / "output" / "coords_textonly.parquet",
+                "report": ROOT / "Projection" / "output" / "projection_compare_textonly.html",
+                "english": False},
+}
+NAMES_EN = ROOT / "Chunks" / "output" / "names_en.json"
+BOOKS_EN = {"Anarchokapitalismus": "Anarcho-capitalism", "Anarchoagorismus": "Anarchoagorism"}
 MODEL = "BAAI/bge-m3"
 SOURCES = ["article", "book", "video"]
 PLACE_K = 10
@@ -46,18 +66,48 @@ def norm01(P):
     return (P - lo) / (hi - lo).max()
 
 
+def load_maps(cfg):
+    """(chunk ids, [raw map, centred map]) scaled to [0, 1] like projection_compare.py."""
+    if cfg["coords"].exists():
+        c = pq.read_table(cfg["coords"]).to_pylist()
+        return ([r["chunk_id"] for r in c], [norm01(np.array([[r["x_raw"], r["y_raw"]] for r in c])),
+                                             norm01(np.array([[r["x_centred"], r["y_centred"]] for r in c]))])
+    if cfg["report"].exists():   # the report embeds every dot as [id, source, kind, title, year, path, x0, y0, x1, y1]
+        m = re.search(r"const P=(\[.*?\]),\s*R=", cfg["report"].read_text(encoding="utf-8"), re.S)
+        if m:
+            P = json.loads(m.group(1).replace("<\\/", "</"))
+            return [p[0] for p in P], [np.array([[p[6], p[7]] for p in P]), np.array([[p[8], p[9]] for p in P])]
+    sys.exit(f"No map coordinates: neither {cfg['coords']} nor {cfg['report']} found. "
+             "Run Projection/project_compare.py --variant textonly.")
+
+
+def to_english(rows):
+    """Show the English twin of each chunk; keep the Czech text as text_cs."""
+    names = json.loads(NAMES_EN.read_text(encoding="utf-8")) if NAMES_EN.exists() else {}
+    for r in rows:
+        r["text_cs"] = r["text"]
+        for c in ("text", "title", "chapter", "subchapter"):
+            if r.get(f"{c}_en"):
+                r[c] = r[f"{c}_en"]
+        if r.get("book"):
+            r["book"] = names.get(r["book"]) or BOOKS_EN.get(r["book"], r["book"])
+    return rows
+
+
 class Index:
-    def __init__(self, device, online=False):
-        rows = pq.read_table(CHUNKS).to_pylist()
-        ids = (EMB / "chunk_ids.txt").read_text(encoding="utf-8").split()
-        coords = pq.read_table(COORDS).to_pylist()
-        if not (ids == [r["chunk_id"] for r in rows] == [c["chunk_id"] for c in coords]):
-            sys.exit("chunks.parquet, Embedding/results_textonly and coords_textonly.parquet don't match: "
-                     "re-embed and rerun Projection/project_compare.py --variant textonly.")
+    def __init__(self, device, corpus="final", online=False):
+        cfg = CORPORA[corpus]
+        rows = pq.read_table(cfg["chunks"]).to_pylist()
+        self.english = cfg["english"] and "text_en" in rows[0]
+        if self.english:
+            rows = to_english(rows)
+        ids = (cfg["emb"] / "chunk_ids.txt").read_text(encoding="utf-8").split()
+        map_ids, self.maps = load_maps(cfg)
+        if not (ids == [r["chunk_id"] for r in rows] == map_ids):
+            sys.exit(f"{cfg['chunks']}, {cfg['emb']} and the map coordinates don't hold the same chunks in the same "
+                     "order: re-embed and rerun Projection/project_compare.py --variant textonly.")
         self.rows = rows
-        self.emb = np.load(EMB / "embeddings.npy")
-        self.maps = [norm01(np.array([[c["x_raw"], c["y_raw"]] for c in coords])),
-                     norm01(np.array([[c["x_centred"], c["y_centred"]] for c in coords]))]
+        self.emb = np.load(cfg["emb"] / "embeddings.npy")
         self.src = np.array([r["source"] for r in rows])
         self.announce = np.array([r["kind"] == "announcement" for r in rows])
         # Offline by default: with the model cached as pytorch_model.bin, transformers otherwise starts a
@@ -104,6 +154,7 @@ class Index:
         for i in order:
             r = self.rows[i]
             hits.append({"i": int(i), "score": round(float(s[i]), 4), "text": r["text"], "url": r["url"],
+                         "text_cs": r.get("text_cs") if self.english else None,
                          "guests": r["guests"] or [], "words": r["words"]})
         return {"query": query, "pos": pos, "hits": hits, "ms": round((time.time() - t) * 1000),
                 "candidates": int(len(cand))}
@@ -154,13 +205,19 @@ def main():
     ap.add_argument("--device", default="auto", help="auto | cuda | cpu")
     ap.add_argument("--online", action="store_true",
                     help="allow Hugging Face downloads (first run on a machine without the model cached)")
+    ap.add_argument("--corpus", choices=CORPORA, default="final",
+                    help="final: Chunks/ corpus shown in English (default); earlier: Preprocessing/ corpus, Czech")
     args = ap.parse_args()
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
-    index = Index(args.device, args.online)
+    index = Index(args.device, args.corpus, args.online)
     data = json.dumps(index.points(), ensure_ascii=False).replace("</", "<\\/")
+    lang = ("Passages, titles and chapter names are shown in their English translation; the search runs on the "
+            "Czech originals (what was embedded), so a query can be in English or Czech. Open a passage to see "
+            "its Czech original." if index.english else "Passages are shown in Czech, as written.")
+    report = "FinalReports/projection_compare_textonly.html" if args.corpus == "final" else "projection_compare_textonly.html"
     page = (TEMPLATE.replace("__DATA__", data).replace("__N__", f"{len(index.rows):,}")
-            .replace("__PLACE_K__", str(PLACE_K)))
+            .replace("__PLACE_K__", str(PLACE_K)).replace("__LANG__", lang).replace("__REPORT__", report))
     server = ThreadingHTTPServer((args.host, args.port), make_handler(index, page))
     print(f"Open http://{'127.0.0.1' if args.host == '0.0.0.0' else args.host}:{args.port}  (Ctrl+C to stop)", flush=True)
     try:
@@ -218,18 +275,21 @@ ol#hits{list-style:none;padding:0;margin:0;display:grid;gap:8px}
 .mt{color:var(--ink2);font-size:12.5px;margin:2px 0 4px 3.2em}
 .tx{margin:0 0 0 3.2em;color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere}
 li:not(.open) .tx{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+details.cs{margin:6px 0 0 3.2em;color:var(--ink2)} li:not(.open) details.cs{display:none}
+details.cs summary{cursor:pointer;font-size:12.5px} details.cs p{white-space:pre-wrap;overflow-wrap:anywhere;margin:4px 0 0}
 a{color:var(--s0)} code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:12.5px}
 .legend{display:inline-flex;align-items:center;gap:6px}
 @media (max-width:820px){.grid{grid-template-columns:1fr}.mt,.tx{margin-left:0}}
 </style></head><body><div class="wrap">
 <h1>Search the map</h1>
-<p class="sub">Write a topic or a question (Czech works best, English works too). The __N__ chunks are scored by
-cosine similarity to it with the same model that embedded them (<code>BAAI/bge-m3</code>, raw <code>textonly</code>
-vectors), and the best ones are highlighted on the two maps from <code>projection_compare_textonly.html</code>.
+<p class="sub">Write a topic or a question. The __N__ chunks are scored by cosine similarity to it with the same
+model that embedded them (<code>BAAI/bge-m3</code>, raw <code>textonly</code> vectors), and the best ones are highlighted
+on the two maps from <code>__REPORT__</code>.
 <span class="legend"><svg width="14" height="14" viewBox="-7 -7 14 14"><path d="M0-6L1.8-1.8 6 0 1.8 1.8 0 6-1.8 1.8-6 0-1.8-1.8Z" fill="var(--q)"/></svg>
-marks where the question lands</span>: the similarity-weighted position of its __PLACE_K__ best passages.</p>
+marks where the question lands</span>: the similarity-weighted position of its __PLACE_K__ best passages.
+__LANG__</p>
 <form id="f">
- <input id="q" type="search" placeholder="e.g. Měl by stát regulovat drogy?  ·  povinná školní docházka  ·  who would build roads" autocomplete="off" autofocus>
+ <input id="q" type="search" placeholder="e.g. Should the state regulate drugs?  ·  compulsory schooling  ·  who would build the roads" autocomplete="off" autofocus>
  <label title="number of passages">top <input id="k" type="number" min="1" max="200" value="20"></label>
  <button id="go" type="submit">Search</button>
  <button id="clr" class="ghost" type="button">Clear</button>
@@ -340,9 +400,9 @@ function list(){const ol=$("hits");ol.innerHTML="";$("rh").hidden=!res;if(!res)r
   const meta=[LABEL[SRC[p[1]]].replace(/s$/,""),p[2],p[4]||(p[1]===1?"book":""),p[5],h.guests.length?"guests: "+h.guests.join(", "):"",h.words+" words"].filter(Boolean).map(esc).join(" · ");
   li.innerHTML=`<div class="hh"><span class="rk">#${r+1}</span><span class="sw" style="background:var(--s${p[1]})"></span><span class="ti">${esc(p[3])}</span>
    <span class="sc">${h.score.toFixed(3)}<span class="bar" style="width:${Math.max(4,60*h.score/top)}px"></span></span></div>
-   <div class="mt">${meta}${h.url?` · <a href="${esc(h.url)}" target="_blank" rel="noopener">source</a>`:""} · <code>${esc(p[0])}</code></div><p class="tx">${esc(h.text)}</p>`;
+   <div class="mt">${meta}${h.url?` · <a href="${esc(h.url)}" target="_blank" rel="noopener">source</a>`:""} · <code>${esc(p[0])}</code></div><p class="tx">${esc(h.text)}</p>${h.text_cs?`<details class="cs"><summary>Czech original</summary><p>${esc(h.text_cs)}</p></details>`:""}`;
   li.onmouseenter=()=>{hover=h.i;draw();mark()};li.onmouseleave=()=>{hover=-1;draw();mark()};
-  li.onclick=e=>{if(e.target.tagName==="A")return;li.classList.toggle("open");sel=li.classList.contains("open")?h.i:-1;draw();mark()};
+  li.onclick=e=>{if(e.target.tagName==="A"||e.target.closest("details"))return;li.classList.toggle("open");sel=li.classList.contains("open")?h.i:-1;draw();mark()};
   ol.appendChild(li)})}
 let last="";
 async function run(query){query=query.trim();if(!query)return;last=query;
