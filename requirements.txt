@@ -18,3 +18,7 @@ matplotlib
 # Embedding/import_results.py, Projection/
 numpy
 umap-learn
+
+# book_corpus.py (BAAI/bge-m3, ~2.3 GB download on first run; GPU optional)
+sentence-transformers
+torch
