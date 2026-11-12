@@ -147,12 +147,27 @@ def chunk_rows():
                        (cs["name"], tc), (en["name"], te))
 
 
+BOILERPLATE_RE = re.compile("|".join([
+    r"^(BTC|LTC|ETH|XMR|BCH|DOGE|LN)\s*:",                                 # crypto addresses, Lightning
+    r"\b(bc1q|ltc1q)[0-9a-z]{20,}",
+    r"^(IBAN|Číslo účtu|Account number|Bank account)\b", r"variabilní symbol|variable symbol",
+    r"^Pravidelná podpora|^Regular (support|donations?)",
+    r"^(Pokud se vám|Jestli se vám|Chcete-li podpořit|Chcete-li mě podpořit)",       # donation pleas
+    r"^(If you (liked|enjoyed|like|want to support|would like to support))",
+    r"^Děkujeme všem diskutujícím|^We thank all the (discussants|participants)",
+    r"^[-–—=_*]{3,}$",                                                     # separators
+    r"^[–-]\s*Urza \(www\.urza\.cz\)",                                     # Urza's signature line
+]), re.IGNORECASE)
+
+
 def strip_video_boilerplate(rows):
-    """Remove lines that recur in at least BOILERPLATE_MIN video descriptions (donation details, crypto
-    addresses, the signature line, separators), per language, in place. Returns the set of removed lines."""
+    """Remove boilerplate lines from video descriptions, per language, in place: lines that recur in at least
+    BOILERPLATE_MIN descriptions, and lines matching BOILERPLATE_RE (donation pleas, crypto addresses, bank
+    details, separators, Urza's signature), which change over the years and so recur less. Guest bios stay:
+    they describe who is in the video. Returns the set of removed lines."""
     lines = Counter(ln.strip() for r in rows if r["source"] == "video"
                     for ln in set(r["text"].split("\n")) if ln.strip())
-    common = {ln for ln, c in lines.items() if c >= BOILERPLATE_MIN}
+    common = {ln for ln, c in lines.items() if c >= BOILERPLATE_MIN or BOILERPLATE_RE.search(ln)}
     for r in rows:
         if r["source"] != "video":
             continue
