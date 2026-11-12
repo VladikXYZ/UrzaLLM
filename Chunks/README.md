@@ -47,3 +47,10 @@ in `chunks_en.parquet`.
 - 21 chunks repeat another chunk's text word for word; `embed_final.py` embeds each distinct text once.
 - Kept as they are, following the rules: 22 very short chunks (three words or fewer), such as hashtag-only articles,
   book headings like “Vzácnost” or single lines of dialogue.
+
+## Presentation
+
+`Chunks/presentation.py` (run at the end of `build_reports.py`) builds `FinalReports/presentation.html`: one
+self-contained page with the key content of the reports in seven sections (data and chunking, raw vs source-centred
+maps, PCA/ICA, book idea map, trails, topic distribution, political space). Its interactive maps are the final reports'
+own maps, embedded as frames showing only the needed section; the variant switches swap them.

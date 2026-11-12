@@ -70,6 +70,9 @@ def main():
                 sys.exit(f"Step {name} failed (log: {WORK / (name + '.log')})")
             print(f"   ok, {time.time() - t0:.0f} s", flush=True)
     copy_outputs()
+    r = subprocess.run([sys.executable, "Chunks/presentation.py"], cwd=ROOT, env=env, capture_output=True, text=True,
+                       encoding="utf-8", errors="replace")      # the presentation is built from the copied reports
+    print(r.stdout.strip() or r.stderr[-2000:])
 
 
 if __name__ == "__main__":
