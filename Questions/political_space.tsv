@@ -1,0 +1,327 @@
+id	layer	major	sub	text	description
+T01.1	topic	Makroekonomie	Inflace a měnová politika	Inflace a měnová politika	cenová hladina, úrokové sazby, centrální banka, tisk peněz
+Q01.1a	question	Makroekonomie	Inflace a měnová politika	Měla by centrální banka existovat, nebo by měly vzniknout soukromé konkurenční měny?
+Q01.1b	question	Makroekonomie	Inflace a měnová politika	Je mírná inflace pro ekonomiku prospěšná, nebo je to skrytá daň?
+T01.2	topic	Makroekonomie	Daně a daňový systém	Daně a daňový systém	výše a struktura daní, progresivní zdanění, DPH, daň z příjmu
+Q01.2a	question	Makroekonomie	Daně a daňový systém	Měla by se zavést progresivní daň z příjmu, aby bohatší platili víc?
+Q01.2b	question	Makroekonomie	Daně a daňový systém	Je zdanění krádež, nebo legitimní poplatek za veřejné služby?
+Q01.2c	question	Makroekonomie	Daně a daňový systém	Měly by se snížit daně, i když to znamená méně peněz na veřejné služby?
+T01.3	topic	Makroekonomie	Státní rozpočet a dluh	Státní rozpočet a dluh	schodek rozpočtu, státní dluh, úsporná opatření, mandatorní výdaje
+Q01.3a	question	Makroekonomie	Státní rozpočet a dluh	Měl by být vyrovnaný státní rozpočet povinný ze zákona?
+Q01.3b	question	Makroekonomie	Státní rozpočet a dluh	Je zadlužování státu přenášením nákladů na příští generace?
+T01.4	topic	Makroekonomie	Hospodářský cyklus a krize	Hospodářský cyklus a krize	recese, nezaměstnanost, stimulační balíčky, záchrana firem státem
+Q01.4a	question	Makroekonomie	Hospodářský cyklus a krize	Má stát v recesi zvyšovat výdaje, aby podpořil ekonomiku?
+Q01.4b	question	Makroekonomie	Hospodářský cyklus a krize	Měl by stát zachraňovat krachující banky a velké firmy?
+T01.5	topic	Makroekonomie	Euro a měnová unie	Euro a měnová unie	přijetí eura, koruna, měnová suverenita
+Q01.5a	question	Makroekonomie	Euro a měnová unie	Měla by Česká republika přijmout euro?
+T02.1	topic	Občanská práva a svobody	Svoboda slova a cenzura	Svoboda slova a cenzura	dezinformace, nenávistné projevy, blokování webů, sociální sítě
+Q02.1a	question	Občanská práva a svobody	Svoboda slova a cenzura	Měl by stát blokovat dezinformační weby?
+Q02.1b	question	Občanská práva a svobody	Svoboda slova a cenzura	Měly by být nenávistné projevy trestné?
+Q02.1c	question	Občanská práva a svobody	Svoboda slova a cenzura	Mají sociální sítě právo mazat příspěvky a blokovat uživatele?
+T02.2	topic	Občanská práva a svobody	Soukromí a sledování	Soukromí a sledování	sledování občanů, data o lidech, kamery, odposlechy, šifrování
+Q02.2a	question	Občanská práva a svobody	Soukromí a sledování	Smí stát sledovat komunikaci občanů v zájmu bezpečnosti?
+Q02.2b	question	Občanská práva a svobody	Soukromí a sledování	Mělo by být legální anonymně platit a komunikovat?
+T02.3	topic	Občanská práva a svobody	Diskriminace a rovnost	Diskriminace a rovnost	antidiskriminační zákony, kvóty, rovnost žen a mužů, menšiny
+Q02.3a	question	Občanská práva a svobody	Diskriminace a rovnost	Měl by zákon zakazovat soukromým firmám diskriminovat zákazníky nebo zaměstnance?
+Q02.3b	question	Občanská práva a svobody	Diskriminace a rovnost	Měly by být zavedeny kvóty pro ženy ve vedení firem a v politice?
+T02.4	topic	Občanská práva a svobody	Práva menšin a LGBT	Práva menšin a LGBT	manželství pro všechny, adopce, Romové, národnostní menšiny
+Q02.4a	question	Občanská práva a svobody	Práva menšin a LGBT	Mělo by být uzákoněno manželství pro páry stejného pohlaví?
+Q02.4b	question	Občanská práva a svobody	Práva menšin a LGBT	Má stát vůbec rozhodovat o tom, kdo smí uzavřít manželství?
+T02.5	topic	Občanská práva a svobody	Shromažďování a protesty	Shromažďování a protesty	demonstrace, občanská neposlušnost, policejní zásahy
+Q02.5a	question	Občanská práva a svobody	Shromažďování a protesty	Je porušování nespravedlivých zákonů ospravedlnitelné?
+Q02.5b	question	Občanská práva a svobody	Shromažďování a protesty	Smí stát omezit demonstrace kvůli veřejnému pořádku?
+T02.6	topic	Občanská práva a svobody	Práva dětí	Práva dětí	práva dětí vůči rodičům a státu, sebeurčení dětí, tělesné tresty
+Q02.6a	question	Občanská práva a svobody	Práva dětí	Mají děti mít právo rozhodovat o svém vzdělávání a životě samy?
+Q02.6b	question	Občanská práva a svobody	Práva dětí	Měly by být fyzické tresty dětí zakázány zákonem?
+T03.1	topic	Zdravotnictví	Financování zdravotnictví a pojištění	Financování zdravotnictví a pojištění	povinné zdravotní pojištění, spoluúčast, soukromé pojišťovny
+Q03.1a	question	Zdravotnictví	Financování zdravotnictví a pojištění	Mělo by být zdravotní pojištění povinné?
+Q03.1b	question	Zdravotnictví	Financování zdravotnictví a pojištění	Měli by pacienti více platit za péči přímo ze svého?
+T03.2	topic	Zdravotnictví	Regulace lékařů a léků	Regulace lékařů a léků	licence lékařů, schvalování léků, lékárny, alternativní medicína
+Q03.2a	question	Zdravotnictví	Regulace lékařů a léků	Měl by stát rozhodovat o tom, které léky smějí lidé užívat?
+Q03.2b	question	Zdravotnictví	Regulace lékařů a léků	Mělo by být možné léčit bez státní licence, pokud pacient souhlasí?
+T03.3	topic	Zdravotnictví	Očkování a veřejné zdraví	Očkování a veřejné zdraví	povinné očkování, epidemie, karantény, lockdowny
+Q03.3a	question	Zdravotnictví	Očkování a veřejné zdraví	Mělo by být očkování povinné?
+Q03.3b	question	Zdravotnictví	Očkování a veřejné zdraví	Byly lockdowny a zavírání podniků během pandemie oprávněné?
+T03.4	topic	Zdravotnictví	Konec života a reprodukce	Konec života a reprodukce	eutanazie, interrupce, náhradní mateřství, dárcovství orgánů
+Q03.4a	question	Zdravotnictví	Konec života a reprodukce	Měla by být eutanazie legální?
+Q03.4b	question	Zdravotnictví	Konec života a reprodukce	Měla by být interrupce legální?
+Q03.4c	question	Zdravotnictví	Konec života a reprodukce	Smí člověk prodat svůj orgán?
+T03.5	topic	Zdravotnictví	Duševní zdraví	Duševní zdraví	psychiatrie, nedobrovolná hospitalizace, psychoterapie
+Q03.5a	question	Zdravotnictví	Duševní zdraví	Smí stát nedobrovolně hospitalizovat duševně nemocné?
+T04.1	topic	Zemědělství	Zemědělské dotace	Zemědělské dotace	dotace zemědělcům, společná zemědělská politika EU, potravinová soběstačnost
+Q04.1a	question	Zemědělství	Zemědělské dotace	Měly by se zrušit zemědělské dotace?
+Q04.1b	question	Zemědělství	Zemědělské dotace	Má být země potravinově soběstačná, i když jsou potraviny dražší?
+T04.2	topic	Zemědělství	Potraviny a jejich regulace	Potraviny a jejich regulace	bezpečnost potravin, GMO, farmářské trhy, prodej ze dvora
+Q04.2a	question	Zemědělství	Potraviny a jejich regulace	Měl by být povolen prodej domácích potravin bez hygienických povolení?
+Q04.2b	question	Zemědělství	Potraviny a jejich regulace	Měly by být geneticky modifikované plodiny povoleny?
+T04.3	topic	Zemědělství	Práva zvířat	Práva zvířat	chov zvířat, kožešinové farmy, týrání zvířat
+Q04.3a	question	Zemědělství	Práva zvířat	Mají zvířata práva, která má stát chránit?
+T05.1	topic	Práce a zaměstnanost	Minimální mzda a regulace práce	Minimální mzda a regulace práce	minimální mzda, zákoník práce, výpovědní lhůty, pracovní doba
+Q05.1a	question	Práce a zaměstnanost	Minimální mzda a regulace práce	Měla by se zvýšit minimální mzda?
+Q05.1b	question	Práce a zaměstnanost	Minimální mzda a regulace práce	Měla by existovat minimální mzda vůbec?
+Q05.1c	question	Práce a zaměstnanost	Minimální mzda a regulace práce	Má zákoník práce chránit zaměstnance, i když to omezuje svobodu smlouvy?
+T05.2	topic	Práce a zaměstnanost	Odbory a stávky	Odbory a stávky	odbory, kolektivní vyjednávání, stávky, stávkokazi
+Q05.2a	question	Práce a zaměstnanost	Odbory a stávky	Měly by odbory mít zvláštní práva při vyjednávání?
+Q05.2b	question	Práce a zaměstnanost	Odbory a stávky	Je stávkokaz zrádce, nebo člověk uplatňující svou svobodu?
+T05.3	topic	Práce a zaměstnanost	Nezaměstnanost a trh práce	Nezaměstnanost a trh práce	podpora v nezaměstnanosti, rekvalifikace, švarc systém, OSVČ
+Q05.3a	question	Práce a zaměstnanost	Nezaměstnanost a trh práce	Měla by být podpora v nezaměstnanosti vyšší, nebo nižší?
+Q05.3b	question	Práce a zaměstnanost	Nezaměstnanost a trh práce	Měl by být švarc systém legální?
+T05.4	topic	Práce a zaměstnanost	Dětská práce a pracovní podmínky	Dětská práce a pracovní podmínky	práce dětí a mladistvých, bezpečnost práce, vykořisťování
+Q05.4a	question	Práce a zaměstnanost	Dětská práce a pracovní podmínky	Měly by děti smět pracovat a vydělávat si, pokud chtějí?
+T06.1	topic	Vzdělávání	Povinná školní docházka	Povinná školní docházka	povinnost chodit do školy, domácí vzdělávání, unschooling
+Q06.1a	question	Vzdělávání	Povinná školní docházka	Měla by být školní docházka povinná?
+Q06.1b	question	Vzdělávání	Povinná školní docházka	Mělo by být domácí vzdělávání svobodně povoleno?
+T06.2	topic	Vzdělávání	Státní a soukromé školy	Státní a soukromé školy	financování škol, soukromé a alternativní školy, vzdělávací poukázky, školné
+Q06.2a	question	Vzdělávání	Státní a soukromé školy	Měl by stát financovat školy, nebo dát rodičům peníze na vzdělávání dítěte?
+Q06.2b	question	Vzdělávání	Státní a soukromé školy	Mělo by být vysokoškolské vzdělání zpoplatněné?
+T06.3	topic	Vzdělávání	Obsah a metody vzdělávání	Obsah a metody vzdělávání	rámcové vzdělávací programy, maturita, inkluze, známkování, svobodné učení
+Q06.3a	question	Vzdělávání	Obsah a metody vzdělávání	Měl by stát určovat, co se děti ve škole učí?
+Q06.3b	question	Vzdělávání	Obsah a metody vzdělávání	Je známkování a testování dětí škodlivé?
+Q06.3c	question	Vzdělávání	Obsah a metody vzdělávání	Měly by se děti učit jen to, co je samy zajímá?
+T06.4	topic	Vzdělávání	Škola a výchova k občanství	Škola a výchova k občanství	vlastenectví, výchova k demokracii, indoktrinace ve škole
+Q06.4a	question	Vzdělávání	Škola a výchova k občanství	Má škola vychovávat k loajalitě ke státu a demokracii?
+T07.1	topic	Životní prostředí	Klimatická změna	Klimatická změna	emise CO2, Green Deal, emisní povolenky, uhlíková daň
+Q07.1a	question	Životní prostředí	Klimatická změna	Má stát zasahovat do ekonomiky kvůli klimatické změně?
+Q07.1b	question	Životní prostředí	Klimatická změna	Měla by Česká republika podporovat Green Deal?
+T07.2	topic	Životní prostředí	Znečištění a ochrana přírody	Znečištění a ochrana přírody	znečištění ovzduší a vody, národní parky, kůrovec, odpady
+Q07.2a	question	Životní prostředí	Znečištění a ochrana přírody	Je soukromé vlastnictví lepší ochranou přírody než státní regulace?
+Q07.2b	question	Životní prostředí	Znečištění a ochrana přírody	Kdo má platit za škody způsobené znečištěním?
+T07.3	topic	Životní prostředí	Voda a sucho	Voda a sucho	hospodaření s vodou, sucho, přehrady, vodné
+Q07.3a	question	Životní prostředí	Voda a sucho	Měly by být vodní zdroje v soukromém vlastnictví?
+T08.1	topic	Energetika	Energetický mix	Energetický mix	jaderná energie, uhlí, obnovitelné zdroje, plyn
+Q08.1a	question	Energetika	Energetický mix	Měla by se stavět nová jaderná elektrárna?
+Q08.1b	question	Energetika	Energetický mix	Měl by stát dotovat obnovitelné zdroje energie?
+T08.2	topic	Energetika	Ceny energií	Ceny energií	zastropování cen, energetická chudoba, ČEZ, regulace trhu s energiemi
+Q08.2a	question	Energetika	Ceny energií	Měl by stát zastropovat ceny energií?
+Q08.2b	question	Energetika	Ceny energií	Měla by být energetika v rukou státu?
+T09.1	topic	Migrace	Imigrace a azyl	Imigrace a azyl	přijímání uprchlíků, azylová politika, kvóty EU, ochrana hranic
+Q09.1a	question	Migrace	Imigrace a azyl	Měla by Česká republika přijímat uprchlíky?
+Q09.1b	question	Migrace	Imigrace a azyl	Má stát právo omezovat, kdo smí přijít do země?
+Q09.1c	question	Migrace	Imigrace a azyl	Byly by otevřené hranice slučitelné se sociálním státem?
+T09.2	topic	Migrace	Integrace a pracovní migrace	Integrace a pracovní migrace	pracovní víza, integrace cizinců, občanství
+Q09.2a	question	Migrace	Integrace a pracovní migrace	Měli by cizinci snadněji získat pracovní povolení?
+T10.1	topic	Doprava	Silnice a dopravní infrastruktura	Silnice a dopravní infrastruktura	stavba dálnic, mýto, vysokorychlostní železnice, kdo by stavěl silnice
+Q10.1a	question	Doprava	Silnice a dopravní infrastruktura	Kdo by stavěl silnice, kdyby nebyl stát?
+Q10.1b	question	Doprava	Silnice a dopravní infrastruktura	Měly by být dálnice zpoplatněné, nebo zdarma?
+T10.2	topic	Doprava	Dopravní pravidla a policie	Dopravní pravidla a policie	rychlostní limity, alkohol za volantem, pokuty, řidičské průkazy
+Q10.2a	question	Doprava	Dopravní pravidla a policie	Měla by platit nulová tolerance alkoholu za volantem?
+Q10.2b	question	Doprava	Dopravní pravidla a policie	Slouží dopravní pokuty bezpečnosti, nebo výběru peněz?
+T10.3	topic	Doprava	Veřejná doprava a taxi	Veřejná doprava a taxi	dotovaná veřejná doprava, Uber, regulace taxislužby, letiště
+Q10.3a	question	Doprava	Veřejná doprava a taxi	Měla by být veřejná doprava zdarma?
+Q10.3b	question	Doprava	Veřejná doprava a taxi	Měly by služby jako Uber fungovat bez licencí taxislužby?
+T12.1	topic	Právo a soudnictví	Kriminalita a trestání	Kriminalita a trestání	vězení, výše trestů, trest smrti, odškodnění obětí
+Q12.1a	question	Právo a soudnictví	Kriminalita a trestání	Měl by být obnoven trest smrti?
+Q12.1b	question	Právo a soudnictví	Kriminalita a trestání	Má trest sloužit k odplatě, nebo k odškodnění oběti?
+Q12.1c	question	Právo a soudnictví	Kriminalita a trestání	Měly by být tresty za trestné činy přísnější?
+T12.2	topic	Právo a soudnictví	Policie a její pravomoci	Policie a její pravomoci	policejní násilí, pravomoci policie, výslechy, právo nevypovídat
+Q12.2a	question	Právo a soudnictví	Policie a její pravomoci	Mají občané povinnost spolupracovat s policií?
+Q12.2b	question	Právo a soudnictví	Policie a její pravomoci	Mohla by bezpečnost zajišťovat soukromá agentura místo státní policie?
+T12.3	topic	Právo a soudnictví	Soudy a výkon spravedlnosti	Soudy a výkon spravedlnosti	soudní systém, délka řízení, rozhodčí soudy, exekuce
+Q12.3a	question	Právo a soudnictví	Soudy a výkon spravedlnosti	Mohly by spory řešit soukromé soudy místo státních?
+Q12.3b	question	Právo a soudnictví	Soudy a výkon spravedlnosti	Jsou exekuce v Česku spravedlivé?
+T12.4	topic	Právo a soudnictví	Drogy a jejich regulace	Drogy a jejich regulace	legalizace marihuany, dekriminalizace drog, prohibice, alkohol a tabák
+Q12.4a	question	Právo a soudnictví	Drogy a jejich regulace	Měla by být marihuana legální?
+Q12.4b	question	Právo a soudnictví	Drogy a jejich regulace	Měly by být legalizovány všechny drogy?
+Q12.4c	question	Právo a soudnictví	Drogy a jejich regulace	Způsobuje válka proti drogám víc škody než drogy samotné?
+T12.5	topic	Právo a soudnictví	Zbraně	Zbraně	právo nosit zbraň, zbrojní průkaz, sebeobrana, směrnice EU o zbraních
+Q12.5a	question	Právo a soudnictví	Zbraně	Má mít každý právo vlastnit a nosit zbraň?
+Q12.5b	question	Právo a soudnictví	Zbraně	Mělo by být právo na zbraň v ústavě?
+T12.6	topic	Právo a soudnictví	Korupce a klientelismus	Korupce a klientelismus	korupce politiků, střet zájmů, veřejné zakázky, lobbing
+Q12.6a	question	Právo a soudnictví	Korupce a klientelismus	Lze korupci vymýtit lepšími zákony, nebo je důsledkem velkého státu?
+Q12.6b	question	Právo a soudnictví	Korupce a klientelismus	Je střet zájmů premiéra-podnikatele nepřijatelný?
+T12.7	topic	Právo a soudnictví	Prostituce a hazard	Prostituce a hazard	legalizace prostituce, hazardní hry, loterie, regulace herních automatů
+Q12.7a	question	Právo a soudnictví	Prostituce a hazard	Měla by být prostituce legální a zdaněná?
+Q12.7b	question	Právo a soudnictví	Prostituce a hazard	Měl by stát omezovat hazard?
+T13.1	topic	Sociální politika	Důchody	Důchody	průběžný důchodový systém, věk odchodu do důchodu, spoření na stáří
+Q13.1a	question	Sociální politika	Důchody	Měl by se zvýšit věk odchodu do důchodu?
+Q13.1b	question	Sociální politika	Důchody	Měl by si každý spořit na důchod sám místo státního systému?
+Q13.1c	question	Sociální politika	Důchody	Je státní důchodový systém pyramidová hra?
+T13.2	topic	Sociální politika	Sociální dávky a chudoba	Sociální dávky a chudoba	sociální dávky, chudoba, bezdomovectví, nepodmíněný příjem
+Q13.2a	question	Sociální politika	Sociální dávky a chudoba	Měl by existovat nepodmíněný základní příjem?
+Q13.2b	question	Sociální politika	Sociální dávky a chudoba	Měla by pomoc chudým být dobrovolná, nebo povinná přes daně?
+Q13.2c	question	Sociální politika	Sociální dávky a chudoba	Vytvářejí sociální dávky závislost na státu?
+T13.3	topic	Sociální politika	Rodinná politika	Rodinná politika	rodičovský příspěvek, porodnost, školky, přídavky na děti
+Q13.3a	question	Sociální politika	Rodinná politika	Měl by stát finančně podporovat rodiny s dětmi?
+Q13.3b	question	Sociální politika	Rodinná politika	Měl by stát řešit nízkou porodnost?
+T13.4	topic	Sociální politika	Zdravotně postižení a péče	Zdravotně postižení a péče	péče o postižené, příspěvek na péči, dobrovolná charita
+Q13.4a	question	Sociální politika	Zdravotně postižení a péče	Dokáže se o slabé postarat dobrovolná charita bez státu?
+T14.1	topic	Bydlení a obce	Dostupnost bydlení	Dostupnost bydlení	ceny nemovitostí, nájemné, stavební řízení, hypotéky
+Q14.1a	question	Bydlení a obce	Dostupnost bydlení	Měl by stát regulovat výši nájemného?
+Q14.1b	question	Bydlení a obce	Dostupnost bydlení	Je drahé bydlení způsobeno regulací stavebního řízení?
+Q14.1c	question	Bydlení a obce	Dostupnost bydlení	Měl by stát stavět obecní a sociální byty?
+T14.2	topic	Bydlení a obce	Územní plánování a vlastnictví půdy	Územní plánování a vlastnictví půdy	územní plán, vyvlastnění, stavební povolení, veřejný prostor
+Q14.2a	question	Bydlení a obce	Územní plánování a vlastnictví půdy	Smí stát vyvlastnit pozemek kvůli stavbě dálnice?
+Q14.2b	question	Bydlení a obce	Územní plánování a vlastnictví půdy	Mělo by vlastníkovi stačit k stavbě na vlastním pozemku jen souhlas sousedů?
+T14.3	topic	Bydlení a obce	Obce a regiony	Obce a regiony	samospráva obcí, kraje, chudé regiony, decentralizace
+Q14.3a	question	Bydlení a obce	Obce a regiony	Měly by obce mít víc pravomocí a peněz na úkor státu?
+T15.1	topic	Podnikání a finance	Regulace podnikání a byrokracie	Regulace podnikání a byrokracie	živnostenský zákon, licence, EET, kontroly, papírování
+Q15.1a	question	Podnikání a finance	Regulace podnikání a byrokracie	Měla by být zrušena elektronická evidence tržeb?
+Q15.1b	question	Podnikání a finance	Regulace podnikání a byrokracie	Mělo by podnikání být možné bez živnostenského listu?
+Q15.1c	question	Podnikání a finance	Regulace podnikání a byrokracie	Brání byrokracie lidem podnikat?
+T15.2	topic	Podnikání a finance	Monopoly a hospodářská soutěž	Monopoly a hospodářská soutěž	antimonopolní úřad, kartely, velké korporace, dumping
+Q15.2a	question	Podnikání a finance	Monopoly a hospodářská soutěž	Potřebujeme antimonopolní úřad, aby trh nevedl k monopolům?
+Q15.2b	question	Podnikání a finance	Monopoly a hospodářská soutěž	Jsou velké korporace hrozbou pro společnost?
+T15.3	topic	Podnikání a finance	Banky a finanční trhy	Banky a finanční trhy	regulace bank, částečné rezervy, burza, spekulace
+Q15.3a	question	Podnikání a finance	Banky a finanční trhy	Měly by být banky přísněji regulovány?
+Q15.3b	question	Podnikání a finance	Banky a finanční trhy	Škodí spekulanti ekonomice?
+T15.4	topic	Podnikání a finance	Kryptoměny a alternativní peníze	Kryptoměny a alternativní peníze	Bitcoin, Monero, kryptoměny, regulace kryptoměn, hotovost
+Q15.4a	question	Podnikání a finance	Kryptoměny a alternativní peníze	Měl by stát regulovat kryptoměny?
+Q15.4b	question	Podnikání a finance	Kryptoměny a alternativní peníze	Měla by být zachována hotovost?
+Q15.4c	question	Podnikání a finance	Kryptoměny a alternativní peníze	Mohou kryptoměny nahradit státní měny?
+T15.5	topic	Podnikání a finance	Ochrana spotřebitele	Ochrana spotřebitele	reklamace, zákaz šmejdů, kvalita výrobků, informování spotřebitelů
+Q15.5a	question	Podnikání a finance	Ochrana spotřebitele	Potřebují spotřebitelé ochranu státu před podvodnými firmami?
+T16.1	topic	Obrana a bezpečnost	Armáda a výdaje na obranu	Armáda a výdaje na obranu	armáda, 2 % HDP na obranu, branná povinnost, nákupy zbraní
+Q16.1a	question	Obrana a bezpečnost	Armáda a výdaje na obranu	Měly by se zvýšit výdaje na armádu?
+Q16.1b	question	Obrana a bezpečnost	Armáda a výdaje na obranu	Měla by být obnovena povinná vojenská služba?
+Q16.1c	question	Obrana a bezpečnost	Armáda a výdaje na obranu	Dokázala by společnost bez státu ubránit se útoku?
+T16.2	topic	Obrana a bezpečnost	NATO a aliance	NATO a aliance	členství v NATO, kolektivní obrana, zahraniční mise
+Q16.2a	question	Obrana a bezpečnost	NATO a aliance	Měla by Česká republika zůstat v NATO?
+T16.3	topic	Obrana a bezpečnost	Válka a terorismus	Válka a terorismus	válka na Ukrajině, terorismus, válečné konflikty, mír
+Q16.3a	question	Obrana a bezpečnost	Válka a terorismus	Měla by Česká republika vojensky podporovat Ukrajinu?
+Q16.3b	question	Obrana a bezpečnost	Válka a terorismus	Je válka vždy důsledkem existence států?
+T17.1	topic	Technologie a věda	Internet a digitální regulace	Internet a digitální regulace	regulace internetu, umělá inteligence, ochrana dat, digitální služby
+Q17.1a	question	Technologie a věda	Internet a digitální regulace	Měla by být umělá inteligence regulována?
+Q17.1b	question	Technologie a věda	Internet a digitální regulace	Má stát regulovat obsah na internetu?
+T17.2	topic	Technologie a věda	Věda a výzkum	Věda a výzkum	financování vědy, granty, akademie věd, soukromý výzkum
+Q17.2a	question	Technologie a věda	Věda a výzkum	Měl by stát financovat vědu a výzkum?
+Q17.2b	question	Technologie a věda	Věda a výzkum	Fungovala by věda bez státních peněz?
+T17.3	topic	Technologie a věda	Duševní vlastnictví	Duševní vlastnictví	autorská práva, patenty, pirátství, sdílení
+Q17.3a	question	Technologie a věda	Duševní vlastnictví	Je duševní vlastnictví legitimní forma vlastnictví?
+Q17.3b	question	Technologie a věda	Duševní vlastnictví	Je stahování filmů a hudby krádež?
+T17.4	topic	Technologie a věda	Média a veřejnoprávní vysílání	Média a veřejnoprávní vysílání	Česká televize, Český rozhlas, koncesionářské poplatky, nezávislost médií
+Q17.4a	question	Technologie a věda	Média a veřejnoprávní vysílání	Měly by být zrušeny koncesionářské poplatky?
+Q17.4b	question	Technologie a věda	Média a veřejnoprávní vysílání	Potřebuje demokracie veřejnoprávní média?
+T18.1	topic	Zahraniční obchod	Volný obchod a cla	Volný obchod a cla	cla, obchodní dohody, ochrana domácích výrobců, globalizace
+Q18.1a	question	Zahraniční obchod	Volný obchod a cla	Měl by stát chránit domácí výrobce cly?
+Q18.1b	question	Zahraniční obchod	Volný obchod a cla	Prospívá globalizace chudým zemím?
+T18.2	topic	Zahraniční obchod	Sankce a embarga	Sankce a embarga	ekonomické sankce, embargo, obchod s autoritářskými režimy
+Q18.2a	question	Zahraniční obchod	Sankce a embarga	Jsou ekonomické sankce vůči jiným státům správné?
+T19.1	topic	Evropská unie a mezinárodní vztahy	Evropská unie	Evropská unie	členství v EU, czexit, evropské směrnice, suverenita
+Q19.1a	question	Evropská unie a mezinárodní vztahy	Evropská unie	Měla by Česká republika vystoupit z Evropské unie?
+Q19.1b	question	Evropská unie a mezinárodní vztahy	Evropská unie	Má EU příliš mnoho pravomocí?
+T19.2	topic	Evropská unie a mezinárodní vztahy	Zahraniční politika a rozvojová pomoc	Zahraniční politika a rozvojová pomoc	vztahy s Ruskem a Čínou, lidská práva v zahraniční politice, rozvojová pomoc
+Q19.2a	question	Evropská unie a mezinárodní vztahy	Zahraniční politika a rozvojová pomoc	Měl by stát poskytovat rozvojovou pomoc chudým zemím?
+Q19.2b	question	Evropská unie a mezinárodní vztahy	Zahraniční politika a rozvojová pomoc	Má zahraniční politika prosazovat lidská práva i za cenu obchodních ztrát?
+T19.3	topic	Evropská unie a mezinárodní vztahy	Mezinárodní organizace	Mezinárodní organizace	OSN, WHO, mezinárodní právo, globální vládnutí
+Q19.3a	question	Evropská unie a mezinárodní vztahy	Mezinárodní organizace	Potřebuje svět globální vládu nebo silnější mezinárodní organizace?
+T20.1	topic	Stát a veřejná správa	Demokracie a volby	Demokracie a volby	volební systém, přímá volba, referendum, volební povinnost
+Q20.1a	question	Stát a veřejná správa	Demokracie a volby	Je demokracie nejlepší způsob, jak řídit společnost?
+Q20.1b	question	Stát a veřejná správa	Demokracie a volby	Měla by se zavést přímá demokracie a referenda?
+Q20.1c	question	Stát a veřejná správa	Demokracie a volby	Má smysl chodit k volbám?
+T20.2	topic	Stát a veřejná správa	Velikost a role státu	Velikost a role státu	rozsah státu, privatizace, minimální stát, zestátnění
+Q20.2a	question	Stát a veřejná správa	Velikost a role státu	Měl by stát dělat méně a nechat více na trhu a lidech?
+Q20.2b	question	Stát a veřejná správa	Velikost a role státu	Mohla by společnost fungovat úplně bez státu?
+Q20.2c	question	Stát a veřejná správa	Velikost a role státu	Které služby musí zajišťovat stát a které by zvládl trh?
+T20.3	topic	Stát a veřejná správa	Veřejná správa a úředníci	Veřejná správa a úředníci	počet úředníků, efektivita úřadů, digitalizace státu, služební zákon
+Q20.3a	question	Stát a veřejná správa	Veřejná správa a úředníci	Je státní správa příliš velká a neefektivní?
+T20.4	topic	Stát a veřejná správa	Ústava a dělba moci	Ústava a dělba moci	ústava, prezident, parlament, ústavní soud, právní stát
+Q20.4a	question	Stát a veřejná správa	Ústava a dělba moci	Ochrání ústava občany před mocí státu?
+Q20.4b	question	Stát a veřejná správa	Ústava a dělba moci	Měl by prezident mít víc pravomocí?
+T20.5	topic	Stát a veřejná správa	Politické strany a politici	Politické strany a politici	politické strany, populismus, financování stran, důvěra v politiky
+Q20.5a	question	Stát a veřejná správa	Politické strany a politici	Lze změnit společnost k lepšímu prostřednictvím politické strany?
+Q20.5b	question	Stát a veřejná správa	Politické strany a politici	Je populismus hrozbou pro demokracii?
+T20.6	topic	Stát a veřejná správa	Dotace a veřejné zakázky	Dotace a veřejné zakázky	evropské dotace, veřejné zakázky, plýtvání veřejnými penězi
+Q20.6a	question	Stát a veřejná správa	Dotace a veřejné zakázky	Deformují dotace trh?
+Q20.6b	question	Stát a veřejná správa	Dotace a veřejné zakázky	Měly by se zrušit všechny dotace firmám?
+T21.1	topic	Veřejné statky a prostory	Veřejné prostranství	Veřejné prostranství	parky, ulice, kdo vlastní veřejný prostor, pravidla na veřejnosti
+Q21.1a	question	Veřejné statky a prostory	Veřejné prostranství	Měly by být ulice a parky v soukromém vlastnictví?
+T21.2	topic	Veřejné statky a prostory	Hasiči a záchranné služby	Hasiči a záchranné služby	hasiči, záchranka, krizové řízení, soukromé záchranné služby
+Q21.2a	question	Veřejné statky a prostory	Hasiči a záchranné služby	Kdo by hasil požáry, kdyby nebyl stát?
+T21.3	topic	Veřejné statky a prostory	Veřejné statky	Veřejné statky	veřejné statky, černí pasažéři, majáky, infrastruktura
+Q21.3a	question	Veřejné statky a prostory	Veřejné statky	Dokáže trh zajistit veřejné statky jako obranu nebo infrastrukturu?
+T23.1	topic	Kultura a náboženství	Kultura a umění	Kultura a umění	dotace kultuře, státní divadla, kinematografie, národní kultura
+Q23.1a	question	Kultura a náboženství	Kultura a umění	Měl by stát financovat kulturu a umění?
+Q23.1b	question	Kultura a náboženství	Kultura a umění	Přežilo by umění bez státních dotací?
+T23.2	topic	Kultura a náboženství	Církve a náboženství	Církve a náboženství	církevní restituce, odluka církve od státu, náboženská svoboda
+Q23.2a	question	Kultura a náboženství	Církve a náboženství	Měl by stát financovat církve?
+Q23.2b	question	Kultura a náboženství	Církve a náboženství	Jsou víra a svoboda v souladu?
+T23.3	topic	Kultura a náboženství	Národ a identita	Národ a identita	národní identita, vlastenectví, státní svátky, tradice
+Q23.3a	question	Kultura a náboženství	Národ a identita	Je vlastenectví ctnost?
+Q23.3b	question	Kultura a náboženství	Národ a identita	Potřebuje národ vlastní stát?
+T23.4	topic	Kultura a náboženství	Kulturní války	Kulturní války	progresivismus, konzervatismus, woke, genderová ideologie, politická korektnost
+Q23.4a	question	Kultura a náboženství	Kulturní války	Ohrožuje progresivismus svobodu?
+Q23.4b	question	Kultura a náboženství	Kulturní války	Ohrožuje konzervatismus svobodu?
+T24.1	topic	Morálka a osobní svoboda	Rodina a výchova dětí	Rodina a výchova dětí	výchova dětí, autorita rodičů, respektující výchova, rozvod
+Q24.1a	question	Morálka a osobní svoboda	Rodina a výchova dětí	Mají rodiče právo vychovávat děti podle sebe bez zásahů státu?
+Q24.1b	question	Morálka a osobní svoboda	Rodina a výchova dětí	Je poslušnost dětí ctnost?
+T24.2	topic	Morálka a osobní svoboda	Sexualita a vztahy	Sexualita a vztahy	monogamie, polyamorie, věk souhlasu, sexuální výchova
+Q24.2a	question	Morálka a osobní svoboda	Sexualita a vztahy	Má stát zasahovat do toho, jak lidé uspořádají své vztahy?
+T24.3	topic	Morálka a osobní svoboda	Osobní odpovědnost a paternalismus	Osobní odpovědnost a paternalismus	zákazy kouření, povinné přilby a pásy, ochrana lidí před sebou samými
+Q24.3a	question	Morálka a osobní svoboda	Osobní odpovědnost a paternalismus	Má stát chránit lidi před nimi samými?
+Q24.3b	question	Morálka a osobní svoboda	Osobní odpovědnost a paternalismus	Měl by být zákaz kouření v restauracích?
+T24.4	topic	Morálka a osobní svoboda	Seberealizace a smysl života	Seberealizace a smysl života	osobní rozvoj, štěstí, sebeřízení, autenticita, láska
+Q24.4a	question	Morálka a osobní svoboda	Seberealizace a smysl života	Začíná změna společnosti u změny sebe sama?
+Q24.4b	question	Morálka a osobní svoboda	Seberealizace a smysl života	Je svoboda podmínkou štěstí?
+C01	concept	Pojmy politické filozofie	Stát a moc	Stát	organizace s monopolem na legitimní násilí na určitém území
+C02	concept	Pojmy politické filozofie	Stát a moc	Suverenita	nejvyšší moc nad územím a obyvateli, nezávislost na jiné moci
+C03	concept	Pojmy politické filozofie	Stát a moc	Legitimita moci	co dává vládě právo vládnout a lidem povinnost poslouchat
+C04	concept	Pojmy politické filozofie	Stát a moc	Společenská smlouva	představa, že stát vzniká dohodou občanů, kteří mu svěří část svobody
+C05	concept	Pojmy politické filozofie	Stát a moc	Autorita a poslušnost	proč lidé poslouchají autority a kdy je poslušnost špatná
+C06	concept	Pojmy politické filozofie	Stát a moc	Moc korumpuje	koncentrace moci vede ke zneužívání, absolutní moc korumpuje absolutně
+C07	concept	Pojmy politické filozofie	Stát a moc	Totalita a autoritářství	režimy, které kontrolují všechny oblasti života občanů
+C08	concept	Pojmy politické filozofie	Stát a moc	Propaganda a indoktrinace	šíření ideologie státem, ovlivňování myšlení občanů
+C09	concept	Pojmy politické filozofie	Stát a moc	Etatismus	víra, že stát je nutný a že problémy má řešit stát
+C10	concept	Pojmy politické filozofie	Ideologie	Liberalismus	politická filozofie individuální svobody, omezené vlády a právního státu
+C11	concept	Pojmy politické filozofie	Ideologie	Konzervatismus	důraz na tradice, řád, rodinu a postupné změny
+C12	concept	Pojmy politické filozofie	Ideologie	Socialismus	společenské vlastnictví výrobních prostředků, rovnost, přerozdělování
+C13	concept	Pojmy politické filozofie	Ideologie	Komunismus	beztřídní společnost bez soukromého vlastnictví, historické komunistické režimy
+C14	concept	Pojmy politické filozofie	Ideologie	Sociální demokracie	tržní ekonomika s rozsáhlým sociálním státem
+C15	concept	Pojmy politické filozofie	Ideologie	Libertarianismus	maximální osobní a ekonomická svoboda, minimální stát
+C16	concept	Pojmy politické filozofie	Ideologie	Anarchismus	společnost bez státu a bez vládců
+C17	concept	Pojmy politické filozofie	Ideologie	Anarchokapitalismus	bezstátní společnost založená na soukromém vlastnictví a volném trhu
+C18	concept	Pojmy politické filozofie	Ideologie	Agorismus a kontraekonomika	osvobození skrze šedý a černý trh a budování paralelních struktur mimo stát
+C19	concept	Pojmy politické filozofie	Ideologie	Nacionalismus	národ jako základ politické identity a státu
+C20	concept	Pojmy politické filozofie	Ideologie	Fašismus	autoritářský nacionalistický režim podřizující jednotlivce státu
+C21	concept	Pojmy politické filozofie	Ideologie	Populismus	politika stavějící „lid“ proti „elitám“
+C22	concept	Pojmy politické filozofie	Ideologie	Progresivismus	snaha o společenské změny, rovnost a odstraňování nespravedlností
+C23	concept	Pojmy politické filozofie	Ideologie	Environmentalismus	politika ochrany přírody a klimatu
+C24	concept	Pojmy politické filozofie	Ideologie	Feminismus	hnutí za rovnost žen a mužů
+C25	concept	Pojmy politické filozofie	Ideologie	Minarchismus	minimální stát omezený na policii, soudy a obranu
+C26	concept	Pojmy politické filozofie	Práva a svoboda	Negativní a pozitivní svoboda	svoboda od zásahů jiných versus svoboda něco dělat nebo mít
+C27	concept	Pojmy politické filozofie	Práva a svoboda	Přirozená práva	práva, která člověk má od přírody, ne od státu
+C28	concept	Pojmy politické filozofie	Práva a svoboda	Lidská práva	univerzální práva každého člověka
+C29	concept	Pojmy politické filozofie	Práva a svoboda	Sebevlastnictví	každý člověk vlastní své tělo a svůj život
+C30	concept	Pojmy politické filozofie	Práva a svoboda	Princip neagrese	zákaz zahájit násilí nebo hrozbu násilím proti jiným a jejich majetku
+C31	concept	Pojmy politické filozofie	Práva a svoboda	Soukromé vlastnictví	právo vlastnit věci a nakládat s nimi
+C32	concept	Pojmy politické filozofie	Práva a svoboda	Dobrovolnost a souhlas	vztahy založené na dobrovolné dohodě a souhlasu všech stran
+C33	concept	Pojmy politické filozofie	Práva a svoboda	Právní stát	vláda zákona, rovnost před zákonem, nezávislé soudy
+C34	concept	Pojmy politické filozofie	Práva a svoboda	Občanská neposlušnost	vědomé porušení nespravedlivého zákona z morálních důvodů
+C35	concept	Pojmy politické filozofie	Práva a svoboda	Tolerance a pluralismus	soužití lidí s různými hodnotami a způsoby života
+C36	concept	Pojmy politické filozofie	Spravedlnost a rovnost	Sociální spravedlnost	spravedlivé rozdělení bohatství a příležitostí ve společnosti
+C37	concept	Pojmy politické filozofie	Spravedlnost a rovnost	Rovnost příležitostí a výsledků	rovný start pro všechny versus rovný výsledek
+C38	concept	Pojmy politické filozofie	Spravedlnost a rovnost	Nerovnost a bohatství	rozdíly v příjmech a majetku, bohatí a chudí
+C39	concept	Pojmy politické filozofie	Spravedlnost a rovnost	Přerozdělování	převod bohatství od jedněch k druhým prostřednictvím státu
+C40	concept	Pojmy politické filozofie	Spravedlnost a rovnost	Vykořisťování	zneužívání práce druhých, kapitalisté a dělníci
+C41	concept	Pojmy politické filozofie	Spravedlnost a rovnost	Solidarita	vzájemná pomoc a odpovědnost členů společnosti
+C42	concept	Pojmy politické filozofie	Spravedlnost a rovnost	Trest a náprava	odplata, odstrašení, náprava pachatele a odškodnění oběti
+C43	concept	Pojmy politické filozofie	Ekonomie	Volný trh	ekonomika řízená dobrovolnou směnou a cenami, bez státních zásahů
+C44	concept	Pojmy politické filozofie	Ekonomie	Kapitalismus	ekonomický systém soukromého vlastnictví a podnikání
+C45	concept	Pojmy politické filozofie	Ekonomie	Centrální plánování	řízení ekonomiky státem podle plánu
+C46	concept	Pojmy politické filozofie	Ekonomie	Problém ekonomické kalkulace	bez tržních cen nelze racionálně rozhodovat o vzácných zdrojích
+C47	concept	Pojmy politické filozofie	Ekonomie	Vzácnost a ceny	omezenost zdrojů a role cen jako signálů
+C48	concept	Pojmy politické filozofie	Ekonomie	Selhání trhu	externality, monopoly, informační asymetrie, veřejné statky
+C49	concept	Pojmy politické filozofie	Ekonomie	Externality	náklady nebo přínosy, které dopadají na třetí strany
+C50	concept	Pojmy politické filozofie	Ekonomie	Tragédie obecní pastviny	nadměrné využívání společných zdrojů, které nikdo nevlastní
+C51	concept	Pojmy politické filozofie	Ekonomie	Černí pasažéři	lidé využívající statky, za které neplatí
+C52	concept	Pojmy politické filozofie	Ekonomie	Rakouská ekonomická škola	Mises, Hayek, Rothbard, lidské jednání, subjektivní hodnota
+C53	concept	Pojmy politické filozofie	Ekonomie	Keynesiánství	stát má stimulovat poptávku a vyrovnávat hospodářské cykly
+C54	concept	Pojmy politické filozofie	Ekonomie	Spontánní řád	řád, který vzniká z jednání lidí, ne z plánu
+C55	concept	Pojmy politické filozofie	Ekonomie	Zlatý standard a zdravé peníze	peníze krytá zlatem nebo jinak chráněná před inflací
+C56	concept	Pojmy politické filozofie	Ekonomie	Lidské jednání	praxeologie, účelné jednání jednotlivců jako základ ekonomie
+C57	concept	Pojmy politické filozofie	Společnost a změna	Revoluce	násilná nebo rychlá změna politického systému
+C58	concept	Pojmy politické filozofie	Společnost a změna	Reforma a gradualismus	postupné změny systému zevnitř
+C59	concept	Pojmy politické filozofie	Společnost a změna	Utopie	představa dokonalé společnosti
+C60	concept	Pojmy politické filozofie	Společnost a změna	Občanská společnost	dobrovolné spolky, komunity a instituce mezi jednotlivcem a státem
+C61	concept	Pojmy politické filozofie	Společnost a změna	Decentralizace	přenesení moci a rozhodování na nižší úrovně
+C62	concept	Pojmy politické filozofie	Společnost a změna	Polycentrické právo	soukromé, konkurující si právní systémy a soudy
+C63	concept	Pojmy politické filozofie	Společnost a změna	Paralelní struktury	budování institucí mimo stát, které ho postupně nahradí
+C64	concept	Pojmy politické filozofie	Společnost a změna	Kryptoanarchie	svoboda prostřednictvím šifrování a kryptoměn
+C65	concept	Pojmy politické filozofie	Společnost a změna	Technologie a svoboda	vliv technologií na moc státu a svobodu jednotlivce
+C66	concept	Pojmy politické filozofie	Společnost a změna	Elity a moc	vládnoucí třídy, lobbisté a jejich vliv
+C67	concept	Pojmy politické filozofie	Etika	Utilitarismus	správné je to, co přináší největší užitek nejvíce lidem
+C68	concept	Pojmy politické filozofie	Etika	Deontologie a morální pravidla	správnost činu podle pravidel, ne podle důsledků
+C69	concept	Pojmy politické filozofie	Etika	Účel světí prostředky	dovoluje dobrý cíl použít špatné prostředky?
+C70	concept	Pojmy politické filozofie	Etika	Násilí a nenásilí	kdy je násilí ospravedlnitelné, pacifismus, sebeobrana
+C71	concept	Pojmy politické filozofie	Etika	Paternalismus	omezování svobody lidí pro jejich vlastní dobro
+C72	concept	Pojmy politické filozofie	Etika	Odpovědnost	nést důsledky vlastních rozhodnutí
+C73	concept	Pojmy politické filozofie	Etika	Empatie a respekt	porozumění druhým, nenásilná komunikace, respekt k jiným

@@ -1,0 +1,13 @@
+{
+  "model": "BAAI/bge-m3",
+  "count": 326,
+  "dim": 1024,
+  "device": "cpu",
+  "text_fingerprint": "9bc1d38bf3001f2b6d8e6a23c23d04f81863af0782966b664502859d28cb6e11",
+  "seconds": 21.7,
+  "created": "2026-11-11T23:56:55",
+  "versions": {
+    "python": "3.11.9",
+    "torch": "2.15.0+cpu"
+  }
+}
