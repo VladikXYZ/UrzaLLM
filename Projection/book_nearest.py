@@ -7,7 +7,7 @@ topics' average vectors in the full 1,024-dim space (an alternative view uses di
 Following the arrows from any topic always ends in a mutual pair (two topics that choose each other);
 all topics that lead to the same pair form a family.
 
-Writes Projection/output/book_nearest_textonly.html (+ .png)
+Writes book_nearest_textonly.html (+ .png) to the dataset's report folder (see dataset.py).
 """
 import json
 import sys
@@ -24,7 +24,7 @@ from book_map import UMAP_PARAMS, chapter_group, compact, esc  # noqa: E402
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+from dataset import CHUNKS, ENGLISH, OUT_DIR, nm, read_chunks, results_dir  # noqa: E402
 OUT = OUT_DIR
 VARIANT = "textonly"
 
@@ -49,8 +49,7 @@ def families(nn):
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     import umap
-    rows = pq.read_table(CHUNKS,
-                         columns=["chunk_id", "source", "book", "chapter", "subchapter"]).to_pylist()
+    rows = read_chunks(CHUNKS, ["chunk_id", "source", "book", "chapter", "subchapter"])
     E = np.load(results_dir(VARIANT) / "embeddings.npy")
     b = [i for i, r in enumerate(rows) if r["source"] == "book"]
     B, X = [rows[i] for i in b], E[b]
@@ -129,9 +128,31 @@ def html(nodes, pts, fams, agree, indeg, moved, path):
     big = fams["m"][0]
     popular = [(i, c) for i, c in indeg.most_common(5)]
     cross = [nd for nd in nodes if nodes[nd["nm"]]["book"] != nd["book"]]
+    # Largest family: which book most of it comes from
+    bigbook, nbig = Counter(nodes[i]["book"] for i in big[1]).most_common(1)[0]
+    # Kinds of mutual pair: chapter + AMEN section, across the two books, within one book
+    amen = lambda i: name(i).startswith("AMEN")
+    k_amen = [p for p in pairs if amen(p[0]) != amen(p[1])]
+    k_x = [p for p in pairs if p not in k_amen and nodes[p[0]]["book"] != nodes[p[1]]["book"]]
+    k_rest = len(pairs) - len(k_amen) - len(k_x)
+    pl = lambda c, s, p: f"{c} {s if c == 1 else p}"
+    kinds = [f"{pl(len(k_amen), 'pair joins', 'pairs join')} a chapter with an AMEN section"]
+    if k_x:
+        kinds.append(f"{pl(len(k_x), 'pair joins', 'pairs join')} the two books ("
+                     + ", ".join(f"{q(name(a))} ↔ {q(name(c))}" for a, c in k_x[:2]) + ")")
+    if k_rest:
+        kinds.append(f"{pl(k_rest, 'pair joins', 'pairs join')} other sections of the same book")
+    kinds = "; ".join(kinds)
+    if agree < 0.5:
+        agree_txt = (f"The two views pick the same nearest topic for only {agree:.0%} of topics: the topic closest "
+                     "in meaning is usually not the one next door on the map.")
+    else:
+        agree_txt = (f"The two views pick the same nearest topic for {agree:.0%} of topics; where they differ, "
+                     "the topic closest in meaning is not the one next door on the map.")
     fill = {"__LABELJS__": LABEL_JS,"__NODES__": j(nodes), "__PTS__": j(pts), "__FAMS__": j(fams),
             "__NT__": str(len(nodes)), "__NF__": str(len(fams["m"])), "__NFP__": str(len(fams["p"])),
-            "__AGREE__": f"{agree:.0%}",
+            "__AGREETXT__": agree_txt, "__KINDS__": kinds,
+            "__BIGBOOK__": f"{nbig} of them from <em>{esc(bigbook)}</em>",
             "__PAIRS__": "; ".join(f"{q(name(a))} ↔ {q(name(c))}" for a, c in pairs),
             "__BIG__": f"{len(big[1])} topics ending in {q(name(big[0][0]))} ↔ {q(name(big[0][1]))}",
             "__POPULAR__": ", ".join(f"{q(name(i))} ({c})" for i, c in popular),
@@ -198,14 +219,13 @@ choosing each other.</p>
 <p class="cap"><strong>How to read it:</strong> each arrow goes from a topic to its nearest topic; thick double
 arrows are mutual pairs, where a family ends. Hover a topic for its nearest and next-nearest topics with
 similarities; click a topic or a family to highlight it. In meaning, there are __NF__ families; on the map
-__NFP__. The two views pick the same nearest topic for only __AGREE__ of topics: the topic closest in meaning is
-usually not the one next door on the map. A topic's position is the average of chunks that can be spread out,
+__NFP__. __AGREETXT__ A topic's position is the average of chunks that can be spread out,
 and UMAP arranges the picture as a whole rather than keeping every pair of close topics side by side. The
 “in meaning” arrows are therefore the reliable ones; the map gives them a place to be drawn.</p>
 
 <h2 class="sec">The families</h2>
-<p class="cap"><strong>What it shows:</strong> the mutual pairs are __PAIRS__. The largest family has __BIG__: the
-personal-freedom chapters and the books' broad framing sections all lead there. The most chosen topics (how many
+<p class="cap"><strong>What it shows:</strong> the mutual pairs are __PAIRS__. The largest family has __BIG__
+(__BIGBOOK__; its members are listed in the side panel). The most chosen topics (how many
 others point to them) are __POPULAR__. __NCROSS__ topics point across to the other book, for example
 __CROSS__.</p>
 <div class="tw" style="margin-top:10px"><table id="tab"><thead><tr><th>Topic</th><th>Nearest topic</th><th class="r">Similarity</th><th>Next nearest</th></tr></thead><tbody></tbody></table></div>
@@ -213,9 +233,8 @@ __CROSS__.</p>
 <h2 class="sec">Conclusions</h2>
 <ul>
  <li><strong>One greedy step already reveals the books' structure:</strong> the families correspond to the
- books' main themes (economics, law and justice, the state, school, money, personal freedom).</li>
- <li><strong>The mutual pairs are the cores of those themes</strong>, usually a chapter and the AMEN section
- or chapter that answers it.</li>
+ books' main themes (economics, law and justice, the state, school, personal freedom).</li>
+ <li><strong>The mutual pairs are the cores of those themes:</strong> of the __NF__ pairs, __KINDS__.</li>
  <li><strong>Limitation:</strong> each topic keeps only one link, so a topic close to several themes appears in
  just one family. The next-nearest topics in the table show the alternatives; the trails report keeps all
  strong links.</li>

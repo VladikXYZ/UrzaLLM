@@ -10,7 +10,7 @@
 Each source's own average vector is subtracted first, so differences in style between
 books, articles and videos don't decide the assignment.
 
-Writes Projection/output/topic_distribution_textonly.html
+Writes topic_distribution_textonly.html to Projection/output/ (Chunks/output/projection/ with URZA_DATASET=final)
 """
 import json
 import sys
@@ -28,13 +28,13 @@ from timeline_map import region_of  # noqa: E402
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+from dataset import CHUNKS, ENGLISH, OUT_DIR, nm, read_chunks, results_dir  # noqa: E402
 OUT = OUT_DIR
 VARIANT = "textonly"
 N_WORST = 15           # worst-fitting texts listed
 K_ALT = (50, 184)      # alternative space sizes for the robustness check
-FRAMING = {"Tři příběhy", "Pár slov úvodem", "Předmluva", "Doslov", "Závěr; a co dál?", "Anarchokapitalismus",
-           "AMEN: aforismy"}   # sections that frame the books rather than discuss one topic
+FRAMING = {nm(x) for x in {"Tři příběhy", "Pár slov úvodem", "Předmluva", "Doslov", "Závěr; a co dál?", "Anarchokapitalismus",
+           "AMEN: aforismy"}}   # sections that frame the books rather than discuss one topic
 
 
 def unit(A):
@@ -79,9 +79,8 @@ def assign(X, b, o, grp, groups, k):
 
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
-    rows = pq.read_table(CHUNKS,
-                         columns=["chunk_id", "source", "kind", "year", "title", "url", "book", "chapter",
-                                  "subchapter", "text"]).to_pylist()
+    rows = read_chunks(CHUNKS, ["chunk_id", "source", "kind", "year", "title", "url", "book", "chapter",
+                                  "subchapter", "text"])
     E = np.load(results_dir(VARIANT) / "embeddings.npy")
     ids = (results_dir(VARIANT) / "chunk_ids.txt").read_text(encoding="utf-8").split()
     assert ids == [r["chunk_id"] for r in rows], "embeddings don't match chunks.parquet"
@@ -160,18 +159,25 @@ def main():
         l2 = r2["lab"]
         c2 = Counter(l2)
         robust[k] = {"shares": {g: c2[g] / len(o) for g in top_groups},
-                     "agree": float(np.mean(l2 == lab)), "acc1": r2["acc1"]}
+                     "agree": float(np.mean(l2 == lab)), "acc1": r2["acc1"],
+                     "top5": len(set(top_groups[:5]) & {g for g, _ in c2.most_common(5)})}
+
+    # Why the source offsets are removed: the same assignment on the raw embeddings
+    K_raw = broken_stick_k(PCA(random_state=0).fit(E[b]).explained_variance_ratio_)
+    raw_v = Counter(assign(E, b, o, grp, groups, K_raw)["lab"][osrc == "video"]).most_common(1)[0]
+    raw = {"g": raw_v[0], "share": raw_v[1] / n_vid, "dim": int(X.shape[1])}
 
     OUT.mkdir(exist_ok=True)
     html(dist, res, K, len(o), n_art, n_vid, nb, per_book, robust, top_groups, len(groups),
-         OUT / f"topic_distribution_{VARIANT}.html", own, fit, osrc, worst)
+         OUT / f"topic_distribution_{VARIANT}.html", own, fit, osrc, worst, raw)
     print(f"K={K} (book variance {res['evr']:.0%}), LOO acc {res['acc1']:.0%} / top-3 {res['acc3']:.0%}, "
           f"captured median {np.median(res['captured']):.2f}; fit median {np.median(fit):.3f} "
           f"vs books own {np.median(own):.3f}")
     for d in sorted(dist, key=lambda d: -d["share"])[:15]:
         print(f"  {d['share']:.1%}  A{d['a']:>3} V{d['v']:>3}  {d['g']}  (book {d['bshare'] or 0:.1%})")
     print("per book:", {k: {kk: f'{vv:.0%}' for kk, vv in v.items()} for k, v in per_book.items()})
-    print("robust:", {k: (f"agree {v['agree']:.0%}") for k, v in robust.items()})
+    print("robust:", {k: (f"agree {v['agree']:.0%}, top-5 kept {v['top5']}") for k, v in robust.items()})
+    print(f"raw embeddings: {raw['share']:.0%} of videos -> {raw['g']}")
     print(f"Wrote {OUT / f'topic_distribution_{VARIANT}.html'}")
 
 
@@ -208,8 +214,9 @@ def fit_svg(own, fit, osrc):
             f'<div class="legend">{legend}</div>')
 
 
-def html(dist, res, K, n, n_art, n_vid, nb, per_book, robust, top_groups, ngroups, path, own, fit, osrc, worst):
+def html(dist, res, K, n, n_art, n_vid, nb, per_book, robust, top_groups, ngroups, path, own, fit, osrc, worst, raw):
     p = lambda v: f"{v * 100:.0f}%"
+    names = lambda ds: ", ".join(q(d["g"]) for d in ds)
     q = lambda s: f"“{esc(s)}”"
     topical = [d for d in dist if not d["framing"]]
     ranked = sorted(topical, key=lambda d: -d["share"])
@@ -230,7 +237,7 @@ def html(dist, res, K, n, n_art, n_vid, nb, per_book, robust, top_groups, ngroup
     rob_rows += ("<tr><td><strong>Same section as main result</strong></td><td>–</td>"
                  + "".join(f"<td>{p(robust[k]['agree'])}</td>" for k in robust) + "</tr>")
     pb = per_book
-    fill = {
+    fill = {"__PRAXE__": esc(nm("19. Praxe")),
         "__DATA__": json.dumps(dist, ensure_ascii=False).replace("</", "<\\/"),
         "__N__": f"{n:,}", "__NA__": f"{n_art:,}", "__NV__": f"{n_vid:,}", "__NB__": f"{nb:,}",
         "__NG__": str(ngroups), "__K__": str(K), "__EVR__": p(res["evr"]),
@@ -253,6 +260,12 @@ def html(dist, res, K, n, n_art, n_vid, nb, per_book, robust, top_groups, ngroup
         "__ROB_ROWS__": rob_rows,
         "__ROB_ACC__": ", ".join(f"{k} dims {p(robust[k]['acc1'])}" for k in robust),
         "__ROB_AGREE__": " and ".join(p(robust[k]["agree"]) for k in robust),
+        "__ROB_TOP5__": " and ".join(f"{robust[k]['top5']} with {k} dims" for k in robust),
+        "__RAW__": (f"one section, {q(raw['g'])}"
+                    + (" (about Urza's organisation)," if raw["g"] == nm("Svobodný přístav") else ",")
+                    + f" attracted {p(raw['share'])} of all videos"),
+        "__DIM__": f"{raw['dim']:,}",
+        "__OVER3__": names(over[:3]), "__UNDER3__": names(under[:3]),
     }
     page = TEMPLATE
     for k, v in fill.items():
@@ -313,14 +326,13 @@ output is distributed over the books' concepts, and which texts fit none of them
 <ol>
  <li><strong>Embeddings:</strong> all chunks, embedded from their own text only (variant <code>textonly</code>).
  Each source's average vector was subtracted first, so the difference in style between book prose, blog posts
- and video descriptions doesn't decide the outcome (without this, one section about Urza's organisation
- “Svobodný přístav” attracted a third of all videos).</li>
+ and video descriptions doesn't decide the outcome (without this, __RAW__).</li>
  <li><strong>The books' concept space:</strong> PCA fitted on the __NB__ book chunks only. Kept are the __K__
  directions that carry more variance than a random split would (broken-stick rule); they hold __EVR__ of the
  books' variation. Articles and videos are projected into this space; directions the books don't use are
  dropped. A typical article or video chunk keeps __CAP__ of its length in it.</li>
  <li><strong>Conceptual centres:</strong> the average of each of the __NG__ book sections' chunks in this space
- (chapters; the appendix and AMEN split into their topics; “19. Praxe” split into its subsections).</li>
+ (chapters; the appendix and AMEN split into their topics; “__PRAXE__” split into its subsections).</li>
  <li><strong>Assignment:</strong> every article and video chunk goes to the centre with the highest cosine
  similarity. Announcements are left out.</li>
  <li><strong>Check on the books:</strong> each book chunk was assigned with its own section's centre computed
@@ -356,7 +368,7 @@ second's after 2020.</p>
 
 <h2 class="sec">How well do articles and videos fit the books at all?</h2>
 <p class="sub">Every text gets a section, even one about something the books never discuss. To see how well texts
-fit, their similarity to the nearest section centre is compared, in the full 1,024-dimensional space, with how
+fit, their similarity to the nearest section centre is compared, in the full __DIM__-dimensional space, with how
 similar the books' own chunks are to their own section (centre computed without the chunk).</p>
 <div class="panel">__FITSVG__</div>
 <p class="cap"><strong>Reading it:</strong> article and video chunks fit the books' sections less tightly (medians
@@ -367,24 +379,25 @@ bottom 10%, and __BELOW_Q25__ worse than the bottom quarter. So the report shows
 the worst-fitting texts instead of one “outside” number.</p>
 <div class="tw"><table><thead><tr><th>The __NWORST__ worst-fitting texts</th><th>Year</th><th>Fit</th><th class="l">Nearest section anyway</th></tr></thead>
 <tbody>__WORST__</tbody></table></div>
-<p class="cap">These are the texts furthest from all of the books' concepts: mostly current events, politicians,
-media and specific campaigns. They are where Urza's output goes beyond what the books systematise.</p>
+<p class="cap">These are the texts furthest from all of the books' concepts, for example current events,
+politicians, media and talks on subjects the books don't treat. They are where Urza's output goes beyond what
+the books systematise.</p>
 
 <h2 class="sec">How robust is this?</h2>
 <p class="sub">The size of the book space is a choice. The same assignment with fewer and with more directions:</p>
 <div class="tw"><table><thead><tr><th>Section</th><th class="r">__K__ dims (main)</th>__ROB_HEAD__</tr></thead><tbody>__ROB_ROWS__</tbody></table></div>
-<p class="cap"><strong>Reading it:</strong> the leading sections stay the same, and __ROB_AGREE__ of chunks get the
-same section with the other sizes; the book check gives __ROB_ACC__. The ranking of covered concepts is
-solid; individual borderline chunks can switch between neighbouring sections.</p>
+<p class="cap"><strong>Reading it:</strong> of the five leading sections, __ROB_TOP5__ stay among the five
+leading; __ROB_AGREE__ of chunks get the same section with the other sizes, and the book check gives __ROB_ACC__.
+The broad picture holds, but the exact ranking of sections with similar shares depends on the size of the space,
+and borderline chunks can switch between neighbouring sections.</p>
 
 <h2 class="sec">Conclusions</h2>
 <ul>
  <li><strong>The books' concepts cover most of Urza's other output:</strong> __NCOV__ of __NTOP__ topical
  sections are reached. Articles and videos fit the sections less tightly than the books themselves, and the
- worst-fitting texts (current affairs, politicians, media, campaigns) mark where Urza goes beyond the books.</li>
- <li><strong>The distribution is uneven</strong>, led by __TOP5__. The practical, organisational and education
- topics are far more present in articles and videos than in the books; parts of the economic theory are mainly
- in the books.</li>
+ worst-fitting texts mark where Urza goes beyond the books.</li>
+ <li><strong>The distribution is uneven</strong>, led by __TOP5__. Relative to their size in
+ the books, __OVER3__ are far more present in articles and videos, while __UNDER3__ are mainly in the books.</li>
  <li><strong>Caveats:</strong> videos are represented by their descriptions; a chunk gets exactly one section
  even when it touches several; sections are clusters of the author's own text, so a topic the books treat
  briefly has a weaker centre. Framing sections (stories, introductions, epilogues) attract texts by tone

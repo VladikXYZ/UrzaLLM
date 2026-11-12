@@ -39,12 +39,12 @@ from the model with a corrected version.</p>
 
 <h2 class="sec">What was done</h2>
 <ol class="steps">
- <li><strong>Embedding.</strong> Each of the 2,528 chunks (articles, book sections, video descriptions; see the
+ <li><strong>Embedding.</strong> Each of the 2,528 chunks (articles, book passages, video descriptions; see the
  preprocessing report) was turned into a 1,024-number vector with the model <code>BAAI/bge-m3</code>. Texts on
  similar subjects should get similar vectors (measured by cosine similarity).</li>
  <li><strong>Correction (“source-centring”).</strong> For each source separately, the average of all its vectors
  was computed and subtracted from each of its vectors, which were then rescaled to length 1. Whatever all books
- have in common (style, length, the “Kniha …” context line) is removed; what makes one book chunk different from
+ have in common (style, length, any shared context line) is removed; what makes one book chunk different from
  another (its topic) stays.</li>
  <li><strong>Projection.</strong> Both versions were reduced to 2D with UMAP (cosine distance, 15 neighbours,
  min_dist 0.1, fixed random seed), which keeps nearby texts nearby. The right map was rotated to line up with the
@@ -61,39 +61,34 @@ on the other map. Use the boxes to hide sources and the search to highlight titl
 <div class="controls" id="controls"></div>
 <div class="grid">
  <div class="panel"><h2>Raw embeddings</h2><canvas id="c0"></canvas>
-  <p class="cap"><strong>What you see:</strong> the map splits into two large “continents” by kind of text, not
-  by subject: video descriptions (green) at the top, articles (blue) and book sections (orange) at the bottom,
-  with books mostly on one side. Chunks on the same subject from different sources end up far apart: search
-  <em>drog</em> and the drug chunks are spread over both continents.</p></div>
+  <p class="cap"><strong>What you see:</strong> the map is sorted mainly by kind of text, not by subject: video descriptions (green) gather in one region, articles (blue) and book passages (orange) in another (same-source share of a chunk's 10 nearest neighbours on this map: 77% / 82% / 84% for articles / books / videos, against about 23% by chance). Chunks on the same subject from different sources
+  can end up far apart; search <em>drog</em> to see where the drug chunks land.</p></div>
  <div class="panel"><h2>After subtracting each source's average</h2><canvas id="c1"></canvas>
-  <p class="cap"><strong>What you see:</strong> one connected map with colours mixed throughout. Small groups
-  are now organised by subject and contain several sources: the drug chunks from the book, the articles and the
-  videos sit together. Books still form small local groups, because consecutive sections of a chapter really do
-  discuss the same thing.</p></div>
+  <p class="cap"><strong>What you see:</strong> one main map in which the colours are more mixed than on the left (same-source share of 2D neighbours 77% / 82% / 84% → 69% / 69% / 69%). Some book chapters sit apart as their own islands: <em>Tři příběhy</em> (27 chunks). Search <em>drog</em> again: the matching chunks from different sources move closer together (average distance between them 63% of that on the left). Books still form local groups, because
+  consecutive passages of a chapter really do discuss the same thing.</p></div>
 </div>
 
 <h2 class="sec">Same-source share of the 10 nearest neighbours</h2>
 <p class="sub"><strong>How it is computed:</strong> for every chunk, take the 10 chunks most similar to it and
 count how many come from the same source (article, book or video); then average over all chunks of that source.
 <strong>Expected at random</strong> is what this share would be if similarity ignored the source entirely, i.e.
-that source's share of all other chunks (books are only 23% of the corpus, so a book chunk would have about 2 of
-10 book neighbours by chance). The gap between a column and “expected at random” measures how much the source,
+that source's share of all other chunks (books are 23% of the corpus, so a book chunk would have about 2 of 10 book neighbours by chance). The gap between a column and “expected at random” measures how much the source,
 rather than the topic, decides who is similar. “Full vectors” uses cosine similarity of the 1,024-number vectors
 (what the coverage scoring will use); “2D map” uses distance on the maps above.</p>
 <div class="tw"><table id="rates"></table></div>
-<p class="cap"><strong>Reading it:</strong> a book chunk's 10 nearest neighbours are 88% books in the raw vectors, against 23% expected by chance. After centring it is 76%. The 2D maps show the same pattern (82% → 69% for books), so the maps reflect the full vectors faithfully.</p>
+<p class="cap"><strong>Reading it:</strong> a book chunk's 10 nearest neighbours are 88% books in the raw vectors, against 23% expected by chance. After centring it is 76%. The 2D maps show a similar pattern (82% → 69% for books; at most 6 points from the full-vector value for any source), so the maps reflect the full vectors only roughly.</p>
 
 <h2 class="sec">Conclusions</h2>
 <ul class="concl">
- <li><strong>The raw embeddings mix topic with kind of text.</strong> In the raw vectors every source has far more same-source neighbours than chance would give: articles 75% vs 38%, book sections 88% vs 23%, video descriptions 84% vs 39%. The effect is strongest for book sections.</li>
- <li><strong>Source-centring fixes the big picture but only part of the close neighbourhoods.</strong> Measured as the excess over chance, centring removes 1% of it for articles, 20% of it for book sections, 31% of it for video descriptions (full vectors): same-source neighbours drop to 75% / 76% / 70% for articles / books / videos, still well above chance. On the map the change is larger: the source continents disappear into one map organised by subject.
+ <li><strong>The raw embeddings mix topic with kind of text.</strong> In the raw vectors every source has far more same-source neighbours than chance would give: articles 75% vs 38%, book passages 88% vs 23%, video descriptions 84% vs 39%. The effect is strongest for book passages.</li>
+ <li><strong>Source-centring helps the big picture more than the close neighbourhoods.</strong> Measured as the excess over chance, centring removes 1% of it for articles, removes 20% of it for book passages, removes 31% of it for video descriptions (full vectors). Same-source neighbours after centring: 75% / 76% / 70% for articles / books / videos, still well above chance. On the 2D map the share goes from 77% / 82% / 84% to 69% / 69% / 69%, and the separate source regions of the raw map merge into one main map, with same-source patches left inside it.
  The reason: subtracting an average removes the shift that pushed each source into its own region (hence the
- single connected map), but the closest neighbours of a chunk are still mostly texts of the same kind.</li>
- <li><strong>Some of the remaining same-source grouping is genuine.</strong> Sections of one book chapter, a
- series of lecture announcements or the yearly Rothbard posts really are about the same thing. <strong>The source word in the context line is not the cause.</strong> The same chunks were embedded a second time without “Kniha / Článek / Oznámení / Video” at the start (variant <code>nosource</code>). Same-source neighbours in the raw vectors changed only from 79% to 75% (articles), 90% to 88% (book sections), 88% to 84% (video descriptions); after centring the two variants are practically identical (75% vs 75%, 75% vs 76%, 70% vs 70%). The clustering comes from the texts themselves: their style, length and the way each source writes about a topic.</li>
- <li><strong>For the coverage map, use the centred vectors</strong>: the map is organised by subject, which is
- what “which political issues does Urza cover” needs. Expect sources to still appear as small same-colour
- patches inside each subject area. <strong>For scoring a question against chunks</strong>, keep the raw vectors:
+ more connected map), but the closest neighbours of a chunk are still mostly texts of the same kind.</li>
+ <li><strong>Some of the remaining same-source grouping is genuine.</strong> Consecutive passages of one book
+ chapter, a series of lecture announcements or the yearly Rothbard posts really are about the same thing. <strong>The context line adds to the clustering, the texts do the rest.</strong> The same chunks were embedded with different context lines (same-source share of the 10 nearest neighbours, full vectors; chance: 38% / 23% / 39%):</li></ul><div class='tw'><table><thead><tr><th>Variant</th><th>Raw, articles</th><th>Raw, book passages</th><th>Raw, video descriptions</th><th>Centred, articles</th><th>Centred, book passages</th><th>Centred, video descriptions</th></tr></thead><tbody><tr><td><code>withsource</code> – context line with the source word (“Kniha …”, “Článek/Oznámení „…“”, “Video „…“”)</td><td>79%</td><td>90%</td><td>88%</td><td>75%</td><td>75%</td><td>70%</td></tr><tr><td><strong><code>nosource</code></strong> – context line without the source word</td><td>75%</td><td>88%</td><td>84%</td><td>75%</td><td>76%</td><td>70%</td></tr><tr><td><code>textonly</code> – no context line, only the chunk's own text</td><td>70%</td><td>77%</td><td>78%</td><td>74%</td><td>61%</td><td>67%</td></tr></tbody></table></div><ul class='concl'><li style='list-style:none'>Removing just the source word lowers the raw same-source share by 2–4 points; removing the rest of the context line (titles, chapter paths, years, guests) lowers it by another 6–12 points in the raw vectors and lowers it by 1–15 points in the centred ones. What remains even without any context line comes from the texts themselves: their style, length and the way each source writes about a topic.</li>
+ <li><strong>For the coverage map, use the centred vectors</strong>: that map is organised more by subject than
+ the raw one, which is what “which political issues does Urza cover” needs. Expect sources to still appear as
+ same-colour patches inside each subject area. <strong>For scoring a question against chunks</strong>, keep the raw vectors:
  a question has no source, and the model was trained on raw vectors. Because neighbours are still partly
  same-source, coverage should be reported per source as well as overall.</li>
 </ul>

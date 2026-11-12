@@ -1,0 +1,327 @@
+id	layer	major	sub	text	description
+T01.1	topic	Macroeconomics	Inflation and monetary policy	Inflation and monetary policy	price level, interest rates, the central bank, money printing
+Q01.1a	question	Macroeconomics	Inflation and monetary policy	Should there be a central bank, or should private competing currencies emerge instead?
+Q01.1b	question	Macroeconomics	Inflation and monetary policy	Is moderate inflation good for the economy, or is it a hidden tax?
+T01.2	topic	Macroeconomics	Taxes and the tax system	Taxes and the tax system	level and structure of taxation, progressive taxation, VAT, income tax
+Q01.2a	question	Macroeconomics	Taxes and the tax system	Should a progressive income tax be introduced so that the rich pay more?
+Q01.2b	question	Macroeconomics	Taxes and the tax system	Is taxation theft, or a legitimate fee for public services?
+Q01.2c	question	Macroeconomics	Taxes and the tax system	Should taxes be cut, even if it means less money for public services?
+T01.3	topic	Macroeconomics	Government budget and public debt	Government budget and public debt	budget deficit, public debt, austerity measures, mandatory spending
+Q01.3a	question	Macroeconomics	Government budget and public debt	Should a balanced budget be required by law?
+Q01.3b	question	Macroeconomics	Government budget and public debt	Does government borrowing shift costs onto future generations?
+T01.4	topic	Macroeconomics	Business cycle and economic crises	Business cycle and economic crises	recession, unemployment, stimulus packages, government bailouts of companies
+Q01.4a	question	Macroeconomics	Business cycle and economic crises	Should the government increase spending during a recession to support the economy?
+Q01.4b	question	Macroeconomics	Business cycle and economic crises	Should the government bail out failing banks and large companies?
+T01.5	topic	Macroeconomics	The euro and monetary union	The euro and monetary union	euro adoption, the Czech koruna, monetary sovereignty
+Q01.5a	question	Macroeconomics	The euro and monetary union	Should the Czech Republic adopt the euro?
+T02.1	topic	Civil rights and liberties	Freedom of speech and censorship	Freedom of speech and censorship	disinformation, hate speech, website blocking, social media
+Q02.1a	question	Civil rights and liberties	Freedom of speech and censorship	Should the state block disinformation websites?
+Q02.1b	question	Civil rights and liberties	Freedom of speech and censorship	Should hate speech be a criminal offense?
+Q02.1c	question	Civil rights and liberties	Freedom of speech and censorship	Do social media platforms have the right to delete posts and ban users?
+T02.2	topic	Civil rights and liberties	Privacy and surveillance	Privacy and surveillance	surveillance of citizens, personal data, cameras, wiretapping, encryption
+Q02.2a	question	Civil rights and liberties	Privacy and surveillance	May the state monitor citizens' communications in the name of security?
+Q02.2b	question	Civil rights and liberties	Privacy and surveillance	Should it be legal to pay and communicate anonymously?
+T02.3	topic	Civil rights and liberties	Discrimination and equality	Discrimination and equality	anti-discrimination laws, quotas, gender equality, minorities
+Q02.3a	question	Civil rights and liberties	Discrimination and equality	Should the law prohibit private businesses from discriminating against customers or employees?
+Q02.3b	question	Civil rights and liberties	Discrimination and equality	Should quotas for women be introduced in corporate leadership and in politics?
+T02.4	topic	Civil rights and liberties	Minority and LGBT rights	Minority and LGBT rights	marriage equality, adoption, the Roma, national minorities
+Q02.4a	question	Civil rights and liberties	Minority and LGBT rights	Should same-sex marriage be legalized?
+Q02.4b	question	Civil rights and liberties	Minority and LGBT rights	Should the state decide at all who may marry?
+T02.5	topic	Civil rights and liberties	Assembly and protest	Assembly and protest	demonstrations, civil disobedience, police intervention
+Q02.5a	question	Civil rights and liberties	Assembly and protest	Is breaking unjust laws justified?
+Q02.5b	question	Civil rights and liberties	Assembly and protest	May the state restrict demonstrations for the sake of public order?
+T02.6	topic	Civil rights and liberties	Children's rights	Children's rights	children's rights vis-à-vis parents and the state, children's self-determination, corporal punishment
+Q02.6a	question	Civil rights and liberties	Children's rights	Should children have the right to make decisions about their own education and life?
+Q02.6b	question	Civil rights and liberties	Children's rights	Should corporal punishment of children be banned by law?
+T03.1	topic	Health care	Health care financing and insurance	Health care financing and insurance	mandatory health insurance, co-payments, private insurers
+Q03.1a	question	Health care	Health care financing and insurance	Should health insurance be mandatory?
+Q03.1b	question	Health care	Health care financing and insurance	Should patients pay more for care out of pocket?
+T03.2	topic	Health care	Regulation of doctors and medicines	Regulation of doctors and medicines	medical licensing, drug approval, pharmacies, alternative medicine
+Q03.2a	question	Health care	Regulation of doctors and medicines	Should the state decide which medicines people are allowed to take?
+Q03.2b	question	Health care	Regulation of doctors and medicines	Should it be possible to practice medicine without a state license if the patient consents?
+T03.3	topic	Health care	Vaccination and public health	Vaccination and public health	mandatory vaccination, epidemics, quarantines, lockdowns
+Q03.3a	question	Health care	Vaccination and public health	Should vaccination be mandatory?
+Q03.3b	question	Health care	Vaccination and public health	Were lockdowns and business closures during the pandemic justified?
+T03.4	topic	Health care	End of life and reproduction	End of life and reproduction	euthanasia, abortion, surrogacy, organ donation
+Q03.4a	question	Health care	End of life and reproduction	Should euthanasia be legal?
+Q03.4b	question	Health care	End of life and reproduction	Should abortion be legal?
+Q03.4c	question	Health care	End of life and reproduction	Should people be allowed to sell their own organs?
+T03.5	topic	Health care	Mental health	Mental health	psychiatry, involuntary commitment, psychotherapy
+Q03.5a	question	Health care	Mental health	May the state involuntarily commit people with mental illness?
+T04.1	topic	Agriculture	Agricultural subsidies	Agricultural subsidies	farm subsidies, the EU Common Agricultural Policy, food self-sufficiency
+Q04.1a	question	Agriculture	Agricultural subsidies	Should agricultural subsidies be abolished?
+Q04.1b	question	Agriculture	Agricultural subsidies	Should the country be self-sufficient in food, even if food becomes more expensive?
+T04.2	topic	Agriculture	Food and food regulation	Food and food regulation	food safety, GMOs, farmers' markets, farm-gate sales
+Q04.2a	question	Agriculture	Food and food regulation	Should the sale of homemade food without hygiene permits be allowed?
+Q04.2b	question	Agriculture	Food and food regulation	Should genetically modified crops be allowed?
+T04.3	topic	Agriculture	Animal rights	Animal rights	animal farming, fur farms, animal cruelty
+Q04.3a	question	Agriculture	Animal rights	Do animals have rights that the state should protect?
+T05.1	topic	Labor and employment	Minimum wage and labor regulation	Minimum wage and labor regulation	minimum wage, the Labor Code, notice periods, working hours
+Q05.1a	question	Labor and employment	Minimum wage and labor regulation	Should the minimum wage be raised?
+Q05.1b	question	Labor and employment	Minimum wage and labor regulation	Should there be a minimum wage at all?
+Q05.1c	question	Labor and employment	Minimum wage and labor regulation	Should the Labor Code protect employees even if it restricts freedom of contract?
+T05.2	topic	Labor and employment	Trade unions and strikes	Trade unions and strikes	trade unions, collective bargaining, strikes, strikebreakers
+Q05.2a	question	Labor and employment	Trade unions and strikes	Should trade unions have special bargaining rights?
+Q05.2b	question	Labor and employment	Trade unions and strikes	Is a strikebreaker a traitor, or a person exercising their freedom?
+T05.3	topic	Labor and employment	Unemployment and the labor market	Unemployment and the labor market	unemployment benefits, retraining, disguised self-employment, the self-employed
+Q05.3a	question	Labor and employment	Unemployment and the labor market	Should unemployment benefits be higher or lower?
+Q05.3b	question	Labor and employment	Unemployment and the labor market	Should disguised self-employment (hiring workers as independent contractors instead of employees) be legal?
+T05.4	topic	Labor and employment	Child labor and working conditions	Child labor and working conditions	work by children and minors, occupational safety, exploitation
+Q05.4a	question	Labor and employment	Child labor and working conditions	Should children be allowed to work and earn money if they want to?
+T06.1	topic	Education	Compulsory schooling	Compulsory schooling	compulsory school attendance, homeschooling, unschooling
+Q06.1a	question	Education	Compulsory schooling	Should school attendance be compulsory?
+Q06.1b	question	Education	Compulsory schooling	Should homeschooling be freely permitted?
+T06.2	topic	Education	Public and private schools	Public and private schools	school funding, private and alternative schools, education vouchers, tuition fees
+Q06.2a	question	Education	Public and private schools	Should the state fund schools, or give parents money for their child's education?
+Q06.2b	question	Education	Public and private schools	Should university education charge tuition?
+T06.3	topic	Education	Curriculum and teaching methods	Curriculum and teaching methods	national curriculum frameworks, the maturita exam, inclusion, grading, self-directed learning
+Q06.3a	question	Education	Curriculum and teaching methods	Should the state determine what children learn at school?
+Q06.3b	question	Education	Curriculum and teaching methods	Are grading and testing harmful to children?
+Q06.3c	question	Education	Curriculum and teaching methods	Should children learn only what interests them?
+T06.4	topic	Education	Schools and civic education	Schools and civic education	patriotism, education for democracy, indoctrination in schools
+Q06.4a	question	Education	Schools and civic education	Should schools instill loyalty to the state and to democracy?
+T07.1	topic	Environment	Climate change	Climate change	CO2 emissions, the Green Deal, emission allowances, carbon tax
+Q07.1a	question	Environment	Climate change	Should the state intervene in the economy because of climate change?
+Q07.1b	question	Environment	Climate change	Should the Czech Republic support the Green Deal?
+T07.2	topic	Environment	Pollution and nature conservation	Pollution and nature conservation	air and water pollution, national parks, bark beetle, waste
+Q07.2a	question	Environment	Pollution and nature conservation	Is private ownership a better protector of nature than state regulation?
+Q07.2b	question	Environment	Pollution and nature conservation	Who should pay for damage caused by pollution?
+T07.3	topic	Environment	Water and drought	Water and drought	water management, drought, dams, water charges
+Q07.3a	question	Environment	Water and drought	Should water resources be privately owned?
+T08.1	topic	Energy	Energy mix	Energy mix	nuclear power, coal, renewables, gas
+Q08.1a	question	Energy	Energy mix	Should a new nuclear power plant be built?
+Q08.1b	question	Energy	Energy mix	Should the state subsidize renewable energy?
+T08.2	topic	Energy	Energy prices	Energy prices	price caps, energy poverty, ČEZ (state-controlled power utility), energy market regulation
+Q08.2a	question	Energy	Energy prices	Should the state cap energy prices?
+Q08.2b	question	Energy	Energy prices	Should the energy sector be in state hands?
+T09.1	topic	Migration	Immigration and asylum	Immigration and asylum	accepting refugees, asylum policy, EU quotas, border protection
+Q09.1a	question	Migration	Immigration and asylum	Should the Czech Republic accept refugees?
+Q09.1b	question	Migration	Immigration and asylum	Does the state have the right to restrict who may enter the country?
+Q09.1c	question	Migration	Immigration and asylum	Would open borders be compatible with the welfare state?
+T09.2	topic	Migration	Integration and labor migration	Integration and labor migration	work visas, integration of foreigners, citizenship
+Q09.2a	question	Migration	Integration and labor migration	Should it be easier for foreigners to obtain work permits?
+T10.1	topic	Transportation	Roads and transport infrastructure	Roads and transport infrastructure	highway construction, tolls, high-speed rail, who would build the roads
+Q10.1a	question	Transportation	Roads and transport infrastructure	Who would build the roads if there were no state?
+Q10.1b	question	Transportation	Roads and transport infrastructure	Should highways be tolled or free?
+T10.2	topic	Transportation	Traffic rules and traffic policing	Traffic rules and traffic policing	speed limits, drunk driving, fines, driver's licenses
+Q10.2a	question	Transportation	Traffic rules and traffic policing	Should there be zero tolerance for alcohol behind the wheel?
+Q10.2b	question	Transportation	Traffic rules and traffic policing	Do traffic fines serve safety, or revenue collection?
+T10.3	topic	Transportation	Public transit and taxis	Public transit and taxis	subsidized public transit, Uber, taxi regulation, airports
+Q10.3a	question	Transportation	Public transit and taxis	Should public transit be free?
+Q10.3b	question	Transportation	Public transit and taxis	Should services like Uber operate without taxi licenses?
+T12.1	topic	Law and justice	Crime and punishment	Crime and punishment	prisons, sentence lengths, the death penalty, victim compensation
+Q12.1a	question	Law and justice	Crime and punishment	Should the death penalty be reinstated?
+Q12.1b	question	Law and justice	Crime and punishment	Should punishment serve retribution, or restitution to the victim?
+Q12.1c	question	Law and justice	Crime and punishment	Should criminal sentences be harsher?
+T12.2	topic	Law and justice	Police and police powers	Police and police powers	police brutality, police powers, interrogations, the right to remain silent
+Q12.2a	question	Law and justice	Police and police powers	Do citizens have a duty to cooperate with the police?
+Q12.2b	question	Law and justice	Police and police powers	Could private security agencies provide security instead of the state police?
+T12.3	topic	Law and justice	Courts and the administration of justice	Courts and the administration of justice	the court system, length of proceedings, arbitration, debt enforcement by bailiffs
+Q12.3a	question	Law and justice	Courts and the administration of justice	Could private courts resolve disputes instead of state courts?
+Q12.3b	question	Law and justice	Courts and the administration of justice	Is the Czech debt-enforcement (bailiff) system fair?
+T12.4	topic	Law and justice	Drugs and drug regulation	Drugs and drug regulation	marijuana legalization, drug decriminalization, prohibition, alcohol and tobacco
+Q12.4a	question	Law and justice	Drugs and drug regulation	Should marijuana be legal?
+Q12.4b	question	Law and justice	Drugs and drug regulation	Should all drugs be legalized?
+Q12.4c	question	Law and justice	Drugs and drug regulation	Does the war on drugs cause more harm than the drugs themselves?
+T12.5	topic	Law and justice	Firearms	Firearms	right to bear arms, firearms license, self-defense, the EU Firearms Directive
+Q12.5a	question	Law and justice	Firearms	Should everyone have the right to own and carry a gun?
+Q12.5b	question	Law and justice	Firearms	Should the right to bear arms be in the constitution?
+T12.6	topic	Law and justice	Corruption and clientelism	Corruption and clientelism	political corruption, conflicts of interest, public procurement, lobbying
+Q12.6a	question	Law and justice	Corruption and clientelism	Can corruption be eradicated by better laws, or is it a consequence of big government?
+Q12.6b	question	Law and justice	Corruption and clientelism	Is a conflict of interest of a businessman prime minister unacceptable?
+T12.7	topic	Law and justice	Prostitution and gambling	Prostitution and gambling	legalization of prostitution, gambling, lotteries, regulation of slot machines
+Q12.7a	question	Law and justice	Prostitution and gambling	Should prostitution be legal and taxed?
+Q12.7b	question	Law and justice	Prostitution and gambling	Should the state restrict gambling?
+T13.1	topic	Social policy	Pensions	Pensions	pay-as-you-go pension system, retirement age, retirement savings
+Q13.1a	question	Social policy	Pensions	Should the retirement age be raised?
+Q13.1b	question	Social policy	Pensions	Should everyone save for retirement on their own instead of relying on the state system?
+Q13.1c	question	Social policy	Pensions	Is the state pension system a Ponzi scheme?
+T13.2	topic	Social policy	Welfare benefits and poverty	Welfare benefits and poverty	welfare benefits, poverty, homelessness, unconditional income
+Q13.2a	question	Social policy	Welfare benefits and poverty	Should there be an unconditional basic income?
+Q13.2b	question	Social policy	Welfare benefits and poverty	Should help for the poor be voluntary, or mandatory through taxes?
+Q13.2c	question	Social policy	Welfare benefits and poverty	Do welfare benefits create dependency on the state?
+T13.3	topic	Social policy	Family policy	Family policy	parental allowance, birth rate, kindergartens, child benefits
+Q13.3a	question	Social policy	Family policy	Should the state financially support families with children?
+Q13.3b	question	Social policy	Family policy	Should the state address the low birth rate?
+T13.4	topic	Social policy	Disability and care	Disability and care	care for people with disabilities, care allowance, voluntary charity
+Q13.4a	question	Social policy	Disability and care	Can voluntary charity take care of the vulnerable without the state?
+T14.1	topic	Housing and local government	Housing affordability	Housing affordability	property prices, rent, building permit procedures, mortgages
+Q14.1a	question	Housing and local government	Housing affordability	Should the state regulate rent levels?
+Q14.1b	question	Housing and local government	Housing affordability	Is expensive housing caused by building permit regulation?
+Q14.1c	question	Housing and local government	Housing affordability	Should the state build municipal and social housing?
+T14.2	topic	Housing and local government	Land-use planning and land ownership	Land-use planning and land ownership	zoning plans, expropriation, building permits, public space
+Q14.2a	question	Housing and local government	Land-use planning and land ownership	May the state expropriate land to build a highway?
+Q14.2b	question	Housing and local government	Land-use planning and land ownership	Should neighbors' consent be all an owner needs to build on their own land?
+T14.3	topic	Housing and local government	Municipalities and regions	Municipalities and regions	municipal self-government, regions, poor regions, decentralization
+Q14.3a	question	Housing and local government	Municipalities and regions	Should municipalities have more powers and money at the expense of the central government?
+T15.1	topic	Business and finance	Business regulation and bureaucracy	Business regulation and bureaucracy	the Trade Licensing Act, licenses, EET (electronic sales registration), inspections, paperwork
+Q15.1a	question	Business and finance	Business regulation and bureaucracy	Should electronic sales registration (EET) be abolished?
+Q15.1b	question	Business and finance	Business regulation and bureaucracy	Should it be possible to do business without a trade license?
+Q15.1c	question	Business and finance	Business regulation and bureaucracy	Does bureaucracy prevent people from starting businesses?
+T15.2	topic	Business and finance	Monopolies and competition	Monopolies and competition	competition authority, cartels, large corporations, dumping
+Q15.2a	question	Business and finance	Monopolies and competition	Do we need a competition authority to keep the market from producing monopolies?
+Q15.2b	question	Business and finance	Monopolies and competition	Are large corporations a threat to society?
+T15.3	topic	Business and finance	Banks and financial markets	Banks and financial markets	bank regulation, fractional-reserve banking, the stock exchange, speculation
+Q15.3a	question	Business and finance	Banks and financial markets	Should banks be more strictly regulated?
+Q15.3b	question	Business and finance	Banks and financial markets	Do speculators harm the economy?
+T15.4	topic	Business and finance	Cryptocurrencies and alternative money	Cryptocurrencies and alternative money	Bitcoin, Monero, cryptocurrencies, crypto regulation, cash
+Q15.4a	question	Business and finance	Cryptocurrencies and alternative money	Should the state regulate cryptocurrencies?
+Q15.4b	question	Business and finance	Cryptocurrencies and alternative money	Should cash be preserved?
+Q15.4c	question	Business and finance	Cryptocurrencies and alternative money	Can cryptocurrencies replace state currencies?
+T15.5	topic	Business and finance	Consumer protection	Consumer protection	product complaints and warranties, crackdown on predatory sellers, product quality, consumer information
+Q15.5a	question	Business and finance	Consumer protection	Do consumers need state protection from fraudulent companies?
+T16.1	topic	Defense and security	Military and defense spending	Military and defense spending	the armed forces, 2% of GDP on defense, conscription, arms procurement
+Q16.1a	question	Defense and security	Military and defense spending	Should military spending be increased?
+Q16.1b	question	Defense and security	Military and defense spending	Should compulsory military service be reinstated?
+Q16.1c	question	Defense and security	Military and defense spending	Could a stateless society defend itself against an attack?
+T16.2	topic	Defense and security	NATO and alliances	NATO and alliances	NATO membership, collective defense, missions abroad
+Q16.2a	question	Defense and security	NATO and alliances	Should the Czech Republic remain in NATO?
+T16.3	topic	Defense and security	War and terrorism	War and terrorism	the war in Ukraine, terrorism, armed conflicts, peace
+Q16.3a	question	Defense and security	War and terrorism	Should the Czech Republic support Ukraine militarily?
+Q16.3b	question	Defense and security	War and terrorism	Is war always a consequence of the existence of states?
+T17.1	topic	Technology and science	Internet and digital regulation	Internet and digital regulation	internet regulation, artificial intelligence, data protection, digital services
+Q17.1a	question	Technology and science	Internet and digital regulation	Should artificial intelligence be regulated?
+Q17.1b	question	Technology and science	Internet and digital regulation	Should the state regulate online content?
+T17.2	topic	Technology and science	Science and research	Science and research	science funding, grants, the Academy of Sciences, private research
+Q17.2a	question	Technology and science	Science and research	Should the state fund science and research?
+Q17.2b	question	Technology and science	Science and research	Would science function without public money?
+T17.3	topic	Technology and science	Intellectual property	Intellectual property	copyright, patents, piracy, file sharing
+Q17.3a	question	Technology and science	Intellectual property	Is intellectual property a legitimate form of property?
+Q17.3b	question	Technology and science	Intellectual property	Is downloading movies and music theft?
+T17.4	topic	Technology and science	Media and public broadcasting	Media and public broadcasting	Česká televize (Czech Television), Český rozhlas (Czech Radio), license fees, media independence
+Q17.4a	question	Technology and science	Media and public broadcasting	Should public broadcasting license fees be abolished?
+Q17.4b	question	Technology and science	Media and public broadcasting	Does democracy need public service media?
+T18.1	topic	Foreign trade	Free trade and tariffs	Free trade and tariffs	tariffs, trade agreements, protection of domestic producers, globalization
+Q18.1a	question	Foreign trade	Free trade and tariffs	Should the state protect domestic producers with tariffs?
+Q18.1b	question	Foreign trade	Free trade and tariffs	Does globalization benefit poor countries?
+T18.2	topic	Foreign trade	Sanctions and embargoes	Sanctions and embargoes	economic sanctions, embargoes, trade with authoritarian regimes
+Q18.2a	question	Foreign trade	Sanctions and embargoes	Are economic sanctions against other countries right?
+T19.1	topic	European Union and international relations	European Union	European Union	EU membership, Czexit, EU directives, sovereignty
+Q19.1a	question	European Union and international relations	European Union	Should the Czech Republic leave the European Union?
+Q19.1b	question	European Union and international relations	European Union	Does the EU have too much power?
+T19.2	topic	European Union and international relations	Foreign policy and development aid	Foreign policy and development aid	relations with Russia and China, human rights in foreign policy, development aid
+Q19.2a	question	European Union and international relations	Foreign policy and development aid	Should the state provide development aid to poor countries?
+Q19.2b	question	European Union and international relations	Foreign policy and development aid	Should foreign policy promote human rights even at the cost of trade losses?
+T19.3	topic	European Union and international relations	International organizations	International organizations	the UN, the WHO, international law, global governance
+Q19.3a	question	European Union and international relations	International organizations	Does the world need a global government or stronger international organizations?
+T20.1	topic	Government and public administration	Democracy and elections	Democracy and elections	electoral system, direct elections, referendums, compulsory voting
+Q20.1a	question	Government and public administration	Democracy and elections	Is democracy the best way to govern society?
+Q20.1b	question	Government and public administration	Democracy and elections	Should direct democracy and referendums be introduced?
+Q20.1c	question	Government and public administration	Democracy and elections	Is there any point in voting?
+T20.2	topic	Government and public administration	Size and role of the state	Size and role of the state	scope of government, privatization, the minimal state, nationalization
+Q20.2a	question	Government and public administration	Size and role of the state	Should the state do less and leave more to the market and to people?
+Q20.2b	question	Government and public administration	Size and role of the state	Could society function entirely without the state?
+Q20.2c	question	Government and public administration	Size and role of the state	Which services must the state provide, and which could the market handle?
+T20.3	topic	Government and public administration	Public administration and civil servants	Public administration and civil servants	number of civil servants, efficiency of government offices, digitalization of government, the Civil Service Act
+Q20.3a	question	Government and public administration	Public administration and civil servants	Is public administration too large and inefficient?
+T20.4	topic	Government and public administration	Constitution and separation of powers	Constitution and separation of powers	the constitution, the president, parliament, the Constitutional Court, rule of law
+Q20.4a	question	Government and public administration	Constitution and separation of powers	Does the constitution protect citizens from state power?
+Q20.4b	question	Government and public administration	Constitution and separation of powers	Should the president have more powers?
+T20.5	topic	Government and public administration	Political parties and politicians	Political parties and politicians	political parties, populism, party financing, trust in politicians
+Q20.5a	question	Government and public administration	Political parties and politicians	Can society be changed for the better through a political party?
+Q20.5b	question	Government and public administration	Political parties and politicians	Is populism a threat to democracy?
+T20.6	topic	Government and public administration	Subsidies and public procurement	Subsidies and public procurement	EU funds, public procurement, waste of public money
+Q20.6a	question	Government and public administration	Subsidies and public procurement	Do subsidies distort the market?
+Q20.6b	question	Government and public administration	Subsidies and public procurement	Should all subsidies to businesses be abolished?
+T21.1	topic	Public goods and public spaces	Public space	Public space	parks, streets, who owns public space, rules in public
+Q21.1a	question	Public goods and public spaces	Public space	Should streets and parks be privately owned?
+T21.2	topic	Public goods and public spaces	Firefighting and emergency services	Firefighting and emergency services	firefighters, ambulance service, crisis management, private emergency services
+Q21.2a	question	Public goods and public spaces	Firefighting and emergency services	Who would put out fires if there were no state?
+T21.3	topic	Public goods and public spaces	Public goods	Public goods	public goods, free riders, lighthouses, infrastructure
+Q21.3a	question	Public goods and public spaces	Public goods	Can the market provide public goods such as defense or infrastructure?
+T23.1	topic	Culture and religion	Culture and the arts	Culture and the arts	cultural subsidies, state theaters, cinema, national culture
+Q23.1a	question	Culture and religion	Culture and the arts	Should the state fund culture and the arts?
+Q23.1b	question	Culture and religion	Culture and the arts	Would the arts survive without state subsidies?
+T23.2	topic	Culture and religion	Churches and religion	Churches and religion	church restitution, separation of church and state, religious freedom
+Q23.2a	question	Culture and religion	Churches and religion	Should the state fund churches?
+Q23.2b	question	Culture and religion	Churches and religion	Are faith and freedom compatible?
+T23.3	topic	Culture and religion	Nation and identity	Nation and identity	national identity, patriotism, public holidays, traditions
+Q23.3a	question	Culture and religion	Nation and identity	Is patriotism a virtue?
+Q23.3b	question	Culture and religion	Nation and identity	Does a nation need its own state?
+T23.4	topic	Culture and religion	Culture wars	Culture wars	progressivism, conservatism, woke, gender ideology, political correctness
+Q23.4a	question	Culture and religion	Culture wars	Does progressivism threaten freedom?
+Q23.4b	question	Culture and religion	Culture wars	Does conservatism threaten freedom?
+T24.1	topic	Morality and personal freedom	Family and child-rearing	Family and child-rearing	child-rearing, parental authority, respectful parenting, divorce
+Q24.1a	question	Morality and personal freedom	Family and child-rearing	Do parents have the right to raise their children as they see fit without state interference?
+Q24.1b	question	Morality and personal freedom	Family and child-rearing	Is obedience in children a virtue?
+T24.2	topic	Morality and personal freedom	Sexuality and relationships	Sexuality and relationships	monogamy, polyamory, age of consent, sex education
+Q24.2a	question	Morality and personal freedom	Sexuality and relationships	Should the state interfere in how people arrange their relationships?
+T24.3	topic	Morality and personal freedom	Personal responsibility and paternalism	Personal responsibility and paternalism	smoking bans, mandatory helmets and seat belts, protecting people from themselves
+Q24.3a	question	Morality and personal freedom	Personal responsibility and paternalism	Should the state protect people from themselves?
+Q24.3b	question	Morality and personal freedom	Personal responsibility and paternalism	Should smoking be banned in restaurants?
+T24.4	topic	Morality and personal freedom	Self-fulfillment and the meaning of life	Self-fulfillment and the meaning of life	personal growth, happiness, self-direction, authenticity, love
+Q24.4a	question	Morality and personal freedom	Self-fulfillment and the meaning of life	Does changing society begin with changing oneself?
+Q24.4b	question	Morality and personal freedom	Self-fulfillment and the meaning of life	Is freedom a precondition for happiness?
+C01	concept	Concepts of political philosophy	The state and power	State	an organization holding a monopoly on legitimate violence within a given territory
+C02	concept	Concepts of political philosophy	The state and power	Sovereignty	supreme authority over a territory and its population, independence from any other power
+C03	concept	Concepts of political philosophy	The state and power	Political legitimacy	what gives a government the right to rule and people the duty to obey
+C04	concept	Concepts of political philosophy	The state and power	Social contract	the idea that the state arises from an agreement among citizens who surrender part of their freedom to it
+C05	concept	Concepts of political philosophy	The state and power	Authority and obedience	why people obey authority and when obedience is wrong
+C06	concept	Concepts of political philosophy	The state and power	Power corrupts	concentration of power leads to abuse; absolute power corrupts absolutely
+C07	concept	Concepts of political philosophy	The state and power	Totalitarianism and authoritarianism	regimes that control every sphere of citizens' lives
+C08	concept	Concepts of political philosophy	The state and power	Propaganda and indoctrination	state dissemination of ideology, shaping how citizens think
+C09	concept	Concepts of political philosophy	The state and power	Statism	the belief that the state is necessary and that problems should be solved by the state
+C10	concept	Concepts of political philosophy	Ideologies	Liberalism	a political philosophy of individual liberty, limited government, and the rule of law
+C11	concept	Concepts of political philosophy	Ideologies	Conservatism	emphasis on tradition, order, family, and gradual change
+C12	concept	Concepts of political philosophy	Ideologies	Socialism	social ownership of the means of production, equality, redistribution
+C13	concept	Concepts of political philosophy	Ideologies	Communism	a classless society without private property; historical communist regimes
+C14	concept	Concepts of political philosophy	Ideologies	Social democracy	a market economy with an extensive welfare state
+C15	concept	Concepts of political philosophy	Ideologies	Libertarianism	maximal personal and economic freedom, a minimal state
+C16	concept	Concepts of political philosophy	Ideologies	Anarchism	a society without the state and without rulers
+C17	concept	Concepts of political philosophy	Ideologies	Anarcho-capitalism	a stateless society based on private property and the free market
+C18	concept	Concepts of political philosophy	Ideologies	Agorism and counter-economics	liberation through gray and black markets and building parallel structures outside the state
+C19	concept	Concepts of political philosophy	Ideologies	Nationalism	the nation as the foundation of political identity and of the state
+C20	concept	Concepts of political philosophy	Ideologies	Fascism	an authoritarian nationalist regime that subordinates the individual to the state
+C21	concept	Concepts of political philosophy	Ideologies	Populism	politics that pits “the people” against “the elites”
+C22	concept	Concepts of political philosophy	Ideologies	Progressivism	the pursuit of social change, equality, and the removal of injustices
+C23	concept	Concepts of political philosophy	Ideologies	Environmentalism	politics of protecting nature and the climate
+C24	concept	Concepts of political philosophy	Ideologies	Feminism	a movement for equality between women and men
+C25	concept	Concepts of political philosophy	Ideologies	Minarchism	a minimal state limited to police, courts, and defense
+C26	concept	Concepts of political philosophy	Rights and liberty	Negative and positive liberty	freedom from interference by others versus freedom to do or to have something
+C27	concept	Concepts of political philosophy	Rights and liberty	Natural rights	rights a person has by nature, not granted by the state
+C28	concept	Concepts of political philosophy	Rights and liberty	Human rights	universal rights of every human being
+C29	concept	Concepts of political philosophy	Rights and liberty	Self-ownership	every person owns their own body and life
+C30	concept	Concepts of political philosophy	Rights and liberty	Non-aggression principle	a prohibition on initiating force or the threat of force against others and their property
+C31	concept	Concepts of political philosophy	Rights and liberty	Private property	the right to own things and dispose of them
+C32	concept	Concepts of political philosophy	Rights and liberty	Voluntarism and consent	relationships based on voluntary agreement and the consent of all parties
+C33	concept	Concepts of political philosophy	Rights and liberty	Rule of law	government by law, equality before the law, independent courts
+C34	concept	Concepts of political philosophy	Rights and liberty	Civil disobedience	deliberately breaking an unjust law for moral reasons
+C35	concept	Concepts of political philosophy	Rights and liberty	Tolerance and pluralism	coexistence of people with different values and ways of life
+C36	concept	Concepts of political philosophy	Justice and equality	Social justice	a fair distribution of wealth and opportunities in society
+C37	concept	Concepts of political philosophy	Justice and equality	Equality of opportunity vs. equality of outcome	an equal start for everyone versus an equal result
+C38	concept	Concepts of political philosophy	Justice and equality	Inequality and wealth	differences in income and wealth, rich and poor
+C39	concept	Concepts of political philosophy	Justice and equality	Redistribution	transfer of wealth from some people to others through the state
+C40	concept	Concepts of political philosophy	Justice and equality	Exploitation	taking unfair advantage of other people's labor; capitalists and workers
+C41	concept	Concepts of political philosophy	Justice and equality	Solidarity	mutual aid and responsibility among members of society
+C42	concept	Concepts of political philosophy	Justice and equality	Punishment and rehabilitation	retribution, deterrence, rehabilitation of the offender, and compensation of the victim
+C43	concept	Concepts of political philosophy	Economics	Free market	an economy governed by voluntary exchange and prices, without state intervention
+C44	concept	Concepts of political philosophy	Economics	Capitalism	an economic system based on private ownership and enterprise
+C45	concept	Concepts of political philosophy	Economics	Central planning	the state managing the economy according to a plan
+C46	concept	Concepts of political philosophy	Economics	Economic calculation problem	without market prices, scarce resources cannot be allocated rationally
+C47	concept	Concepts of political philosophy	Economics	Scarcity and prices	the limited nature of resources and the role of prices as signals
+C48	concept	Concepts of political philosophy	Economics	Market failure	externalities, monopolies, information asymmetry, public goods
+C49	concept	Concepts of political philosophy	Economics	Externalities	costs or benefits that fall on third parties
+C50	concept	Concepts of political philosophy	Economics	Tragedy of the commons	overuse of shared resources that no one owns
+C51	concept	Concepts of political philosophy	Economics	Free riders	people who use goods they do not pay for
+C52	concept	Concepts of political philosophy	Economics	Austrian School of economics	Mises, Hayek, Rothbard, human action, subjective value
+C53	concept	Concepts of political philosophy	Economics	Keynesianism	the state should stimulate demand and smooth out business cycles
+C54	concept	Concepts of political philosophy	Economics	Spontaneous order	order that emerges from human action, not from design
+C55	concept	Concepts of political philosophy	Economics	Gold standard and sound money	money backed by gold or otherwise protected from inflation
+C56	concept	Concepts of political philosophy	Economics	Human action	praxeology; purposeful action of individuals as the foundation of economics
+C57	concept	Concepts of political philosophy	Society and change	Revolution	violent or rapid change of a political system
+C58	concept	Concepts of political philosophy	Society and change	Reform and gradualism	gradual change of the system from within
+C59	concept	Concepts of political philosophy	Society and change	Utopia	a vision of a perfect society
+C60	concept	Concepts of political philosophy	Society and change	Civil society	voluntary associations, communities, and institutions between the individual and the state
+C61	concept	Concepts of political philosophy	Society and change	Decentralization	transfer of power and decision-making to lower levels
+C62	concept	Concepts of political philosophy	Society and change	Polycentric law	private, competing legal systems and courts
+C63	concept	Concepts of political philosophy	Society and change	Parallel structures	building institutions outside the state that gradually replace it
+C64	concept	Concepts of political philosophy	Society and change	Crypto-anarchism	freedom through encryption and cryptocurrencies
+C65	concept	Concepts of political philosophy	Society and change	Technology and freedom	the impact of technology on state power and individual freedom
+C66	concept	Concepts of political philosophy	Society and change	Elites and power	ruling classes, lobbyists, and their influence
+C67	concept	Concepts of political philosophy	Ethics	Utilitarianism	the right thing is whatever brings the greatest good to the greatest number
+C68	concept	Concepts of political philosophy	Ethics	Deontology and moral rules	judging actions by rules rather than by consequences
+C69	concept	Concepts of political philosophy	Ethics	The end justifies the means	does a good goal permit the use of bad means?
+C70	concept	Concepts of political philosophy	Ethics	Violence and nonviolence	when violence is justified; pacifism; self-defense
+C71	concept	Concepts of political philosophy	Ethics	Paternalism	restricting people's freedom for their own good
+C72	concept	Concepts of political philosophy	Ethics	Responsibility	bearing the consequences of one's own decisions
+C73	concept	Concepts of political philosophy	Ethics	Empathy and respect	understanding others, nonviolent communication, respect for others

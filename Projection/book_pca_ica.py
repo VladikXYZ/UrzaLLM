@@ -26,7 +26,7 @@ from book_map import BOOK_COLORS, chapter_group, esc  # noqa: E402
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+from dataset import CHUNKS, ENGLISH, OUT_DIR, nm, read_chunks, results_dir  # noqa: E402
 OUT = OUT_DIR
 VARIANT = "textonly"
 N_PCA_SHOW = 20      # components in the variance chart
@@ -47,6 +47,12 @@ def spread_ratio(Q, grp, rng):
     return float(np.median(out)), sum(1 for r in out if r < 0.2), len(out)
 
 
+def eta2(v, lab):
+    """Share of an axis' variance explained by a grouping (0 = none, 1 = all)."""
+    m = v.mean()
+    return float(sum((lab == l).sum() * (v[lab == l].mean() - m) ** 2 for l in set(lab)) / ((v - m) ** 2).sum())
+
+
 def ends(v, grp, k=4):
     m = {g: v[grp == g].mean() for g in set(grp)}
     o = sorted(m, key=m.get)
@@ -55,8 +61,7 @@ def ends(v, grp, k=4):
 
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
-    rows = pq.read_table(CHUNKS,
-                         columns=["chunk_id", "source", "book", "chapter", "subchapter", "text"]).to_pylist()
+    rows = read_chunks(CHUNKS, ["chunk_id", "source", "book", "chapter", "subchapter", "text"])
     E = np.load(results_dir(VARIANT) / "embeddings.npy")
     ids = (results_dir(VARIANT) / "chunk_ids.txt").read_text(encoding="utf-8").split()
     assert ids == [r["chunk_id"] for r in rows], "embeddings don't match chunks.parquet"
@@ -75,6 +80,12 @@ def main():
     cum = np.cumsum(full_pca.explained_variance_ratio_)
     n50 = needed(cum, 0.5)
     pc_ends = [ends(S[:, k], grp) for k in range(N_PCA_AXES)]
+    # Which of the map axes separates the two books best (η² of the book on each PC)
+    book_eta = [eta2(S[:, k], book) for k in range(N_PCA_AXES)]
+    bk = int(np.argmax(book_eta))
+    bmeans = {b: float(S[book == b, bk].mean()) for b in set(book)}
+    bsplit = {"k": bk, "eta": book_eta[bk], "eta1": book_eta[0], "evr": float(evr[bk]),
+              "low": min(bmeans, key=bmeans.get), "high": max(bmeans, key=bmeans.get)}
 
     # ICA: with only 2 components ICA is just a rotated, rescaled PCA, so take more.
     ica = FastICA(N_ICA, whiten="unit-variance", random_state=SEED, max_iter=5000)
@@ -94,8 +105,14 @@ def main():
                       "best_text": B[best]["text"][:200]})
     # Default map axes: the two most chapter-separating *focused* themes (long tail, kurtosis > 2)
     # that aren't one chapter on its own.
-    themed = [c for c in comps if not c["single"] and c["kurt"] > 2] or [c for c in comps if not c["single"]]
+    themed = [c for c in comps if not c["single"] and c["kurt"] > 2]
+    focused = len(themed) >= 2
+    if not focused:
+        themed = [c for c in comps if not c["single"]]
     ax_i, ax_j = themed[0], themed[1]
+    ch_book = {g: book[i] for i, g in enumerate(grp)}
+    for c in comps:                          # top chapters from both books: a theme shared across the books
+        c["cross"] = len({ch_book[g] for g in c["top"]}) > 1
 
     # Tightness of chapters on the default maps, compared with the non-linear maps
     pca_tight = spread_ratio(S[:, :2], grp, rng)
@@ -121,8 +138,9 @@ def main():
         f"{ax_j['label']}: {', '.join(ax_j['top'][:2])} …", "Book chunks, ICA (textonly)",
         OUT / f"book_pca_ica_{VARIANT}_ica.png")
     html(pts, chapters, evr, n50, pc_ends, comps, ax_i, ax_j, pca_tight, ica_tight, nonlin, len(B), cum,
-         OUT / f"book_pca_ica_{VARIANT}.html")
+         bsplit, focused, OUT / f"book_pca_ica_{VARIANT}.html")
     print(f"PCA: PC1 {evr[0]:.1%}, PC2 {evr[1]:.1%}, 2 PCs {evr[:2].sum():.1%}, {n50} PCs for 50%")
+    print("book eta2 per PC:", [round(v, 2) for v in book_eta], "| books separate along PC", bk + 1)
     print("PCA map median spread", round(pca_tight[0], 2), "| ICA map", round(ica_tight[0], 2))
     for c in comps:
         print(f"  {c['label']} F={c['F']:.1f} kurt={c['kurt']:.1f} single={c['single']} top={c['top']}")
@@ -180,9 +198,34 @@ def variance_svg(evr):
             f'<line x1="{pl}" x2="{w - 8}" y1="{h - pb}" y2="{h - pb}" class="base"/></svg>')
 
 
-def html(pts, chapters, evr, n50, pc_ends, comps, ax_i, ax_j, pca_tight, ica_tight, nonlin, n, cum, path):
+def html(pts, chapters, evr, n50, pc_ends, comps, ax_i, ax_j, pca_tight, ica_tight, nonlin, n, cum, bsplit, focused,
+         path):
     q = lambda s: f"“{esc(s)}”"
     lst = lambda xs: ", ".join(q(x) for x in xs)
+    bs = bsplit
+    pk = f"PC{bs['k'] + 1}"
+    sides = f"<em>{esc(bs['low'])}</em> towards the low end, <em>{esc(bs['high'])}</em> towards the high end"
+    if bs["k"] == 0:
+        booksplit = (f"PC1 is also the axis that separates the two books best (book η² {bs['eta']:.2f}: {sides}).")
+        how = "largely" if bs["eta"] >= 0.3 else "partly"
+        concl1 = (f"<strong>The main linear direction is {how} the difference between the books.</strong> PC1 "
+                  f"(book η² {bs['eta']:.2f}) has {sides}, but explains only {evr[0]:.1%} of the variation.")
+    else:
+        booksplit = (f"PC1 is not the difference between the books (book η² only {bs['eta1']:.2f}); they separate best "
+                     f"along {pk} (book η² {bs['eta']:.2f}: {sides}).")
+        concl1 = (f"<strong>The difference between the books is a main linear direction, but not the first.</strong> "
+                  f"The books separate best along {pk} (book η² {bs['eta']:.2f}, {bs['evr']:.1%} of the variation); "
+                  f"PC1 ({evr[0]:.1%}) runs across both books (book η² {bs['eta1']:.2f}).")
+    overlap = ("Chapters overlap much more than on the UMAP map:" if nonlin and pca_tight[0] > nonlin["median_ratio"]
+               else "Chapter tightness on this map:")
+    shared = [c for c in comps if not c["single"]]
+    cross = [c for c in comps if c["cross"]]
+    cross_txt = (("Some components draw their top three chapters from both books ("
+                  + "; ".join(f"{c['label']}: {lst(c['top'])}" for c in cross[:3])
+                  + "): links across the books that the chapter structure alone does not show.") if cross else "")
+    topch = list(dict.fromkeys(c["top"][0] for c in comps))[:6]
+    axwhy = ("the two focused themes (kurtosis above 2) that separate chapters best"
+             if focused else "the two themes that separate chapters best")
     pc_opts = [{"label": f"PC{k + 1} ({evr[k]:.1%})", "low": pc_ends[k][0], "high": pc_ends[k][1]}
                for k in range(N_PCA_AXES)]
     ic_opts = [{"label": c["label"], "top": c["top"]} for c in comps]
@@ -209,7 +252,11 @@ def html(pts, chapters, evr, n50, pc_ends, comps, ax_i, ax_j, pca_tight, ica_tig
         "__AXI__": ax_i["label"], "__AXJ__": ax_j["label"],
         "__AXI_TOP__": lst(ax_i["top"]), "__AXJ_TOP__": lst(ax_j["top"]),
         "__SINGLE__": ("; ".join(f"{c['label']} is driven mostly by {q(c['single_group'])}" for c in single)
-                       + ", so it describes one chapter's style rather than a shared theme.") if single else "",
+                       + (", so it describes one chapter rather than a theme shared by several." if len(single) == 1
+                          else ", so these describe one chapter each rather than a theme shared by several.")
+                       ) if single else "",
+        "__NSHARED__": str(len(shared)), "__CROSS__": cross_txt, "__BOOKSPLIT__": booksplit, "__CONCL1__": concl1,
+        "__OVERLAP__": overlap, "__TOPCH__": lst(topch), "__AXWHY__": axwhy,
         "__THEMES__": "; ".join(f"{c['label']}: {lst(c['top'][:2])}" for c in comps if not c["single"]),
         "__DATA__": json.dumps(pts, ensure_ascii=False).replace("</", "<\\/"),
         "__CHAPTERS__": json.dumps(chapters, ensure_ascii=False).replace("</", "<\\/"),
@@ -282,8 +329,8 @@ embedded from their own text only (no chapter path, title or other context line)
 <h2 class="sec">PCA: how much does each direction explain?</h2>
 <div class="panel">__VARSVG__</div>
 <p class="cap"><strong>Reading it:</strong> PC1 explains __PC1__ of the differences between chunks, PC2 __PC2__,
-together __PC12__; the first 20 components explain __PC20__, and __N50__ components are needed for half. There is
-no dominant direction: the books' content is spread over many independent dimensions. A 2-dimensional PCA map
+together __PC12__; the first 20 components explain __PC20__, and __N50__ components are needed for half. No single
+direction dominates: even PC1 covers only __PC1__, and the books' content is spread over many dimensions. A 2-dimensional PCA map
 therefore shows only a thin slice of the structure, which is why non-linear maps (UMAP, t-SNE) are needed for a
 readable picture.</p>
 <p class="cap" style="margin-top:14px"><strong>Cumulative variance:</strong></p>
@@ -291,7 +338,7 @@ readable picture.</p>
 <p class="cap"><strong>Reading it:</strong> the share of all differences between __UNITS__ explained by the first k
 principal components together (out of __NPC__ components in total). Two components, the most a flat PCA map can
 show, explain __CUM2__. Half needs __N50__ components, 80% __N80__, 90% __N90__ and 95% __N95__. The curve rises
-slowly and without a clear elbow: no small set of directions captures most of the content.</p>
+gradually: no small set of directions captures most of the content.</p>
 
 <h2 class="sec">PCA map</h2>
 <div class="controls"><label>X axis <select id="pcx"></select></label><label>Y axis <select id="pcy"></select></label>
@@ -301,11 +348,8 @@ slowly and without a clear elbow: no small set of directions captures most of th
  <div class="panel"><canvas id="cv0"></canvas><div class="axes" id="ax0"></div></div>
  <div class="panel side"><h3>Chapters (click to highlight)</h3><div id="list"></div></div>
 </div>
-<p class="cap"><strong>What you see (PC1 × PC2):</strong> PC1 runs from __PC1LOW__ (low) to __PC1HIGH__ (high):
-from personal freedom, obedience and the future towards economics and how institutions work. It is essentially
-the difference between the two books, which therefore sit side by side along PC1. PC2 runs from __PC2LOW__ (low)
-to __PC2HIGH__ (high): from abstract arguments about the state and democracy towards concrete, practical or
-narrative passages. Chapters overlap much more than on the UMAP map: their median spread is __PCA_TIGHT__ of a
+<p class="cap"><strong>What you see (PC1 × PC2):</strong> PC1 runs from __PC1LOW__ (low) to __PC1HIGH__ (high).
+PC2 runs from __PC2LOW__ (low) to __PC2HIGH__ (high). __BOOKSPLIT__ __OVERLAP__ their median spread is __PCA_TIGHT__ of a
 random set (__PCA_TIGHTN__ chapters below 0.20).__NONLIN__ Use the selectors to look at further components.</p>
 
 <h2 class="sec">ICA: independent themes</h2>
@@ -315,15 +359,14 @@ within them). <strong>Kurtosis</strong> above 0 means a long tail: a few chunks 
 theme.</p>
 <div class="tw"><table><thead><tr><th>Component</th><th>Chapters scoring highest</th><th>Highest-scoring chunk</th><th>F</th><th>Kurtosis</th></tr></thead>
 <tbody>__IC_ROWS__</tbody></table></div>
-<p class="cap"><strong>Reading it:</strong> almost every component is a recognisable theme of the books, found
-without any chapter information: __THEMES__. __SINGLE__ The themes cut across the two books where the subject
-is shared (school appears in both), which the chapter structure alone does not show.</p>
+<p class="cap"><strong>Reading it:</strong> __NSHARED__ of the __N_ICA__ components are themes spread over several
+chapters, found without any chapter information (named here by their two highest-scoring chapters): __THEMES__.
+__SINGLE__ __CROSS__</p>
 
 <h2 class="sec">ICA map</h2>
 <div class="controls"><label>X axis <select id="icx"></select></label><label>Y axis <select id="icy"></select></label></div>
 <div class="panel"><canvas id="cv1"></canvas><div class="axes" id="ax1"></div></div>
-<p class="cap"><strong>What you see (default __AXI__ × __AXJ__):</strong> the two focused themes (kurtosis
-above 2) that separate chapters best, leaving out components that describe a single chapter. __AXI__ is high for __AXI_TOP__;
+<p class="cap"><strong>What you see (default __AXI__ × __AXJ__):</strong> __AXWHY__, leaving out components that describe a single chapter. __AXI__ is high for __AXI_TOP__;
 __AXJ__ for __AXJ_TOP__. Most chunks sit near the origin (0, 0), and each theme forms an arm reaching out
 along its axis: an ICA map shows <em>how strongly</em> a chunk is about a theme rather than a landscape of
 regions. Median chapter spread on this map: __ICA_TIGHT__ (__ICA_TIGHTN__ below 0.20). Pick other components
@@ -331,14 +374,12 @@ to see other themes; hovering a chunk highlights it on both maps.</p>
 
 <h2 class="sec">Conclusions</h2>
 <ul>
- <li><strong>The main linear direction is the difference between the books.</strong> PC1 separates the
- economic and institutional arguments of <em>Anarchokapitalismus</em> from the personal freedom and obedience
- themes of <em>Anarchoagorismus</em>, but explains only __PC1__ of the variation.</li>
+ <li>__CONCL1__</li>
  <li><strong>PCA is a poor map, but an honest one.</strong> With no dominant directions, any 2D linear view
  overlaps most chapters. The compact chapter regions of UMAP and t-SNE come from combining many directions,
  not from one or two.</li>
  <li><strong>ICA recovers the books' topics on its own.</strong> Without knowing the chapters, its components
- line up with them: money, school and obedience, drugs and guns, law and courts, the social system and so on.
+ line up with them: their highest-scoring chapters include __TOPCH__ and more.
  This is independent, linear evidence that the embedding encodes Urza's ideas as distinct directions.</li>
  <li><strong>ICA components are candidate “idea axes” for the coverage map.</strong> A political question
  could be scored along each component to see which of Urza's themes it touches. The components depend on the

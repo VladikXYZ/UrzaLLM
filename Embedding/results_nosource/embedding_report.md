@@ -33,7 +33,7 @@ For each chunk, the share of its 10 nearest neighbours that come from the same s
 | book | 592 | 88% | 23% |
 | video | 980 | 84% | 39% |
 
-**Source-centred vectors** (`embeddings_source_centred.npy`): each source's average vector is subtracted, then vectors are re-normalised. This removes the shared “book-ness” / “video-blurb-ness” and lets topics match across sources. Use them for the 2D map; for scoring a question against chunks, the raw vectors are the ones the model was trained for.
+**Source-centred vectors** (`embeddings_source_centred.npy`): each source's average vector is subtracted, then vectors are re-normalised. This removes the shared “book-ness” / “video-blurb-ness” and helps topics match across sources. Use them for the 2D map; for scoring a question against chunks, the raw vectors are the ones the model was trained for.
 
 | Source | Same-source neighbours, raw | Centred | Expected at random |
 |---|---:|---:|---:|
@@ -41,9 +41,9 @@ For each chunk, the share of its 10 nearest neighbours that come from the same s
 | book | 88% | 76% | 23% |
 | video | 84% | 70% | 39% |
 
-Part of the remaining clustering likely comes from the context line at the start of each chunk (“Kniha …”, “Video „…“”, “Článek …”), which names the source outright. Re-embedding without the source word would test that.
+Here the context line no longer names the source, but still carries a chapter path or a title and year that differ by source; the `textonly` variant removes it entirely.
 
-Nearest neighbour is another chunk of the same document for 19% of chunks.
+Nearest neighbour is another chunk of the same document for 19% of chunks. All sources (articles, books and videos) have documents split into several chunks; per source, the share is 2% for articles, 78% for books, 0% for videos.
 
 ## Near-duplicates (similarity > 0.95, different documents)
 
@@ -69,7 +69,7 @@ Nearest neighbour is another chunk of the same document for 19% of chunks.
 
 ## Example neighbourhoods
 
-Five nearest chunks from *other* documents, for a few seed chunks. They should share the topic.
+Five nearest chunks from *other* documents, for the first chunk whose title contains each of: “Kartely”, “10. Zdravotnictví”, “Drogy”, “Bitcoin”, “Demokracie”, “Školství”. Ideally they share its topic; announcements and episodes of a recurring series often match other items of the same series instead.
 
 **Kartely** (book)
 

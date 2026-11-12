@@ -19,7 +19,8 @@ import pyarrow.parquet as pq
 HERE = Path(__file__).resolve().parent
 EMB_ROOT = HERE.parent / "Embedding"
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+from dataset import CHUNKS, ENGLISH, FINAL, OUT_DIR, nm, read_chunks, results_dir  # noqa: E402
+DRUG, SCHOOL = ("drug", "school") if ENGLISH else ("drog", "školství")   # example searches (titles)
 OUT = OUT_DIR
 SOURCES = ["article", "book", "video"]
 COLORS = {"article": "#2a78d6", "book": "#eb6834", "video": "#1baf7a"}  # validated slots 1–3
@@ -45,6 +46,23 @@ def same_source_rate(X, src, k=10):
     return {s: float((src[nn[src == s]] == s).mean()) for s in SOURCES}
 
 
+def main_body(P):
+    """Boolean mask of the largest connected group on a 2D map (points linked when closer than
+    8x the median nearest-neighbour distance); everything else is a detached island."""
+    from scipy.sparse.csgraph import connected_components
+    from scipy.spatial.distance import pdist, squareform
+    D = squareform(pdist(P))
+    step = np.median(np.sort(D, 1)[:, 1])
+    _, lab = connected_components(D < 8 * step)
+    return lab == np.bincount(lab).argmax()
+
+
+def cross_source_spread(P, idx, src):
+    """Mean distance between matching chunks of different sources, relative to the map's mean radius."""
+    d = [np.linalg.norm(P[i] - P[j]) for a, i in enumerate(idx) for j in idx[a + 1:] if src[i] != src[j]]
+    return float(np.mean(d) / np.linalg.norm(P - P.mean(0), axis=1).mean()) if d else None
+
+
 def main():
     import argparse
     ap = argparse.ArgumentParser()
@@ -54,9 +72,8 @@ def main():
     if not (EMB / "embeddings_source_centred.npy").exists():
         sys.exit(f"Run first: python Embedding/analyze.py --variant {variant}")
     sys.stdout.reconfigure(encoding="utf-8")
-    meta = pq.read_table(EMB / "chunks_embedded.parquet",
-                         columns=["chunk_id", "doc_id", "source", "kind", "title", "year", "book",
-                                  "chapter", "subchapter", "words"]).to_pylist()
+    meta = read_chunks(EMB / "chunks_embedded.parquet", ["chunk_id", "doc_id", "source", "kind", "title", "year", "book",
+                                  "chapter", "subchapter", "words"])
     ids = (EMB / "chunk_ids.txt").read_text(encoding="utf-8").split()
     assert ids == [m["chunk_id"] for m in meta], "chunk order mismatch"
     raw = np.load(EMB / "embeddings.npy")
@@ -122,12 +139,52 @@ def html(meta, a, b, rates, path, variant):
     er, ec = excess(r), excess(c)
     cut = {s: 1 - ec[s] / er[s] for s in SOURCES}
     worst = max(SOURCES, key=lambda s: er[s])
-    label = {"article": "articles", "book": "book sections", "video": "video descriptions"}
+    label = {"article": "articles", "book": "book passages", "video": "video descriptions"}
     page = page.replace("__N__", f"{len(meta):,}")
-    page = page.replace("__VARIANT__", variant)
+    page = page.replace("__VARIANT__", variant).replace("__DRUG__", DRUG).replace("__SCHOOL__", SCHOOL)
+    page = page.replace("__PREP_REPORT__", "chunking report" if FINAL else "preprocessing report")
+    page = page.replace("__BOOK_SHARE__", (
+        f"books are {p(rnd['book'])} of the corpus, so a book chunk would have about "
+        f"{round(10 * rnd['book'])} of 10 book neighbours by chance"))
+    src = np.array([m["source"] for m in meta])
+    r2, c2 = rates["raw_2d"], rates["centred_2d"]
+    trio = lambda d: " / ".join(p(d[s]) for s in SOURCES)
+    # Raw map: is it sorted by kind of text? (2D same-source shares well above chance)
+    page = page.replace("__RAW_MAP__", (
+        "the map is sorted mainly by kind of text, not by subject: video descriptions (green) gather in one "
+        "region, articles (blue) and book passages (orange) in another"
+        if min(r2[s] - rnd[s] for s in SOURCES) > 0.25 else
+        "the sources overlap in places, but each still keeps largely to its own areas")
+        + f" (same-source share of a chunk's 10 nearest neighbours on this map: {trio(r2)} for articles / "
+          f"books / videos, against about {p(rnd['book'])} by chance)")
+    # Centred map: how much more mixed, detached book islands, and where the 'drog' chunks go.
+    drop = np.mean([r2[s] - c2[s] for s in SOURCES])
+    body = main_body(b)
+    chap = np.array([m["chapter"] or "" for m in meta])
+    isl = []
+    for ch in dict.fromkeys(chap[src == "book"]):
+        m = (src == "book") & (chap == ch)
+        if ch and m.sum() >= 20 and (~body[m]).mean() >= 0.8:
+            isl.append((int(m.sum()), ch))
+    isl = sorted(isl, reverse=True)[:3]
+    cen_txt = ("one main map in which the colours are more mixed than on the left" if drop >= 0.03 else
+               "one main map, but the colours are only slightly more mixed than on the left")
+    cen_txt += f" (same-source share of 2D neighbours {trio(r2)} → {trio(c2)})"
+    if isl:
+        cen_txt += (". Some book chapters sit apart as their own islands: "
+                    + ", ".join(f"<em>{ch}</em> ({n} chunks)" for n, ch in isl))
+    q = [i for i, m in enumerate(meta) if DRUG in m["title"].lower()]
+    sa, sb = cross_source_spread(a, q, src), cross_source_spread(b, q, src)
+    if sa and sb:
+        ratio = sb / sa
+        how = ("move closer together" if ratio < 0.85 else
+               "do not move closer together on this map" if ratio > 1.15 else "stay about as far apart")
+        cen_txt += (f". Search <em>{DRUG}</em> again: the matching chunks from different sources {how} "
+                    f"(average distance between them {round(ratio * 100)}% of that on the left)")
+    page = page.replace("__CEN_MAP__", cen_txt)
     # How much does the context line matter? Compare all embedding variants that have been projected.
     order = ["withsource", "nosource", "textonly"]
-    desc = {"withsource": "context line with the source word (“Kniha …”, “Článek „…“”, “Video „…“”)",
+    desc = {"withsource": "context line with the source word (“Kniha …”, “Článek/Oznámení „…“”, “Video „…“”)",
             "nosource": "context line without the source word",
             "textonly": "no context line, only the chunk's own text"}
     allr = {v: json.loads((OUT / f"rates_{v}.json").read_text(encoding="utf-8"))
@@ -140,15 +197,23 @@ def html(meta, a, b, rates, path, variant):
             f" – {desc.get(v, '')}</td>"
             + "".join(f"<td>{p(allr[v]['raw_1024d'][s])}</td>" for s in SOURCES)
             + "".join(f"<td>{p(allr[v]['centred_1024d'][s])}</td>" for s in SOURCES) + "</tr>" for v in avail)
+        def change(d, it="it", more=""):  # d = drops in percentage points, one per source
+            lo, hi = min(d), max(d)
+            if lo >= 0:
+                return f"lowers {it} by {more}{lo}–{hi} points" if lo != hi else f"lowers {it} by {more}{lo} points"
+            if hi <= 0:
+                return f"raises {it} by {more}{-hi}–{-lo} points" if lo != hi else f"raises {it} by {more}{-lo} points"
+            return f"changes {it} by between −{-lo} and +{hi} points"
         found = []
         if "withsource" in allr and "nosource" in allr:
             d = [round((allr["withsource"]["raw_1024d"][s] - allr["nosource"]["raw_1024d"][s]) * 100) for s in SOURCES]
-            found.append(f"removing just the source word lowers the raw same-source share by {min(d)}–{max(d)} points")
+            found.append("removing just the source word " + change(d, "the raw same-source share"))
         if "nosource" in allr and "textonly" in allr:
             d = [round((allr["nosource"]["raw_1024d"][s] - allr["textonly"]["raw_1024d"][s]) * 100) for s in SOURCES]
             dc = [round((allr["nosource"]["centred_1024d"][s] - allr["textonly"]["centred_1024d"][s]) * 100) for s in SOURCES]
-            found.append(f"removing the rest of the context line (titles, chapter paths, years, guests) lowers it by "
-                         f"another {min(d)}–{max(d)} points raw and {min(dc)}–{max(dc)} points after centring")
+            found.append("removing the rest of the context line (titles, chapter paths, years, guests) "
+                         + change(d, more="another ") + " in the raw vectors and "
+                         + change(dc) + " in the centred ones")
         label_txt = (
             "<strong>The context line adds to the clustering, the texts do the rest.</strong> The same chunks "
             "were embedded with different context lines (same-source share of the 10 nearest neighbours, full "
@@ -157,18 +222,21 @@ def html(meta, a, b, rates, path, variant):
             + "".join(f"<th>Raw, {label[s]}</th>" for s in SOURCES)
             + "".join(f"<th>Centred, {label[s]}</th>" for s in SOURCES)
             + f"</tr></thead><tbody>{rows_html}</tbody></table></div><ul class='concl'><li style='list-style:none'>"
-            + ("; ".join(found).capitalize() + ". " if found else "")
+            + (("; ".join(found))[:1].upper() + ("; ".join(found))[1:] + ". " if found else "")
             + "What remains even without any context line comes from the texts themselves: their style, "
               "length and the way each source writes about a topic.")
     else:
         label_txt = ("Part may be the context line at the start of each chunk (“Kniha …”, “Video „…“”, "
-                     "“Článek …”); the <code>nosource</code> and <code>textonly</code> variants test that.")
+                     "“Článek …” or “Oznámení …”); the <code>nosource</code> and <code>textonly</code> variants "
+                     "test that.")
     page = page.replace("__LABEL_BULLET__", label_txt)
+    gap2d = max(abs(rates[f"{k}_2d"][s] - rates[f"{k}_1024d"][s]) for k in ("raw", "centred") for s in SOURCES)
     page = page.replace("__TABLE_READING__", (
         f"<strong>Reading it:</strong> a book chunk's 10 nearest neighbours are {p(r['book'])} books in the raw "
         f"vectors, against {p(rnd['book'])} expected by chance. After centring it is {p(c['book'])}. The 2D maps "
-        f"show the same pattern ({p(rates['raw_2d']['book'])} → {p(rates['centred_2d']['book'])} for books), so "
-        f"the maps reflect the full vectors faithfully."))
+        f"show {'the same' if gap2d <= 0.06 else 'a similar'} pattern ({p(r2['book'])} → {p(c2['book'])} for "
+        f"books; at most {round(gap2d * 100)} points from the full-vector value for any source), so the maps "
+        + ("reflect the full vectors faithfully." if gap2d <= 0.06 else "reflect the full vectors only roughly.")))
     page = page.replace("__C1__", (
         f"In the raw vectors every source has far more same-source neighbours than chance would give: "
         + ", ".join(f"{label[s]} {p(r[s])} vs {p(rnd[s])}" for s in SOURCES)
@@ -179,8 +247,10 @@ def html(meta, a, b, rates, path, variant):
                      f"slightly increases it for {label[s]} ({p(r[s])} → {p(c[s])})" if cut[s] < -0.005 else
                      f"leaves it unchanged for {label[s]}") for s in SOURCES)
         + f" (full vectors). Same-source neighbours after centring: {p(c['article'])} / {p(c['book'])} / "
-          f"{p(c['video'])} for articles / books / videos, still well above chance. On the map the change "
-          f"is larger: the source continents disappear into one map organised by subject."))
+          f"{p(c['video'])} for articles / books / videos, "
+        + ("still well above chance. " if min(c[s] - rnd[s] for s in SOURCES) > 0.15 else "closer to chance. ")
+        + f"On the 2D map the share goes from {trio(r2)} to {trio(c2)}, and the separate source regions of "
+          f"the raw map merge into one main map, with same-source patches left inside it."))
     path.write_text(page, encoding="utf-8")
 
 
@@ -225,8 +295,8 @@ from the model with a corrected version.</p>
 
 <h2 class="sec">What was done</h2>
 <ol class="steps">
- <li><strong>Embedding.</strong> Each of the __N__ chunks (articles, book sections, video descriptions; see the
- preprocessing report) was turned into a 1,024-number vector with the model <code>BAAI/bge-m3</code>. Texts on
+ <li><strong>Embedding.</strong> Each of the __N__ chunks (articles, book passages, video descriptions; see the
+ __PREP_REPORT__) was turned into a 1,024-number vector with the model <code>BAAI/bge-m3</code>. Texts on
  similar subjects should get similar vectors (measured by cosine similarity).</li>
  <li><strong>Correction (“source-centring”).</strong> For each source separately, the average of all its vectors
  was computed and subtracted from each of its vectors, which were then rescaled to length 1. Whatever all books
@@ -242,28 +312,23 @@ from the model with a corrected version.</p>
 
 <h2 class="sec">The two maps</h2>
 <p class="sub">Each dot is one chunk, coloured by source. Hover a dot to see the chunk; the same chunk is circled
-on the other map. Use the boxes to hide sources and the search to highlight titles (try <em>drog</em>,
-<em>školství</em> or <em>bitcoin</em>).</p>
+on the other map. Use the boxes to hide sources and the search to highlight titles (try <em>__DRUG__</em>,
+<em>__SCHOOL__</em> or <em>bitcoin</em>).</p>
 <div class="controls" id="controls"></div>
 <div class="grid">
  <div class="panel"><h2>Raw embeddings</h2><canvas id="c0"></canvas>
-  <p class="cap"><strong>What you see:</strong> the map splits into two large “continents” by kind of text, not
-  by subject: video descriptions (green) on one, articles (blue) and book sections (orange) on the other. Chunks
-  on the same subject from different sources can end up far apart; search <em>drog</em> to see where the drug
-  chunks land.</p></div>
+  <p class="cap"><strong>What you see:</strong> __RAW_MAP__. Chunks on the same subject from different sources
+  can end up far apart; search <em>__DRUG__</em> to see where the drug chunks land.</p></div>
  <div class="panel"><h2>After subtracting each source's average</h2><canvas id="c1"></canvas>
-  <p class="cap"><strong>What you see:</strong> one connected map with colours mixed throughout. Small groups
-  are organised by subject and contain several sources (search <em>drog</em> again: the matching chunks from
-  books, articles and videos move much closer together). Books still form small local groups, because
-  consecutive sections of a chapter really do discuss the same thing.</p></div>
+  <p class="cap"><strong>What you see:</strong> __CEN_MAP__. Books still form local groups, because
+  consecutive passages of a chapter really do discuss the same thing.</p></div>
 </div>
 
 <h2 class="sec">Same-source share of the 10 nearest neighbours</h2>
 <p class="sub"><strong>How it is computed:</strong> for every chunk, take the 10 chunks most similar to it and
 count how many come from the same source (article, book or video); then average over all chunks of that source.
 <strong>Expected at random</strong> is what this share would be if similarity ignored the source entirely, i.e.
-that source's share of all other chunks (books are only 23% of the corpus, so a book chunk would have about 2 of
-10 book neighbours by chance). The gap between a column and “expected at random” measures how much the source,
+that source's share of all other chunks (__BOOK_SHARE__). The gap between a column and “expected at random” measures how much the source,
 rather than the topic, decides who is similar. “Full vectors” uses cosine similarity of the 1,024-number vectors
 (what the coverage scoring will use); “2D map” uses distance on the maps above.</p>
 <div class="tw"><table id="rates"></table></div>
@@ -272,14 +337,14 @@ rather than the topic, decides who is similar. “Full vectors” uses cosine si
 <h2 class="sec">Conclusions</h2>
 <ul class="concl">
  <li><strong>The raw embeddings mix topic with kind of text.</strong> __C1__</li>
- <li><strong>Source-centring fixes the big picture but only part of the close neighbourhoods.</strong> __C2__
+ <li><strong>Source-centring helps the big picture more than the close neighbourhoods.</strong> __C2__
  The reason: subtracting an average removes the shift that pushed each source into its own region (hence the
- single connected map), but the closest neighbours of a chunk are still mostly texts of the same kind.</li>
- <li><strong>Some of the remaining same-source grouping is genuine.</strong> Sections of one book chapter, a
- series of lecture announcements or the yearly Rothbard posts really are about the same thing. __LABEL_BULLET__</li>
- <li><strong>For the coverage map, use the centred vectors</strong>: the map is organised by subject, which is
- what “which political issues does Urza cover” needs. Expect sources to still appear as small same-colour
- patches inside each subject area. <strong>For scoring a question against chunks</strong>, keep the raw vectors:
+ more connected map), but the closest neighbours of a chunk are still mostly texts of the same kind.</li>
+ <li><strong>Some of the remaining same-source grouping is genuine.</strong> Consecutive passages of one book
+ chapter, a series of lecture announcements or the yearly Rothbard posts really are about the same thing. __LABEL_BULLET__</li>
+ <li><strong>For the coverage map, use the centred vectors</strong>: that map is organised more by subject than
+ the raw one, which is what “which political issues does Urza cover” needs. Expect sources to still appear as
+ same-colour patches inside each subject area. <strong>For scoring a question against chunks</strong>, keep the raw vectors:
  a question has no source, and the model was trained on raw vectors. Because neighbours are still partly
  same-source, coverage should be reported per source as well as overall.</li>
 </ul>

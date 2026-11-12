@@ -5,9 +5,10 @@
 Question: do regions of the map correspond to ideas? The books are the best test,
 because their chapters are human-made topic labels.
 
-Reads  Preprocessing/output/chunks.parquet, Embedding/results_<variant>/embeddings.npy
-Writes Projection/output/book_map_<variant>.html   interactive, self-contained report
-       Projection/output/book_map_<variant>.png    static map
+Reads  chunks.parquet and results_<variant>/embeddings.npy of the dataset chosen in dataset.py
+       (default Preprocessing/output + Embedding/; URZA_DATASET=final: Chunks/output/)
+Writes <OUT_DIR>/book_map_<variant>.html   interactive, self-contained report
+       <OUT_DIR>/book_map_<variant>.png    static map
 """
 import argparse
 import json
@@ -22,7 +23,7 @@ from labels import LABEL_JS, place_labels  # noqa: E402
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+from dataset import CHUNKS, ENGLISH, OUT_DIR, nm, read_chunks, results_dir  # noqa: E402
 OUT = OUT_DIR
 BOOK_COLORS = {"Anarchokapitalismus": "#2a78d6", "Anarchoagorismus": "#eb6834"}  # validated slots 1–2
 UMAP_PARAMS = dict(n_neighbors=15, min_dist=0.1, metric="cosine", random_state=42)
@@ -32,10 +33,10 @@ K = 10
 def chapter_group(r) -> str:
     """The idea-level unit: a chapter, or for the appendix its topic / AMEN category."""
     ch, sub = r["chapter"], (r["subchapter"] or "").split(" › ")
-    if ch == "dodatek":
+    if ch in ("dodatek", "Appendix"):                       # Czech chapter names, or their English display twins
         return f"AMEN: {sub[1]}" if sub[0].startswith("AMEN") and len(sub) > 1 else sub[-1]
-    if ch.startswith("AMEN"):
-        return "AMEN: aforismy"
+    if ch.startswith("AMEN"):                                # "AMEN: aforismy …" → "AMEN: aforismy" ("AMEN: aphorisms")
+        return "AMEN: " + ch.split(":", 1)[1].split()[0]
     return ch
 
 
@@ -108,9 +109,8 @@ def main():
     sys.stdout.reconfigure(encoding="utf-8")
     import umap
 
-    rows = pq.read_table(CHUNKS,
-                         columns=["chunk_id", "doc_id", "source", "book", "chapter", "subchapter",
-                                  "title", "text"]).to_pylist()
+    rows = read_chunks(CHUNKS, ["chunk_id", "doc_id", "source", "book", "chapter", "subchapter",
+                                  "title", "text"])
     E = np.load(results_dir(variant) / "embeddings.npy")
     ids = (results_dir(variant) / "chunk_ids.txt").read_text(encoding="utf-8").split()
     assert ids == [r["chunk_id"] for r in rows], "embeddings don't match chunks.parquet"
@@ -132,6 +132,21 @@ def main():
     }
     cross = float(((grp[nn] == grp[:, None]) & other_sec).sum() / other_sec.sum())
 
+    # Facts about the chunks themselves, so the report text follows the data.
+    import re
+    nxt = [(a, b) for a, b in zip(B, B[1:]) if a["doc_id"] == b["doc_id"]]
+
+    def overlaps(a, b):
+        last = re.split(r"(?<=[.!?])\s+", a["text"].strip())[-1]
+        return len(last) > 15 and last in b["text"]
+    facts = {
+        "words": float(np.median([len(r["text"].split()) for r in B])),
+        "single_para": float(np.mean(["\n\n" not in r["text"].strip() for r in B])),
+        "overlap": float(np.mean([overlaps(a, b) for a, b in nxt])) if nxt else 0.0,
+        "subsections": {g: len({(B[i]["subchapter"] or "").split(" › ")[0] for i in np.where(grp == g)[0]} - {""})
+                        for g in set(grp)},
+    }
+
     print(f"UMAP on {len(B)} book chunks …")
     P = umap.UMAP(**UMAP_PARAMS).fit_transform(X)
     P = (P - P.min(0)) / (P.max(0) - P.min(0)).max()
@@ -146,6 +161,12 @@ def main():
     T = b @ (u @ vt)
     T = (T - T.min(0)) / (T.max(0) - T.min(0)).max()
     Td, moved_t = compact(T, grp)
+
+    # Clumps on the (original) UMAP map, as in compact(): used to explain spread-out groups.
+    from scipy.sparse.csgraph import connected_components
+    from sklearn.neighbors import radius_neighbors_graph
+    _, comp = connected_components(radius_neighbors_graph(P, ISLAND_LINK), directed=False)
+    sub1 = np.array([(r["subchapter"] or "").split(" › ")[0] for r in B])
 
     rng = np.random.default_rng(0)
 
@@ -162,7 +183,13 @@ def main():
             ratio = spread(ix) / np.mean([spread(r) for r in draws])
             ratio_t = spread(ix, T) / np.mean([spread(r, T) for r in draws])
         nn_same = float((grp[nn[ix]] == g).mean())
+        clumps = [k for _, k in Counter(comp[ix]).most_common()]
+        # Each subsection sits in exactly one clump, and different subsections in different clumps?
+        by_sub = {s: set(comp[ix][sub1[ix] == s]) for s in set(sub1[ix])}
+        per_sub = (len(by_sub) > 1 and all(len(v) == 1 for v in by_sub.values())
+                   and len(set.union(*by_sub.values())) == len(by_sub))
         chapters.append({"name": g, "book": B[ix[0]]["book"], "n": int(cnt), "ratio": ratio, "ratio_t": ratio_t,
+                         "clumps": clumps, "per_sub": per_sub,
                          "tx": float(Td[ix, 0].mean()), "ty": float(Td[ix, 1].mean()),
                          "nn_same": nn_same, "cx": float(Pd[ix, 0].mean()), "cy": float(Pd[ix, 1].mean()),
                          "ox": float(P[ix, 0].mean()), "oy": float(P[ix, 1].mean()),
@@ -199,7 +226,8 @@ def main():
             gid[grp[i]], " › ".join(x for x in (b["chapter"], b["subchapter"]) if x), b["text"][:240],
             round(float(Td[i, 0]), 4), round(float(Td[i, 1]), 4)]
            for i, b in enumerate(B)]
-    html(pts, chapters, rates, cross, variant, len(B), OUT / f"book_map_{variant}.html", nearest, isolated, moved, Pd, moved_t, Td)
+    html(pts, chapters, rates, cross, variant, len(B), OUT / f"book_map_{variant}.html", nearest, isolated, moved, Pd,
+         moved_t, Td, facts)
     print("same-section / chapter / book neighbours:",
           {k: f"{v[0]:.0%} vs {v[1]:.0%}" for k, v in rates.items()}, f"cross-section same chapter {cross:.0%}")
     print(f"Wrote {OUT / f'book_map_{variant}.html'}")
@@ -237,25 +265,39 @@ def png(P, book, chapters, moved, path, keys=("cx", "cy"),
     plt.close(fig)
 
 
-PROBES = ["AMEN: Peníze a bankovnictví", "AMEN: Ekonomie", "AMEN: Přirozené právo", "8. Školství", "11. Zločin",
-          "Drogy", "10. Zdravotnictví"]
+PROBES = [nm(x) for x in ["AMEN: Peníze a bankovnictví", "AMEN: Ekonomie", "AMEN: Přirozené právo", "8. Školství", "11. Zločin",
+          "Drogy", "10. Zdravotnictví"]]
 CONTEXT = {"withsource": "“Kniha Anarchokapitalismus › 10. Zdravotnictví”",
            "nosource": "“Anarchokapitalismus › 10. Zdravotnictví”",
            "textonly": "nothing: only the chunk's own text"}
 
 
-def html(pts, chapters, rates, cross, variant, n, path, nearest, isolated, moved, Pd, moved_t, Td):
+def html(pts, chapters, rates, cross, variant, n, path, nearest, isolated, moved, Pd, moved_t, Td, facts):
     p = lambda v: f"{round(v * 100)}%"
     q = lambda s: f"“{esc(s)}”"
     dims = Pd.max(0)
     islands = [{"x0": float(Pd[m["idx"], 0].min()) - 0.012, "y0": float(Pd[m["idx"], 1].min()) - 0.012,
                 "x1": float(Pd[m["idx"], 0].max()) + 0.012, "y1": float(Pd[m["idx"], 1].max()) + 0.012,
                 "f": round(m["gap_before"] / m["gap_after"])} for m in moved]
-    island_note = ("To avoid a mostly empty picture, " + "; ".join(
-        f"the island {', '.join(q(g) for g in m['groups'][:3])} was moved closer to the rest (its gap shortened "
-        f"about {round(m['gap_before'] / m['gap_after'])}×; dashed box on the map)" for m in moved)
-        + ". Distances inside the main cloud and inside each island are unchanged; all measurements use the "
-          "original layout.") if moved else ""
+    by_names = {}
+    for m in moved:
+        by_names.setdefault(tuple(m["groups"][:3]), []).append(m)
+
+    def island_desc(names, ms):
+        fs = sorted(round(m["gap_before"] / m["gap_after"]) for m in ms)
+        f = f"{fs[0]}×" if fs[0] == fs[-1] else f"{fs[0]}–{fs[-1]}×"
+        label = ", ".join(q(g) for g in names)
+        if len(ms) == 1:
+            return f"the island {label} was moved closer to the rest (its gap shortened about {f}; dashed box on the map)"
+        return (f"{len(ms)} separate islands of {label} were moved closer to the rest (gaps shortened about {f}; "
+                f"dashed boxes on the map)")
+    island_note = ("To avoid a mostly empty picture, " + "; ".join(island_desc(k, v) for k, v in by_names.items())
+                   + ". Distances inside the main cloud and inside each island are unchanged; all measurements use "
+                     "the original layout.") if moved else ""
+    chunk_note = (f"each one paragraph of the book, median {facts['words']:.0f} words"
+                  if facts["single_para"] >= 0.95 else f"median {facts['words']:.0f} words each")
+    sec_note = ("neighbouring passages, which also share one overlapping sentence" if facts["overlap"] >= 0.1
+                else "neighbouring paragraphs of the same text")
     dims2 = Td.max(0)
     islands2 = [{"x0": float(Td[m["idx"], 0].min()) - 0.012, "y0": float(Td[m["idx"], 1].min()) - 0.012,
                  "x1": float(Td[m["idx"], 0].max()) + 0.012, "y1": float(Td[m["idx"], 1].max()) + 0.012,
@@ -275,7 +317,8 @@ def html(pts, chapters, rates, cross, variant, n, path, nearest, isolated, moved
                  f"<strong>{rho:.2f}</strong>.")
     agree = "agree closely" if rho >= 0.7 else "broadly agree" if rho >= 0.4 else "agree only weakly"
     tsne_caption = (
-        f"<strong>What you see:</strong> the same chapters form islands in the t-SNE map, and the two methods "
+        f"<strong>What you see:</strong> chapters form islands in the t-SNE map too ({tight_t} of {len(rt)} below "
+        f"0.20, against {tight} in UMAP), and the two methods "
         f"{agree} on which chapters are compact and which are spread out (rank correlation {rho:.2f}). t-SNE "
         f"packs chapters {'tighter' if med_t < med else 'less tightly'} overall (median {med_t:.2f} vs "
         f"{med:.2f} for UMAP)"
@@ -283,9 +326,11 @@ def html(pts, chapters, rates, cross, variant, n, path, nearest, isolated, moved
            "spread is smaller relative to a random set of chunks" if med_t < med else
            ": t-SNE keeps more space inside groups and pulls clusters less apart than UMAP, so the same "
            "chapters look looser relative to a random set of chunks")
-        + f". The loosest groups in t-SNE are {', '.join(q(x) for x in loose_t)}. Because a "
-        f"differently built method shows the same chapter structure, the islands are a property of the "
-        f"embeddings, not an artefact of UMAP.")
+        + f". The loosest groups in t-SNE are {', '.join(q(x) for x in loose_t)}. "
+        + ("Because a differently built method shows the same chapter structure, the islands are a property of "
+           "the embeddings, not an artefact of UMAP." if rho >= 0.4 else
+           "With this little agreement, the exact ranking of chapters depends on the projection method; only "
+           "the measurements in the full 1,024 dimensions below are independent of it."))
     if moved_t:
         tsne_caption += (" As on the UMAP map, far-away islands were moved closer (dashed box); measurements "
                          "use the original layout.")
@@ -293,14 +338,19 @@ def html(pts, chapters, rates, cross, variant, n, path, nearest, isolated, moved
                 if c["ratio"] is not None]
     tightest = ", ".join(q(c["name"]) for c in by_ratio[:6])
     pairs = "; ".join(f"{q(nm)} → {q(nearest[nm][0])}, {q(nearest[nm][1])}" for nm in PROBES if nm in nearest)
+    book_of = {c["name"]: c["book"] for c in chapters}
+    cross_pairs = [(nm, nb) for nm in PROBES if nm in nearest for nb in nearest[nm] if book_of[nb] != book_of[nm]]
+    meet = (f"; where they meet, it is through related chapters (such as {q(cross_pairs[0][0])} → "
+            f"{q(cross_pairs[0][1])} in the list above)" if cross_pairs else "")
+    apart = "largely" if rates["book"][0] - rates["book"][1] >= 0.2 else "partly"
     caption = (
         f"<strong>What you see:</strong> chapters form islands with their label on top; the most compact are "
         f"{tightest}. <strong>Related chapters are neighbours.</strong> Closest chapters in meaning (average "
-        f"vector of each chapter, full 1,024 dimensions): {pairs}. <strong>The two books</strong> keep largely "
-        f"apart: {p(rates['book'][0])} of a chunk's nearest neighbours are from the same book (50% by chance), "
-        f"because <em>Anarchokapitalismus</em> argues about institutions and economics and "
-        f"<em>Anarchoagorismus</em> about freedom, obedience and self-development; where they meet, they share a "
-        f"subject (as with school in the list above). The most isolated group on the map is {q(isolated)}.")
+        f"vector of each chapter, full 1,024 dimensions): {pairs}. <strong>The two books</strong> keep {apart} "
+        f"apart: {p(rates['book'][0])} of a chunk's nearest neighbours are from the same book "
+        f"({p(rates['book'][1])} by chance), in line with <em>Anarchokapitalismus</em> arguing about institutions "
+        f"and economics and <em>Anarchoagorismus</em> about freedom, obedience and self-development{meet}. The "
+        f"most isolated group on the map is {q(isolated)}.")
     # The effect of the context line, measured if the other variants' book maps exist.
     other = {v: json.loads((path.parent / f"book_stats_{v}.json").read_text(encoding="utf-8"))
              for v in ("withsource", "nosource", "textonly")
@@ -322,8 +372,10 @@ def html(pts, chapters, rates, cross, variant, n, path, nearest, isolated, moved
             f"0.20</th></tr></thead><tbody>{rows_html}</tbody></table></div><ul><li style='list-style:none'>"
             f"Without the chapter path, same-chapter neighbours fall from {p(ref['rates']['chapter'][0])} to "
             f"{p(t['rates']['chapter'][0])} and the median chapter is about {1 / t['median_ratio']:.0f}× tighter "
-            f"than random instead of {1 / ref['median_ratio']:.0f}×. So roughly half of the apparent chapter "
-            "clustering came from the shared label; the rest comes from what the chapters actually say.")
+            f"than random instead of {1 / ref['median_ratio']:.0f}×. So about "
+            f"{p((ref['rates']['chapter'][0] - t['rates']['chapter'][0]) / (ref['rates']['chapter'][0] - rates['chapter'][1]))}"
+            " of the above-chance same-chapter neighbours came from the shared label; the rest comes from what the "
+            "chapters actually say.")
     else:
         caveat = ("<strong>Caveat: the chapter name is in the text.</strong> Every chunk starts with its chapter "
                   "path, which helps chunks of one chapter find each other. The <code>textonly</code> variant "
@@ -338,18 +390,69 @@ def html(pts, chapters, rates, cross, variant, n, path, nearest, isolated, moved
                    f"form a compact region and related chapters lie next to each other; see the caveat below "
                    f"about the chapter name in the text.")
     loose = [c for c in sorted(chapters, key=lambda c: -(c["ratio"] or 0)) if (c["ratio"] or 0) >= 0.3]
+    # Why is a loose group loose? Split into separate clumps (but still its own neighbours), or mixed content.
+    split, mixed = [], []
+    for c in loose:
+        big = [k for k in c["clumps"] if k >= 3]
+        if c["nn_same"] >= 0.6 and len(big) >= 2:
+            split.append((c, f"lies in {len(big)} separate clumps" + (" (one per subsection)" if c["per_sub"] else "")))
+        elif c["nn_same"] >= 0.6 and c["clumps"][0] < c["n"]:
+            rest = c["n"] - c["clumps"][0]
+            split.append((c, f"has {c['clumps'][0]} of its {c['n']} chunks in one clump and the other "
+                             f"{'one' if rest == 1 else rest} elsewhere"))
+        elif c["nn_same"] < 0.6:
+            mixed.append(c)
+    broad = []
+    for c in mixed:
+        if nm("19. Praxe") in c["name"] and facts["subsections"].get(c["name"], 0) > 1:
+            broad.append(f"{q(c['name'])} is {facts['subsections'][c['name']]} different subsections ({nm('Ježek bez klece')}, "
+                         f"{nm('Svobodný přístav')}, {nm('Kryptoanarchie')}, Agora, …)")
+        elif nm("Boření mýtů") in c["name"]:
+            broad.append(f"{q(c['name'])} debunks myths from many areas")
+    split_txt = "; ".join(f"{q(c['name'])} ({p(c['nn_same'])} same-chapter neighbours) {d}" for c, d in split)
+    if not loose:
+        loose_note = "No group has a spread ratio of 0.30 or more."
+    else:
+        loose_note = (f"The loosest groups (0.30 or more) are: "
+                      + ", ".join(f"{esc(c['name'])} ({c['ratio']:.2f})" for c in loose) + ".")
+        if mixed:
+            lead = (f"All {len(mixed)}" if len(mixed) == len(loose) else f"{len(mixed)} of them")
+            loose_note += (f" {lead} also have few neighbours from their own chapter (at most "
+                           f"{p(max(c['nn_same'] for c in mixed))}), so their chunks really are scattered"
+                           + (": " + ", and ".join(broad) + (", so they are" if len(broad) > 1 else ", so it is")
+                              + " spread because the content is." if broad else "."))
+        if split:
+            loose_note += (" Others are loose for a different reason: their chunks still find each other, but the "
+                           f"map places them apart. {split_txt}.")
+    if not loose:
+        spread_verdict = "<strong>No chapter is badly spread out</strong> on the map: every group is below 0.30."
+    else:
+        spread_verdict = "<strong>A spread-out chapter is not a failure of the embedding.</strong> "
+        if mixed:
+            spread_verdict += ("Loose groups with few same-chapter neighbours really are mixed in content"
+                               + (", the clearest being the broad ones (" + ", ".join(
+                                   q(c["name"]) for c in mixed if nm("19. Praxe") in c["name"] or nm("Boření mýtů") in c["name"])
+                                  + ")" if broad else "") + ". ")
+        if split:
+            spread_verdict += (", ".join(q(c["name"]) for c, _ in split) + (" keeps" if len(split) == 1 else " keep")
+                               + " mostly same-chapter neighbours and" + (" is" if len(split) == 1 else " are")
+                               + " loose only because the map splits " + ("it" if len(split) == 1 else "them")
+                               + " into separate clumps.")
     rows = sorted([c for c in chapters if c["ratio"] is not None], key=lambda c: c["ratio"])
     table = "".join(
         f'<tr data-g="{c["id"]}"><td><span class="sw" style="background:var(--b{0 if c["book"] == "Anarchokapitalismus" else 1})"></span>'
         f'{esc(c["name"])}</td><td>{c["n"]}</td><td>{c["ratio"]:.2f}</td><td>{c["ratio_t"]:.2f}</td><td>{p(c["nn_same"])}</td></tr>' for c in rows)
     fill = {"__LABELJS__": LABEL_JS,
-        "__N__": str(n), "__NCH__": str(len(chapters)), "__VARIANT__": variant,
+        "__N__": str(n), "__NCH__": str(len(chapters)), "__APPX__": ", ".join(esc(nm(x)) for x in ("Drogy", "Zbraně", "Věda", "Práce")),
+        "__AMENCATS__": ", ".join(esc(nm(x)) for x in ("Ekonomie", "Historie")),
+        "__VARIANT__": variant,
         "__SEC__": p(rates["section"][0]), "__SECR__": p(rates["section"][1]),
         "__CH__": p(rates["chapter"][0]), "__CHR__": p(rates["chapter"][1]),
         "__BK__": p(rates["book"][0]), "__BKR__": p(rates["book"][1]),
         "__CROSS__": p(cross), "__MED__": f"{med:.2f}", "__MEDX__": f"{1 / med:.0f}",
         "__TIGHT__": str(tight), "__NRAT__": str(len(ratios)),
-        "__LOOSE__": ", ".join(f"{esc(c['name'])} ({c['ratio']:.2f})" for c in loose),
+        "__LOOSE_NOTE__": loose_note, "__SPREAD_VERDICT__": spread_verdict,
+        "__CHUNK_NOTE__": chunk_note, "__SEC_NOTE__": sec_note,
         "__ISLAND_NOTE__": island_note, "__ISLANDS__": json.dumps(islands),
         "__ISLANDS2__": json.dumps(islands2), "__W2__": f"{dims2[0]:.4f}", "__H2__": f"{dims2[1]:.4f}",
         "__TSNE_SIDE__": tsne_side, "__TSNE_CAPTION__": tsne_caption, "__W__": f"{dims[0]:.4f}", "__H__": f"{dims[1]:.4f}",
@@ -407,11 +510,10 @@ embeddings (no source-centring, which is unnecessary when all chunks come from o
 
 <h2 class="sec">What was done</h2>
 <ol>
- <li><strong>Data.</strong> The __N__ book chunks (about 150 words each) from <em>Anarchokapitalismus</em> and
+ <li><strong>Data.</strong> The __N__ book chunks (__CHUNK_NOTE__) from <em>Anarchokapitalismus</em> and
  <em>Anarchoagorismus</em>, with their bge-m3 embeddings (variant <code>__VARIANT__</code>; text in front of each chunk: __CONTEXT__).</li>
  <li><strong>Chapter groups.</strong> Each chunk belongs to one of __NCH__ groups: a chapter, or in the appendix
- of <em>Anarchokapitalismus</em> its own topic (Drogy, Zbraně, Věda, Práce) or AMEN category (Ekonomie,
- Historie, …). All AMEN aphorisms of <em>Anarchoagorismus</em> form one group.</li>
+ of <em>Anarchokapitalismus</em> its own topic (__APPX__) or AMEN category (__AMENCATS__, …). All AMEN aphorisms of <em>Anarchoagorismus</em> form one group.</li>
  <li><strong>Map.</strong> UMAP to 2D (cosine distance, 15 neighbours, min_dist 0.1, fixed seed) on these chunks
  only. Each chapter's name is placed at the average position of its chunks. __ISLAND_NOTE__</li>
  <li><strong>Measurements.</strong> Who are each chunk's 10 nearest neighbours (full 1,024-dim vectors), and how
@@ -454,10 +556,9 @@ or the same book. <strong>Expected at random</strong> is the share if neighbours
 <tr><td>book</td><td>__BK__</td><td>__BKR__</td></tr>
 </tbody></table></div>
 <p class="cap"><strong>Reading it:</strong> __CH__ of a chunk's nearest neighbours are from its own chapter,
-against __CHR__ by chance. Part of that is trivial: __SEC__ are from the very same section (neighbouring
-paragraphs, which also share one overlapping sentence). Looking only at neighbours from <em>other</em>
+against __CHR__ by chance. Part of that is trivial: __SEC__ are from the very same section (__SEC_NOTE__). Looking only at neighbours from <em>other</em>
 sections, __CROSS__ are still from the same chapter group, i.e. different parts of a chapter find each other.
-__BK__ of neighbours are from the same book (50% by chance): the two books differ in subject and tone.</p>
+__BK__ of neighbours are from the same book (__BKR__ by chance): the two books differ in subject and tone.</p>
 
 <h2 class="sec">How tight is each chapter?</h2>
 <p class="sub"><strong>How it is computed:</strong> the average distance of a chapter's chunks from their centre
@@ -469,16 +570,12 @@ Click a row to highlight it on the map.</p>
 <div class="scroll"><table id="ctab"><thead><tr><th>Chapter group</th><th>Chunks</th><th>Spread vs random (UMAP)</th><th>Spread vs random (t-SNE)</th><th>Neighbours in chapter</th></tr></thead>
 <tbody>__TABLE__</tbody></table></div>
 <p class="cap"><strong>Reading it:</strong> the median chapter has a spread ratio of __MED__, i.e. its chunks are
-about __MEDX__× more concentrated than random; __TIGHT__ of __NRAT__ groups are below 0.20. The loosest groups
-are the broad ones: __LOOSE__. “19. Praxe” is nine different subsections (Ježek bez klece, Svobodný přístav,
-Kryptoanarchie, Agora, …), and “XX. Boření mýtů” debunks myths from many areas, so they are spread because
-their content is.</p>
+about __MEDX__× more concentrated than random; __TIGHT__ of __NRAT__ groups are below 0.20. __LOOSE_NOTE__</p>
 
 <h2 class="sec">Conclusions</h2>
 <ul>
  <li>__VERDICT__</li>
- <li><strong>Where a chapter is spread out, its content is mixed.</strong> The loose groups are exactly the ones
- that cover several subjects, not failures of the embedding.</li>
+ <li>__SPREAD_VERDICT__</li>
  <li>__CAVEAT__</li>
  <li><strong>The books are a good “skeleton” for the full map.</strong> Their chapter labels can name the
  regions of the full map (articles and videos included), since the same topics recur across sources.</li>

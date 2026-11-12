@@ -7,7 +7,7 @@ were published in 2026); they stay on the map as a constant reference layer and 
 the concept regions their names: every article and video chunk is assigned to the book
 section it is closest to in meaning.
 
-Writes Projection/output/timeline_map_textonly.html (+ .png)
+Writes timeline_map_textonly.html to Projection/output/ (Chunks/output/projection/ with URZA_DATASET=final) (+ .png)
 """
 import json
 import sys
@@ -24,7 +24,7 @@ from book_map import chapter_group, esc  # noqa: E402
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+from dataset import CHUNKS, ENGLISH, OUT_DIR, nm, read_chunks, results_dir  # noqa: E402
 OUT = OUT_DIR
 VARIANT = "textonly"
 SOURCES = ["article", "book", "video"]
@@ -36,16 +36,15 @@ FEW = 30               # years with fewer dated chunks than this are marked unce
 def region_of(r):
     """Concept region = book chapter group; the broad '19. Praxe' is split into its subsections."""
     g = chapter_group(r)
-    if g.startswith("19. Praxe") and r.get("subchapter"):
+    if g.startswith(nm("19. Praxe")) and r.get("subchapter"):
         return r["subchapter"]
     return g
 
 
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
-    rows = pq.read_table(CHUNKS,
-                         columns=["chunk_id", "source", "kind", "year", "date", "title", "book", "chapter",
-                                  "subchapter", "text"]).to_pylist()
+    rows = read_chunks(CHUNKS, ["chunk_id", "source", "kind", "year", "date", "title", "book", "chapter",
+                                  "subchapter", "text"])
     ids = [r["chunk_id"] for r in rows]
     coords = pq.read_table(OUT / f"coords_{VARIANT}.parquet").to_pylist()
     assert [c["chunk_id"] for c in coords] == ids, "run project_compare.py --variant textonly first"
@@ -118,6 +117,18 @@ def main():
                                 if ms.sum() else None)
     anag_e, anag_l = bshare(se), bshare(sl)
 
+    # Where the Anarchoagorismus share changes: the split year (at least two years on each side) that best
+    # separates the yearly shares, i.e. with the largest gap between the lowest year from it on and the
+    # highest year before it; then the share before / from that year within each source.
+    ya = [st["anag"] for st in ystats]
+    cut = max(range(2, len(ya) - 1), key=lambda k: min(ya[k:]) - max(ya[:k]))
+    shift = {"year": ystats[cut]["year"], "hi_before": max(ya[:cut]), "lo_after": min(ya[cut:])}
+    for so in ("article", "video"):
+        for part, ms in (("before", year < shift["year"]), ("after", year >= shift["year"])):
+            m = dated & (src == so) & ms
+            shift[f"{so}_{part}"] = (float(np.mean([book_of.get(g) == "Anarchoagorismus" for g in region[m]]))
+                                     if m.sum() else None)
+
     pts = [[round(float(P[i, 0]), 4), round(float(P[i, 1]), 4), SOURCES.index(src[i]), int(year[i]),
             1 if kind[i] == "announcement" else 0, rid.get(region[i], -1), rows[i]["title"],
             rows[i]["text"][:160], round(float(match[i]), 2)] for i in range(len(rows))]
@@ -125,8 +136,9 @@ def main():
     OUT.mkdir(exist_ok=True)
     png(P, src, year, dated, ystats, reg_info, OUT / f"timeline_map_{VARIANT}.png")
     html(pts, reg_info, ystats, early, late, se, sl, ne, nl, rising, falling, drift, OUT / f"timeline_map_{VARIANT}.html",
-         anag_e, anag_l)
+         anag_e, anag_l, shift, book_of)
     print(f"Anarchoagorismus regions: {anag_e:.0%} -> {anag_l:.0%}", [(st["year"], st["anag"]) for st in ystats])
+    print("shift:", {k: (round(v, 3) if isinstance(v, float) else v) for k, v in shift.items()})
     print("years:", [(s["year"], s["n"]) for s in ystats])
     print("early", early, "→ late", late)
     print("rising:", [(g, f"{se.get(g, 0):.0%}→{sl.get(g, 0):.0%}") for g in rising])
@@ -169,13 +181,73 @@ def png(P, src, year, dated, ystats, reg_info, path):
     plt.close(fig)
 
 
-def html(pts, reg_info, ystats, early, late, se, sl, ne, nl, rising, falling, drift, path, anag_e, anag_l):
+def year_list(ys):
+    """2015, 2016, 2017, 2019 -> '2015–2017 and 2019'."""
+    runs = []
+    for y in ys:
+        if runs and y == runs[-1][1] + 1:
+            runs[-1][1] = y
+        else:
+            runs.append([y, y])
+    parts = [f"{a}–{b}" if b > a else str(a) for a, b in runs]
+    return " and ".join([", ".join(parts[:-1]), parts[-1]]) if len(parts) > 1 else parts[0]
+
+
+def html(pts, reg_info, ystats, early, late, se, sl, ne, nl, rising, falling, drift, path, anag_e, anag_l,
+         shift, book_of):
     p = lambda v: f"{round(v * 100)}%"
     q = lambda s: f"“{esc(s)}”"
     span = lambda ys: f"{ys[0]}–{ys[-1]}" if len(ys) > 1 else str(ys[0])
     few = [s["year"] for s in ystats if s["few"]]
     chg = lambda gs: ", ".join(f"{q(g)} ({p(se.get(g, 0))} → {p(sl.get(g, 0))})" for g in gs)
-    fill = {"__LABELJS__": LABEL_JS,
+
+    # Reading of the rising / falling regions: which book they come from
+    n_up = sum(book_of.get(g) == "Anarchoagorismus" for g in rising)
+    n_down = sum(book_of.get(g) == "Anarchokapitalismus" for g in falling)
+    words = ["none", "one", "two", "three", "four", "five"]
+    wd = lambda k: words[k] if k < len(words) else str(k)
+    num = lambda k, of: f"all {wd(of)}" if k == of else f"{wd(k)} of the {wd(of)}"
+    reading = (f"{num(n_up, len(rising)).capitalize()} regions that grew most "
+               f"belong to <em>Anarchoagorismus</em>")
+    if rising[0] == nm("Ježek bez klece"):
+        reading += f", led by the free school Urza co-founded (“{nm('Ježek bez klece')}”)"
+    reading += (f"; {num(n_down, len(falling))} that shrank most belong to "
+                f"<em>Anarchokapitalismus</em>")
+    if nm("Tři příběhy") in falling and book_of.get(nm("Tři příběhy")) == "Anarchokapitalismus":
+        reading += f", including its stories (“{nm('Tři příběhy')}”), which early narrative blog posts resembled"
+    reading += "."
+
+    # Where the shift happens and whether it holds within each source
+    sy = shift["year"]
+    within = [so for so in ("article", "video")
+              if shift[f"{so}_before"] is not None and shift[f"{so}_after"] is not None
+              and shift[f"{so}_after"] - shift[f"{so}_before"] >= 0.05]
+    sw = lambda so: f"{p(shift[so + '_before'])} → {p(shift[so + '_after'])}"
+    if shift["lo_after"] > shift["hi_before"]:
+        reading += (f" The shift towards <em>Anarchoagorismus</em> happens around {sy}: no year before it is above "
+                    f"{p(shift['hi_before'])}, no year from it on below {p(shift['lo_after'])}.")
+    else:
+        reading += (f" The shift towards <em>Anarchoagorismus</em> is gradual; the clearest break is around {sy}.")
+    if within == ["article", "video"]:
+        reading += (f" It appears "
+                    f"<strong>within articles and within videos separately</strong> (before {sy} against "
+                    f"from {sy} on: articles {sw('article')}, videos {sw('video')}), so it is not just the move "
+                    f"from articles to videos that happened at the same time.")
+    else:
+        reading += (f" It is not equally clear within each source (before {sy} against from {sy} on: articles "
+                    f"{sw('article') if shift['article_before'] is not None and shift['article_after'] is not None else '–'}, "
+                    f"videos {sw('video') if shift['video_before'] is not None and shift['video_after'] is not None else '–'}), "
+                    f"so part of it may be the move from articles to videos.")
+
+    # Source mix over the years
+    art_major = [s["year"] for s in ystats if s["counts"]["article"] > s["counts"]["video"]]
+    vid_from = next((s["year"] for k, s in enumerate(ystats)
+                     if all(t["counts"]["video"] > t["counts"]["article"] for t in ystats[k:])), None)
+    mix = (f"Articles are the majority of dated chunks in {year_list(art_major)}" if art_major
+           else "Articles are never the majority of dated chunks")
+    mix += (f"; from {vid_from} on, videos are (see the volume chart)." if vid_from
+            else " (see the volume chart).")
+    fill = {"__LABELJS__": LABEL_JS, "__PRAXE__": esc(nm("19. Praxe")),
         "__DATA__": json.dumps(pts, ensure_ascii=False).replace("</", "<\\/"),
         "__REGIONS__": json.dumps(reg_info, ensure_ascii=False).replace("</", "<\\/"),
         "__YEARS__": json.dumps(ystats, ensure_ascii=False),
@@ -184,7 +256,7 @@ def html(pts, reg_info, ystats, early, late, se, sl, ne, nl, rising, falling, dr
         "__RISING__": chg(rising), "__FALLING__": chg(falling),
         "__FEW__": (", ".join(map(str, few)) + f" (fewer than {FEW} dated chunks)") if few else "none",
         "__FEWN__": str(FEW), "__K__": str(K_REGION), "__NREG__": str(len(reg_info)),
-        "__ANAG_E__": p(anag_e), "__ANAG_L__": p(anag_l),
+        "__ANAG_E__": p(anag_e), "__ANAG_L__": p(anag_l), "__READING__": reading, "__MIX__": mix,
         "__ANAG_TABLE__": (
             "<div class='tw'><table><thead><tr><th>Year</th>" + "".join(f"<th>{st['year']}</th>" for st in ystats)
             + "</tr></thead><tbody>"
@@ -250,7 +322,7 @@ The books stay on the map as a fixed reference: they carry no year in the data (
  <li><strong>Concept regions.</strong> Every article and video chunk was given the region of the book section
  closest to it in meaning: its __K__ most similar book chunks (source-centred vectors) vote, weighted by
  similarity. There are __NREG__ regions: the book chapters, with the appendix and AMEN split into their topics and
- the broad “19. Praxe” split into its subsections. Region labels sit at the average position of the book chunks.</li>
+ the broad “__PRAXE__” split into its subsections. Region labels sit at the average position of the book chunks.</li>
  <li><strong>Years.</strong> Articles and videos carry their publication year (__Y0__–__Y1__). Announcements
  (short event notices) are shown but left out of all yearly numbers. For each year, the black trail marks the
  average position of its chunks: the year's centre of gravity.</li>
@@ -294,17 +366,11 @@ accumulates the years up to the one selected.</p>
 </ul>
 __ANAG_TABLE__
 <p class="cap">* fewer than __FEWN__ chunks of that source in that year.</p>
-<p class="cap"><strong>Reading it:</strong> the regions that grew are those of the free school Urza co-founded
-(“Ježek bez klece”) and of the personal-freedom chapters of <em>Anarchoagorismus</em>; the ones that shrank are
-the institutional topics of <em>Anarchokapitalismus</em> (work, roads, guns) and the stories, which early
-narrative blog posts resembled. The shift towards <em>Anarchoagorismus</em> happens around 2021 and appears
-<strong>within articles and within videos separately</strong>, so it is not just the move from articles to
-videos that happened at the same time.</p>
+<p class="cap"><strong>Reading it:</strong> __READING__</p>
 
 <h2 class="sec">Caveats</h2>
 <ul>
- <li><strong>The source mix changes over time.</strong> Until 2020 most dated chunks are articles; from 2021 most
- are videos (see the volume chart). The map is source-centred, which removes most of the difference in how the
+ <li><strong>The source mix changes over time.</strong> __MIX__ The map is source-centred, which removes most of the difference in how the
  two sources embed, but part of any change can still be a change of format rather than of subject.</li>
  <li><strong>Videos are represented by their descriptions</strong>, not by what is said in them, so their region
  reflects the summary Urza wrote.</li>

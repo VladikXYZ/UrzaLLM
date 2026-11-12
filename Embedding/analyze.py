@@ -20,6 +20,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 from variants import CHUNKS, HERE, VARIANTS, fingerprint, load_texts, results_dir
+from dataset import ENGLISH, nm, to_display  # noqa: E402  (variants puts the repo root on sys.path)
 
 
 def main():
@@ -61,6 +62,7 @@ def main():
     full = pq.read_table(CHUNKS).to_pylist()
     rows = [dict(r, embedding=emb[k].tolist()) for k, r in enumerate(full)]
     pq.write_table(pa.Table.from_pylist(rows), RES / "chunks_embedded.parquet", compression="zstd")
+    to_display(rows)                       # report shows English text/titles for the final corpus
     report(emb, rows, man, checks)
     print(f"Wrote analysis to {RES}")
 
@@ -111,17 +113,32 @@ def report(emb, rows, man, checks):
     cnn = np.argsort(-csim, axis=1)[:, :k]
     L += ["", "**Source-centred vectors** (`embeddings_source_centred.npy`): each source's average vector is "
           "subtracted, then vectors are re-normalised. This removes the shared “book-ness” / “video-blurb-ness” "
-          "and lets topics match across sources. Use them for the 2D map; for scoring a question against "
+          "and helps topics match across sources. Use them for the 2D map; for scoring a question against "
           "chunks, the raw vectors are the ones the model was trained for.", "",
           "| Source | Same-source neighbours, raw | Centred | Expected at random |", "|---|---:|---:|---:|"]
     for s in ("article", "book", "video"):
         m = src == s
         L.append(f"| {s} | {stats[s][0]:.0%} | {float((src[cnn[m]] == s).mean()):.0%} | {stats[s][1]:.0%} |")
-    L += ["", "Part of the remaining clustering likely comes from the context line at the start of each "
-          "chunk (“Kniha …”, “Video „…“”, “Článek …”), which names the source outright. Re-embedding "
-          "without the source word would test that."]
-    sim_doc = float((doc[nn[:, 0]] == doc).mean())
-    L += ["", f"Nearest neighbour is another chunk of the same document for {sim_doc:.0%} of chunks."]
+    variant = man.get("variant")
+    if variant == "withsource":
+        L += ["", "Part of the remaining clustering likely comes from the context line at the start of each "
+              "chunk (“Kniha …”, “Video „…“”, “Článek …” or “Oznámení …”), which names the source outright; the `nosource` "
+              "and `textonly` variants test that."]
+    elif variant == "nosource":
+        L += ["", "Here the context line no longer names the source, but still carries a chapter path or a "
+              "title and year that differ by source; the `textonly` variant removes it entirely."]
+    else:
+        L += ["", "Nothing is put in front of the chunks here, so the remaining clustering comes from the texts "
+              "themselves: how each source writes (book prose, article, video description), their length and "
+              "their typical subjects."]
+    same_doc = doc[nn[:, 0]] == doc
+    multi = [s for s in ("article", "book", "video") if len(set(doc[src == s])) < (src == s).sum()]
+    L += ["", f"Nearest neighbour is another chunk of the same document for {float(same_doc.mean()):.0%} of chunks"
+          + (". " + ("Only " if len(multi) < 3 else "All sources (")
+             + " and ".join([", ".join(f"{s}s" for s in multi[:-1]), f"{multi[-1]}s"] if len(multi) > 1 else [f"{multi[0]}s"])
+             + ("" if len(multi) < 3 else ")") + " have documents split into several chunks; per source, the share is "
+             + ", ".join(f"{float(same_doc[src == s].mean()):.0%} for {s}s" for s in multi) + "."
+             if multi else " (no document is split into several chunks).")]
 
     # Near-duplicates across documents
     iu = np.argwhere(np.triu(sim, 1) > 0.95)
@@ -133,10 +150,14 @@ def report(emb, rows, man, checks):
             L.append(f"| {sim[i, j]:.3f} | {title[i]} ({src[i]}) | {title[j]} ({src[j]}) |")
 
     # Example neighbourhoods: pick seeds by title
-    seeds = ["Kartely", "10. Zdravotnictví", "Drogy", "Bitcoin", "Demokracie", "Školství"]
+    seeds = ([nm(x) for x in ("10. Zdravotnictví", "Drogy")] + ["Cartels", "Bitcoin", "Democracy", "Education"]
+             if ENGLISH else ["Kartely", "10. Zdravotnictví", "Drogy", "Bitcoin", "Demokracie", "Školství"])
+    found = [sd for sd in seeds if any(sd.casefold() in t.casefold() for t in title)]
     L += ["", "## Example neighbourhoods", "",
-          "Five nearest chunks from *other* documents, for a few seed chunks. They should share the topic.", ""]
-    for sd in seeds:
+          "Five nearest chunks from *other* documents, for the first chunk whose title contains each of: "
+          + ", ".join(f"“{sd}”" for sd in found) + ". Ideally they share its topic; announcements and episodes "
+          "of a recurring series often match other items of the same series instead.", ""]
+    for sd in found:
         cand = [i for i, t in enumerate(title) if sd.casefold() in t.casefold()]
         if not cand:
             continue

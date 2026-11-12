@@ -57,8 +57,8 @@ embedded from their own text only (no chapter path, title or other context line)
 <h2 class="sec">PCA: how much does each direction explain?</h2>
 <div class="panel"><svg viewBox="0 0 640 200" role="img" aria-label="Variance explained per principal component" style="width:100%;max-width:640px;height:auto"><line x1="36" x2="632" y1="142.2" y2="142.2" class="grid"/><text x="30" y="146.2" text-anchor="end" class="ax">1%</text><line x1="36" x2="632" y1="112.4" y2="112.4" class="grid"/><text x="30" y="116.4" text-anchor="end" class="ax">2%</text><line x1="36" x2="632" y1="82.7" y2="82.7" class="grid"/><text x="30" y="86.7" text-anchor="end" class="ax">3%</text><line x1="36" x2="632" y1="52.9" y2="52.9" class="grid"/><text x="30" y="56.9" text-anchor="end" class="ax">4%</text><rect x="38.0" y="32.9" width="25.8" height="139.1" rx="3" fill="var(--b0)"><title>PC1: 4.7% of variance</title></rect><text x="50.9" y="28.9" text-anchor="middle" class="lab">4.7%</text><text x="50.9" y="188" text-anchor="middle" class="ax">PC1</text><rect x="67.8" y="52.0" width="25.8" height="120.0" rx="3" fill="var(--b0)"><title>PC2: 4.0% of variance</title></rect><text x="80.7" y="48.0" text-anchor="middle" class="lab">4.0%</text><rect x="97.6" y="72.6" width="25.8" height="99.4" rx="3" fill="var(--b0)"><title>PC3: 3.3% of variance</title></rect><text x="110.5" y="68.6" text-anchor="middle" class="lab">3.3%</text><text x="110.5" y="188" text-anchor="middle" class="ax">PC3</text><rect x="127.4" y="88.5" width="25.8" height="83.5" rx="3" fill="var(--b0)"><title>PC4: 2.8% of variance</title></rect><rect x="157.2" y="104.0" width="25.8" height="68.0" rx="3" fill="var(--b0)"><title>PC5: 2.3% of variance</title></rect><text x="170.1" y="188" text-anchor="middle" class="ax">PC5</text><rect x="187.0" y="108.9" width="25.8" height="63.1" rx="3" fill="var(--b0)"><title>PC6: 2.1% of variance</title></rect><rect x="216.8" y="114.7" width="25.8" height="57.3" rx="3" fill="var(--b0)"><title>PC7: 1.9% of variance</title></rect><text x="229.7" y="188" text-anchor="middle" class="ax">PC7</text><rect x="246.6" y="122.2" width="25.8" height="49.8" rx="3" fill="var(--b0)"><title>PC8: 1.7% of variance</title></rect><rect x="276.4" y="125.7" width="25.8" height="46.3" rx="3" fill="var(--b0)"><title>PC9: 1.6% of variance</title></rect><text x="289.3" y="188" text-anchor="middle" class="ax">PC9</text><rect x="306.2" y="129.7" width="25.8" height="42.3" rx="3" fill="var(--b0)"><title>PC10: 1.4% of variance</title></rect><rect x="336.0" y="130.3" width="25.8" height="41.7" rx="3" fill="var(--b0)"><title>PC11: 1.4% of variance</title></rect><text x="348.9" y="188" text-anchor="middle" class="ax">PC11</text><rect x="365.8" y="131.5" width="25.8" height="40.5" rx="3" fill="var(--b0)"><title>PC12: 1.4% of variance</title></rect><rect x="395.6" y="134.0" width="25.8" height="38.0" rx="3" fill="var(--b0)"><title>PC13: 1.3% of variance</title></rect><text x="408.5" y="188" text-anchor="middle" class="ax">PC13</text><rect x="425.4" y="135.3" width="25.8" height="36.7" rx="3" fill="var(--b0)"><title>PC14: 1.2% of variance</title></rect><rect x="455.2" y="137.0" width="25.8" height="35.0" rx="3" fill="var(--b0)"><title>PC15: 1.2% of variance</title></rect><text x="468.1" y="188" text-anchor="middle" class="ax">PC15</text><rect x="485.0" y="138.6" width="25.8" height="33.4" rx="3" fill="var(--b0)"><title>PC16: 1.1% of variance</title></rect><rect x="514.8" y="139.7" width="25.8" height="32.3" rx="3" fill="var(--b0)"><title>PC17: 1.1% of variance</title></rect><text x="527.7" y="188" text-anchor="middle" class="ax">PC17</text><rect x="544.6" y="140.4" width="25.8" height="31.6" rx="3" fill="var(--b0)"><title>PC18: 1.1% of variance</title></rect><rect x="574.4" y="141.3" width="25.8" height="30.7" rx="3" fill="var(--b0)"><title>PC19: 1.0% of variance</title></rect><text x="587.3" y="188" text-anchor="middle" class="ax">PC19</text><rect x="604.2" y="142.5" width="25.8" height="29.5" rx="3" fill="var(--b0)"><title>PC20: 1.0% of variance</title></rect><line x1="36" x2="632" y1="172" y2="172" class="base"/></svg></div>
 <p class="cap"><strong>Reading it:</strong> PC1 explains 4.7% of the differences between chunks, PC2 4.0%,
-together 8.7%; the first 20 components explain 38%, and 37 components are needed for half. There is
-no dominant direction: the books' content is spread over many independent dimensions. A 2-dimensional PCA map
+together 8.7%; the first 20 components explain 38%, and 37 components are needed for half. No single
+direction dominates: even PC1 covers only 4.7%, and the books' content is spread over many dimensions. A 2-dimensional PCA map
 therefore shows only a thin slice of the structure, which is why non-linear maps (UMAP, t-SNE) are needed for a
 readable picture.</p>
 <p class="cap" style="margin-top:14px"><strong>Cumulative variance:</strong></p>
@@ -66,7 +66,7 @@ readable picture.</p>
 <p class="cap"><strong>Reading it:</strong> the share of all differences between book chunks explained by the first k
 principal components together (out of 592 components in total). Two components, the most a flat PCA map can
 show, explain 9%. Half needs 37 components, 80% 118, 90% 184 and 95% 249. The curve rises
-slowly and without a clear elbow: no small set of directions captures most of the content.</p>
+gradually: no small set of directions captures most of the content.</p>
 
 <h2 class="sec">PCA map</h2>
 <div class="controls"><label>X axis <select id="pcx"></select></label><label>Y axis <select id="pcy"></select></label>
@@ -76,11 +76,8 @@ slowly and without a clear elbow: no small set of directions captures most of th
  <div class="panel"><canvas id="cv0"></canvas><div class="axes" id="ax0"></div></div>
  <div class="panel side"><h3>Chapters (click to highlight)</h3><div id="list"></div></div>
 </div>
-<p class="cap"><strong>What you see (PC1 × PC2):</strong> PC1 runs from “Doslov”, “21. Budoucnost”, “4. Poslušnost”, “12. Anarchie” (low) to “AMEN: Peníze a bankovnictví”, “12. Silnice a dopravní pravidla”, “AMEN: Ekonomie”, “1. Vzácné zdroje a systém cen” (high):
-from personal freedom, obedience and the future towards economics and how institutions work. It is essentially
-the difference between the two books, which therefore sit side by side along PC1. PC2 runs from “8. Stát”, “AMEN: Lidské jednání”, “10. Etatismus”, “9. Demokracie” (low)
-to “Tři příběhy”, “5. Peníze”, “Doslov”, “19. Praxe” (high): from abstract arguments about the state and democracy towards concrete, practical or
-narrative passages. Chapters overlap much more than on the UMAP map: their median spread is 0.49 of a
+<p class="cap"><strong>What you see (PC1 × PC2):</strong> PC1 runs from “Doslov”, “21. Budoucnost”, “4. Poslušnost”, “12. Anarchie” (low) to “AMEN: Peníze a bankovnictví”, “12. Silnice a dopravní pravidla”, “AMEN: Ekonomie”, “1. Vzácné zdroje a systém cen” (high).
+PC2 runs from “8. Stát”, “AMEN: Lidské jednání”, “10. Etatismus”, “9. Demokracie” (low) to “Tři příběhy”, “5. Peníze”, “Doslov”, “19. Praxe” (high). PC1 is also the axis that separates the two books best (book η² 0.47: <em>Anarchoagorismus</em> towards the low end, <em>Anarchokapitalismus</em> towards the high end). Chapters overlap much more than on the UMAP map: their median spread is 0.49 of a
 random set (0 of 55 chapters below 0.20). For comparison, the non-linear maps of the same chunks: UMAP 0.19, t-SNE 0.31. Use the selectors to look at further components.</p>
 
 <h2 class="sec">ICA: independent themes</h2>
@@ -100,15 +97,14 @@ Odpověď: Tato námitka je bez…</td><td>9.0</td><td>4.1</td></tr><tr><td><str
 Odpověď: Tato velmi častá námitka se rozhodně netýk…</td><td>3.5</td><td>1.0</td></tr><tr><td><strong>IC16</strong></td><td>“AMEN: aforismy”, “6. Vedení”, “4. Poslušnost”</td><td><span class='path'>AMEN: aforismy manifestující esenci neposlušnosti › Moc korumpuje a absolutní moc korumpuje absolutně.</span><br>– lord Acton
 
 Nejznámější výrok Johna Emericha Edwarda Dalberg-Actona (známého jako lorda Actona) pochází z dopisu adresovaného biskupu Mandellovi Creightonovi. Tito učenci ve své korespondenci z konc…</td><td>2.1</td><td>1.8</td></tr></tbody></table></div>
-<p class="cap"><strong>Reading it:</strong> almost every component is a recognisable theme of the books, found
-without any chapter information: IC2: “12. Silnice a dopravní pravidla”, “AMEN: Ekonomie”; IC3: “5. Peníze”, “AMEN: Peníze a bankovnictví”; IC4: “2. Školství”, “8. Školství”; IC5: “9. Sociální systém”, “10. Zdravotnictví”; IC6: “Drogy”, “Zbraně”; IC7: “Doslov”, “15. Osvobození”; IC8: “3. Princip neagrese”, “14. Soudnictví”; IC9: “15. Vymáhání práva”, “6. Hasiči”; IC10: “AMEN: Historie”, “AMEN: Polemika”; IC11: “2. Proč selhává centrální plánování?”, “1. Vzácné zdroje a systém cen”; IC12: “9. Demokracie”, “8. Stát”; IC13: “AMEN: Historie”, “16. Armáda”; IC14: “Pár slov úvodem”, “Doslov”; IC15: “Práce”, “AMEN: Peníze a bankovnictví”; IC16: “AMEN: aforismy”, “6. Vedení”. IC1 is driven mostly by “Tři příběhy”, so it describes one chapter's style rather than a shared theme. The themes cut across the two books where the subject
-is shared (school appears in both), which the chapter structure alone does not show.</p>
+<p class="cap"><strong>Reading it:</strong> 15 of the 16 components are themes spread over several
+chapters, found without any chapter information (named here by their two highest-scoring chapters): IC2: “12. Silnice a dopravní pravidla”, “AMEN: Ekonomie”; IC3: “5. Peníze”, “AMEN: Peníze a bankovnictví”; IC4: “2. Školství”, “8. Školství”; IC5: “9. Sociální systém”, “10. Zdravotnictví”; IC6: “Drogy”, “Zbraně”; IC7: “Doslov”, “15. Osvobození”; IC8: “3. Princip neagrese”, “14. Soudnictví”; IC9: “15. Vymáhání práva”, “6. Hasiči”; IC10: “AMEN: Historie”, “AMEN: Polemika”; IC11: “2. Proč selhává centrální plánování?”, “1. Vzácné zdroje a systém cen”; IC12: “9. Demokracie”, “8. Stát”; IC13: “AMEN: Historie”, “16. Armáda”; IC14: “Pár slov úvodem”, “Doslov”; IC15: “Práce”, “AMEN: Peníze a bankovnictví”; IC16: “AMEN: aforismy”, “6. Vedení”.
+IC1 is driven mostly by “Tři příběhy”, so it describes one chapter rather than a theme shared by several. Some components draw their top three chapters from both books (IC3: “5. Peníze”, “AMEN: Peníze a bankovnictví”, “19. Praxe”; IC4: “2. Školství”, “8. Školství”, “4. Poslušnost”; IC9: “15. Vymáhání práva”, “6. Hasiči”, “11. Zločin”): links across the books that the chapter structure alone does not show.</p>
 
 <h2 class="sec">ICA map</h2>
 <div class="controls"><label>X axis <select id="icx"></select></label><label>Y axis <select id="icy"></select></label></div>
 <div class="panel"><canvas id="cv1"></canvas><div class="axes" id="ax1"></div></div>
-<p class="cap"><strong>What you see (default IC3 × IC4):</strong> the two focused themes (kurtosis
-above 2) that separate chapters best, leaving out components that describe a single chapter. IC3 is high for “5. Peníze”, “AMEN: Peníze a bankovnictví”, “19. Praxe”;
+<p class="cap"><strong>What you see (default IC3 × IC4):</strong> the two focused themes (kurtosis above 2) that separate chapters best, leaving out components that describe a single chapter. IC3 is high for “5. Peníze”, “AMEN: Peníze a bankovnictví”, “19. Praxe”;
 IC4 for “2. Školství”, “8. Školství”, “4. Poslušnost”. Most chunks sit near the origin (0, 0), and each theme forms an arm reaching out
 along its axis: an ICA map shows <em>how strongly</em> a chunk is about a theme rather than a landscape of
 regions. Median chapter spread on this map: 0.53 (0 of 55 below 0.20). Pick other components
@@ -116,14 +112,12 @@ to see other themes; hovering a chunk highlights it on both maps.</p>
 
 <h2 class="sec">Conclusions</h2>
 <ul>
- <li><strong>The main linear direction is the difference between the books.</strong> PC1 separates the
- economic and institutional arguments of <em>Anarchokapitalismus</em> from the personal freedom and obedience
- themes of <em>Anarchoagorismus</em>, but explains only 4.7% of the variation.</li>
+ <li><strong>The main linear direction is largely the difference between the books.</strong> PC1 (book η² 0.47) has <em>Anarchoagorismus</em> towards the low end, <em>Anarchokapitalismus</em> towards the high end, but explains only 4.7% of the variation.</li>
  <li><strong>PCA is a poor map, but an honest one.</strong> With no dominant directions, any 2D linear view
  overlaps most chapters. The compact chapter regions of UMAP and t-SNE come from combining many directions,
  not from one or two.</li>
  <li><strong>ICA recovers the books' topics on its own.</strong> Without knowing the chapters, its components
- line up with them: money, school and obedience, drugs and guns, law and courts, the social system and so on.
+ line up with them: their highest-scoring chapters include “Tři příběhy”, “12. Silnice a dopravní pravidla”, “5. Peníze”, “2. Školství”, “9. Sociální systém”, “Drogy” and more.
  This is independent, linear evidence that the embedding encodes Urza's ideas as distinct directions.</li>
  <li><strong>ICA components are candidate “idea axes” for the coverage map.</strong> A political question
  could be scored along each component to see which of Urza's themes it touches. The components depend on the

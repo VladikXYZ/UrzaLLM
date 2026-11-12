@@ -59,8 +59,18 @@ def book_place(chapter, name):
     return "book_section", name, ""
 
 
-def pipeline_rows(cs_rows):
-    """Czech chunks in the format of Preprocessing/output/chunks.parquet, with the three embedding texts."""
+def book_place_en(chapter_cs, chapter_en, name_en):
+    """English (chapter, subchapter), structured exactly like book_place() decides for the Czech original."""
+    if chapter_cs.startswith(DODATEK):
+        return "Appendix", f"{chapter_en} › {name_en}"
+    if chapter_cs:
+        return chapter_en, name_en
+    return name_en, ""
+
+
+def pipeline_rows(cs_rows, en_rows):
+    """Czech chunks in the format of Preprocessing/output/chunks.parquet, with the three embedding texts
+    (Czech, as embedded) and the English twin's text, title, chapter and subchapter for display (*_en)."""
     sys.path.insert(0, str(ROOT / "Preprocessing"))
     from chunking import header  # noqa: E402
     docs = {d["url"]: d for d in pq.read_table(ROOT / "Preprocessing" / "output" / "documents.parquet").to_pylist()
@@ -74,10 +84,13 @@ def pipeline_rows(cs_rows):
     per_doc = {}
     for r in cs_rows:
         per_doc[r["doc_id"]] = per_doc.get(r["doc_id"], 0) + 1
-    for r in cs_rows:
+    for r, e in zip(cs_rows, en_rows):
+        assert r["chunk_id"] == e["chunk_id"]
         d = docs.get(r["url"], {})
+        chapter_en = sub_en = None
         if r["source"] == "book":
             kind, chapter, sub = book_place(r["chapter"], r["section"])
+            chapter_en, sub_en = book_place_en(r["chapter"], r["chapter_en"], r["section_en"])
         else:
             kind = d.get("kind") or r["source"]
             if kind == "video_post":          # articles the earlier pipeline set aside for their video; here they count as text
@@ -98,8 +111,31 @@ def pipeline_rows(cs_rows):
             "embed_text": f"{header(doc)}\n\n{r['text']}",
             "embed_text_nosource": f"{header(doc, with_source=False)}\n\n{r['text']}",
             "embed_text_textonly": r["text"],
+            "text_en": e["text"], "title_en": e["title"], "chapter_en": chapter_en, "subchapter_en": sub_en or None,
         })
     return out
+
+
+def name_map(prow):
+    """Czech → English for every book chapter, subchapter, path part and chapter group, so scripts that name a
+    section in Czech can show its English name (see dataset.nm)."""
+    sys.path.insert(0, str(ROOT / "Projection"))
+    from book_map import chapter_group  # noqa: E402
+    m = {"dodatek": "Appendix"}
+
+    def add(cs, en):
+        if cs and en and cs != en:
+            assert m.get(cs, en) == en, f"name {cs!r} translated two ways: {m[cs]!r} / {en!r}"
+            m[cs] = en
+    for r in prow:
+        if r["source"] != "book":
+            continue
+        add(r["chapter"], r["chapter_en"])
+        add(r["subchapter"], r["subchapter_en"])
+        for a, b in zip((r["subchapter"] or "").split(" › "), (r["subchapter_en"] or "").split(" › ")):
+            add(a, b)
+        add(chapter_group(r), chapter_group({"chapter": r["chapter_en"], "subchapter": r["subchapter_en"]}))
+    return m
 
 
 def load(path):
@@ -120,7 +156,7 @@ def chunk_rows():
         assert a["text"] == cs[1], f"article {i}: arts.json and arts_tr.json disagree"
         date = a["date"][:10]
         yield ({"chunk_id": f"art-{i:04d}", "source": "article", "doc_id": f"art-{i:04d}", "book": "", "chapter": "",
-                "section": "", "para": 0, "date": date, "year": int(date[:4]) if date else 0, "url": a["url"],
+                "section": "", "chapter_en": "", "section_en": "", "para": 0, "date": date, "year": int(date[:4]) if date else 0, "url": a["url"],
                 "video_url": a.get("video") or ""}, (cs[0], cs[1]), (en[0], en[1]))
 
     yt, yt_cs, yt_en = load(PRE / "yt.json"), load(PRE / "yt_tr.json"), load(PRE / "yt_en.json")
@@ -130,7 +166,7 @@ def chunk_rows():
         d = upload.get(v["url"], "")
         date = f"{d[:4]}-{d[4:6]}-{d[6:8]}" if len(d) == 8 else ""
         yield ({"chunk_id": f"vid-{i:04d}", "source": "video", "doc_id": f"vid-{i:04d}", "book": "", "chapter": "",
-                "section": "", "para": 0, "date": date, "year": int(date[:4]) if date else 0, "url": v["url"],
+                "section": "", "chapter_en": "", "section_en": "", "para": 0, "date": date, "year": int(date[:4]) if date else 0, "url": v["url"],
                 "video_url": v["url"]}, (cs[0], cs[1]), (en[0], en[1]))
 
     for code, book, stem in BOOKS:
@@ -142,7 +178,7 @@ def chunk_rows():
             for p, (tc, te) in enumerate(zip(pc, pe)):
                 cid = f"{code}-{s:03d}-{p:03d}"
                 yield ({"chunk_id": cid, "source": "book", "doc_id": f"{code}-{s:03d}", "book": book,
-                        "chapter": cs["chapter"], "section": cs["name"], "para": p, "date": "", "year": 0,
+                        "chapter": cs["chapter"], "section": cs["name"], "chapter_en": en["chapter"], "section_en": en["name"], "para": p, "date": "", "year": 0,
                         "url": "", "video_url": ""},
                        (cs["name"], tc), (en["name"], te))
 
@@ -198,7 +234,9 @@ def main():
         with open(OUT / f"chunks_{lang}.jsonl", "w", encoding="utf-8", newline="\n") as f:
             for r in rows:
                 f.write(json.dumps(r, ensure_ascii=False) + "\n")
-    pq.write_table(pa.Table.from_pylist(pipeline_rows(cs_rows)), OUT / "chunks.parquet")
+    prow = pipeline_rows(cs_rows, en_rows)
+    pq.write_table(pa.Table.from_pylist(prow), OUT / "chunks.parquet")
+    (OUT / "names_en.json").write_text(json.dumps(name_map(prow), ensure_ascii=False, indent=1), encoding="utf-8")
 
     for src in ("article", "video", "book"):
         w = sorted(r["n_words"] for r in cs_rows if r["source"] == src)

@@ -117,6 +117,7 @@ def main():
     ratio = np.array([b["n_words"] / max(a["n_words"], 1) for a, b in zip(cs, en)])
     same = sum(1 for a, b in zip(cs, en) if a["text"] == b["text"])
     tiny = [r for r in cs if r["n_words"] <= 3]
+    en_text = {r["chunk_id"]: r["text"] for r in en}
     dup = Counter(r["text"] for r in cs if r["source"] == "article")
     dups = [r for r in cs if r["source"] == "article" and dup[r["text"]] > 1]
     kinds = Counter((r["source"], r["kind"]) for r in pipe)
@@ -124,7 +125,8 @@ def main():
     raw_w = sum(len(d[1].split()) for d in raw_v)
     kept_w = sum(r["n_words"] for r in cs if r["source"] == "video")
     raw_med = float(np.median([len(d[1].split()) for d in raw_v]))
-    groups = Counter(chapter_group(r) for r in pipe if r["source"] == "book")
+    groups = Counter(chapter_group({"chapter": r["chapter_en"], "subchapter": r["subchapter_en"]})   # English names
+                     for r in pipe if r["source"] == "book")
     gtop = groups.most_common(6)
     ex = {s: next(r for r in pipe if r["source"] == s and r["words"] > 40) for s in SOURCES}
 
@@ -146,7 +148,8 @@ def main():
         "__RMED__": f"{np.median(ratio):.2f}", "__RLO__": f"{q(ratio, 5):.2f}", "__RHI__": f"{q(ratio, 95):.2f}",
         "__SAME__": str(same), "__NTINY__": str(len(tiny)),
         "__TINY__": "".join(f"<tr><td><code>{esc(r['chunk_id'])}</code></td><td>{LABEL[r['source']][:-1]}</td>"
-                            f"<td>{esc(r['text'][:90])}</td></tr>" for r in tiny),
+                            f"<td>{esc(en_text[r['chunk_id']][:90])}</td><td class=m>{esc(r['text'][:90])}</td></tr>"
+                            for r in tiny),
         "__NDUP__": str(len(dups)), "__NDUPT__": str(sum(1 for t, c in dup.items() if c > 1)),
         "__NANN__": str(kinds[("article", "announcement")]), "__NART__": str(kinds[("article", "article")]),
         "__NSTORY__": str(kinds[("book", "book_story")]), "__NFAQ__": str(kinds[("book", "book_faq")]),
@@ -216,7 +219,7 @@ svg .ax{fill:var(--ink2);font-size:10px}svg .lab{fill:var(--ink);font-size:11.5p
  as before, giving the same __NGROUPS__ chapter groups.</li>
  <li><strong>Three embedding texts</strong>, as in all earlier reports; only the Czech chunks are embedded
  (bge-m3), each variant separately:
- <div class="tw" style="margin-top:6px"><table><thead><tr><th>Source</th><th><code>withsource</code>: line in front</th><th><code>nosource</code>: line in front</th><th><code>textonly</code></th></tr></thead><tbody>__EX__</tbody></table></div></li>
+ <div class="tw" style="margin-top:6px"><table><thead><tr><th>Source</th><th><code>withsource</code>: line in front (Czech, as embedded)</th><th><code>nosource</code>: line in front</th><th><code>textonly</code></th></tr></thead><tbody>__EX__</tbody></table></div></li>
 </ol>
 
 <h2 class="sec">Chunks by source, compared with the earlier chunking</h2>
@@ -251,7 +254,7 @@ English-language texts). Only the Czech chunks are embedded; the English twin of
 <code>chunk_id</code>.</p>
 
 <h2 class="sec">Odd chunks kept by the rules</h2>
-<div class="tw"><table><thead><tr><th>Chunk</th><th>Source</th><th>Text</th></tr></thead><tbody>__TINY__</tbody></table></div>
+<div class="tw"><table><thead><tr><th>Chunk</th><th>Source</th><th>Text (English)</th><th>Czech original</th></tr></thead><tbody>__TINY__</tbody></table></div>
 <p class="cap"><strong>What it shows:</strong> the __NTINY__ chunks of three words or fewer: hashtag-only articles,
 link-only video descriptions, headings in the books and single lines of dialogue. They follow the rules and are
 kept; on the maps they land wherever their few words point. In addition, __NDUP__ article chunks share their text
@@ -260,7 +263,7 @@ with another article (__NDUPT__ texts), also kept.</p>
 <h2 class="sec">Book chunks by section</h2>
 <p class="cap" style="margin-top:0"><strong>What it shows:</strong> the books split into __NGROUPS__ chapter groups,
 the same as in the earlier reports. Paragraph chunking changes their weight: the largest are __GTOP__. The
-opening stories (“Tři příběhy”, __NSTORY__ chunks) are dialogue, so nearly every line is its own paragraph;
+opening stories (“Three stories”, __NSTORY__ chunks) are dialogue, so nearly every line is its own paragraph;
 they now weigh much more in the book maps than before. The two AMEN sections (objections and aphorisms) have __NFAQ__ chunks.</p>
 
 <h2 class="sec">Conclusions</h2>

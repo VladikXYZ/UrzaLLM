@@ -28,14 +28,18 @@ from book_map import esc  # noqa: E402
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+from dataset import CHUNKS, ENGLISH, OUT_DIR, nm, read_chunks, results_dir  # noqa: E402
 OUT = OUT_DIR
 VARIANT = "textonly"
 SOURCES = ["article", "book", "video"]
+QTEXT = {}   # item id -> shown text (for the caveat questions)
 STRONG, SOME = 0.60, 0.55     # depth tiers (cosine of best passage); set from the validation examples
 K_PLACE = 5                   # nearest items used to place a chunk on the map
 SEED = 42
+# spot-check questions: the first N_CORE are on Urza's core subjects (drugs, schooling, crypto, taxes, guns, roads),
+# the rest on subjects he treats only in passing (refugees, climate, abortion, Ukraine)
 CHECK = ["Q12.4a", "Q06.1a", "Q15.4c", "Q01.2b", "Q12.5a", "Q10.1a", "Q09.1a", "Q07.1a", "Q03.4b", "Q16.3a"]
+N_CORE = 6
 
 
 def unit(A):
@@ -46,11 +50,16 @@ def main():
     sys.stdout.reconfigure(encoding="utf-8")
     import umap
     items = list(csv.DictReader(open(ROOT / "Questions" / "political_space.tsv", encoding="utf-8"), delimiter="\t"))
+    en_tsv = ROOT / "Questions" / "political_space_en.tsv"
+    if ENGLISH and en_tsv.exists():   # show the English translation; the embeddings stay those of the Czech items
+        en = list(csv.DictReader(open(en_tsv, encoding="utf-8"), delimiter="\t"))
+        assert [q["id"] for q in en] == [q["id"] for q in items], "political_space_en.tsv does not match the Czech list"
+        items = [{**q, "description": q.get("description") or ""} for q in en]
+    QTEXT.update({q["id"]: q["text"] for q in items})
     QE = np.load(ROOT / "Questions" / "output" / "embeddings.npy")
     assert (ROOT / "Questions" / "output" / "ids.txt").read_text(encoding="utf-8").split() == [q["id"] for q in items]
-    rows = pq.read_table(CHUNKS,
-                         columns=["chunk_id", "doc_id", "source", "kind", "year", "title", "url", "chapter",
-                                  "text"]).to_pylist()
+    rows = read_chunks(CHUNKS, ["chunk_id", "doc_id", "source", "kind", "year", "title", "url", "chapter",
+                                  "text"])
     E = np.load(results_dir(VARIANT) / "embeddings.npy")
     assert (results_dir(VARIANT) / "chunk_ids.txt").read_text(encoding="utf-8").split() \
         == [r["chunk_id"] for r in rows]
@@ -142,6 +151,7 @@ def main():
         pstats[name]["same_src"] = float((src_i[np.argsort(Dc, 1)[:, :10]] == src_i[:, None]).mean())
         del Dc
     pstats["moved"] = float(np.median(np.sqrt(((CP - CT) ** 2).sum(1))))
+    pstats["moved_g"] = float(np.median(np.sqrt(((CG - CT) ** 2).sum(1))))      # third placement vs second
 
     # ---- aggregates
     majors = list(dict.fromkeys(q["major"] for q in items if q["layer"] != "concept"))
@@ -235,7 +245,7 @@ def html(st, areas, q_top, q_bot, c_top, c_bot, checks, pts_items, pts_chunks, l
     by_vol = sorted(areas, key=lambda a: -a["vol"])
     by_depth = sorted(areas, key=lambda a: -a["depth"])
     j = lambda o: json.dumps(o, ensure_ascii=False).replace("</", "<\\/")
-    fill = {"__LABELJS__": LABEL_JS,
+    fill = {"__LABELJS__": LABEL_JS, "__ROADQ__": esc(QTEXT["Q10.1a"]), "__TAXQ__": esc(QTEXT["Q01.2b"]),
         "__AREAS__": j(areas), "__QTOP__": j(q_top), "__QBOT__": j(q_bot), "__CTOP__": j(c_top), "__CBOT__": j(c_bot),
         "__CHECKS__": j(checks), "__ITEMS__": j(pts_items), "__CHUNKS__": j(pts_chunks), "__LABELS__": j(labels),
         "__N__": f"{st['n']:,}", "__NI__": str(st["n_items"]), "__NQ__": str(st["n_q"]), "__NC__": str(st["n_c"]),
@@ -257,6 +267,11 @@ def html(st, areas, q_top, q_bot, c_top, c_bot, checks, pts_items, pts_chunks, l
         "__GOUT__": f"{st['place']['g']['outside'] * 100:.0f}%", "__GFAITH__": p(st["place"]["g"]["faith"]),
         "__SSK__": p(st["place"]["knn"]["same_src"]), "__SST__": p(st["place"]["tr"]["same_src"]),
         "__SSG__": p(st["place"]["g"]["same_src"]), "__SSCH__": p(st["place"]["src_ch"]),
+        **check_text(checks, q), **place_text(st["place"]),
+        "__BLINDNO__": ("have no passage that reaches " + f"{SOME:.2f}" + ", i.e. none that addresses them directly"
+                        if max(r[3] for r in q_bot[:6]) < SOME else "have only weakly matching passages"),
+        "__BLINDNO2__": ("get no passage that addresses them directly" if max(r[3] for r in q_bot[:6]) < SOME
+                         else "get only weakly matching passages"),
         "__LTYPE__": p(st["layout"]["type"]), "__LTYPERAW__": p(st["layout"]["type_raw"]), "__LTYPECH__": p(st["layout"]["type_ch"]),
         "__LAREA__": p(st["layout"]["area"]), "__LAREARAW__": p(st["layout"]["area_raw"]), "__LAREACH__": p(st["layout"]["area_ch"]),
     }
@@ -264,6 +279,56 @@ def html(st, areas, q_top, q_bot, c_top, c_bot, checks, pts_items, pts_chunks, l
     for k, v in fill.items():
         page = page.replace(k, v)
     path.write_text(page, encoding="utf-8")
+
+
+def check_text(checks, q):
+    """Spot-check caption from the actual best passages (core subjects vs subjects treated in passing)."""
+    core, rest = checks[:N_CORE], checks[N_CORE:]
+    top = lambda cs: [c[1][0][0] for c in cs]
+    rng = lambda v: f"{min(v):.2f}–{max(v):.2f}"
+    on = [c for c in core if c[1][0][0] >= SOME]
+    titles = list(dict.fromkeys(c[1][0][2] for c in on))[:4]
+    txt = (f"the {len(core)} questions on his core subjects find, as best passage, his own texts on those subjects "
+           f"(such as {', '.join(q(t) for t in titles)}), at similarities of {rng(top(core))}.")
+    if rest:
+        lower = max(top(rest)) < min(top(core))
+        txt += (f" For the {len(rest)} questions on subjects he treats only in passing, his best passages score "
+                f"{'lower' if lower else 'mostly lower'} ({rng(top(rest))}).")
+    return {"__CHECKTXT__": txt}
+
+
+def place_text(pl):
+    """Placement captions, worded from the placement statistics."""
+    k, t, g = pl["knn"], pl["tr"], pl["g"]
+    p = lambda v: f"{v * 100:.0f}%"
+    if k["outside"] == 0:
+        kout = "never puts a chunk outside the area of the political items"
+    else:
+        kout = f"puts {p(k['outside'])} of chunks outside the area of the political items"
+    out = (f"it lets some fall away from the items ({p(t['outside'])} land outside the items' area)" if t["outside"] > 0
+           else "it keeps all of them within the items' area")
+    if t["cells"] > k["cells"] and t["dense"] > k["dense"]:
+        spread = (f"reaches more cells ({t['cells']}) but also piles more chunks onto a few spots "
+                  f"({p(t['dense'])} in the densest 5%)")
+    else:
+        spread = f"reaches {t['cells']} cells (densest 5%: {p(t['dense'])})"
+    trtxt = f"<em>UMAP transform</em> {spread}, and {out}."
+    diff = abs(g["same_src"] - t["same_src"])
+    if diff < 0.05:
+        gtxt = ("It keeps the differences between sources, but they barely show: ")
+        gend = ("So once Urza's overall average is removed, the remaining differences between articles, books and "
+                "videos hardly change where his texts land in the political space")
+    else:
+        gtxt = "It keeps the differences between sources, and they show: "
+        gend = ("So the differences between articles, books and videos do change where his texts land in the "
+                "political space")
+    if pl["moved_g"] < pl["moved"] / 2:
+        gend += (f"; a chunk moves by a median of only {pl['moved_g']:.2f} map widths between this placement and the "
+                 f"second one (against {pl['moved']:.2f} between the first two).")
+    else:
+        gend += (f"; a chunk moves by a median of {pl['moved_g']:.2f} map widths between this placement and the second "
+                 f"one (against {pl['moved']:.2f} between the first two).")
+    return {"__KOUT__": kout, "__TRTXT__": trtxt, "__GTXT__": gtxt, "__GEND__": gend}
 
 
 TEMPLATE = r"""<!doctype html>
@@ -349,9 +414,7 @@ which parts of it he attends to, how deeply, and where his blind spots are.</p>
 <h2 class="sec">Does it find the right texts? Spot checks</h2>
 <p class="sub">Questions on subjects Urza is known for, and his three best-matching passages:</p>
 <div id="checks"></div>
-<p class="cap"><strong>Reading it:</strong> the questions find his own texts on exactly those subjects (the gun
-chapter, “Loupež zvaná daně”, his road-building lecture), usually at similarities of 0.60–0.70. Questions on
-subjects he treats only in passing find related but less direct texts around 0.55.</p>
+<p class="cap"><strong>Reading it:</strong> __CHECKTXT__</p>
 
 <h2 class="sec">The map of the political space</h2>
 <div class="controls"><span>Urza's chunks:</span>
@@ -370,22 +433,18 @@ addresses squarely, pale ones only weakly; the cloud of small dots shows where h
 its best passages.</p>
 <p class="cap"><strong>Nearest items vs UMAP transform:</strong> in all three placements, the political items stay
 exactly where they are; only Urza's chunks are placed differently. <em>Among nearest items</em> spreads them over __KCELLS__ of 1,600 grid cells
-(the 5% densest cells hold __KDENSE__ of the chunks) and never puts a chunk outside the area of the political items.
-<em>UMAP transform</em> reaches more cells (__TCELLS__) but also piles more chunks onto a few spots (__TDENSE__ in the
-densest 5%), and it lets some fall away from the items (__TOUT__ land outside the items' area). A chunk moves by a median of __MOVED__ map widths between
+(the 5% densest cells hold __KDENSE__ of the chunks) and __KOUT__.
+__TRTXT__ A chunk moves by a median of __MOVED__ map widths between
 the two. Neither keeps a chunk next to the items it is most similar to: the item closest to a chunk on the map is one
 of its five most similar items for only __KFAITH__ (nearest items) and __TFAITH__ (transform) of chunks, because a 2D
-map cannot keep 326 items and thousands of passages in their true neighbourhoods. Read both maps for where his
+map cannot keep __NI__ items and thousands of passages in their true neighbourhoods. Read both maps for where his
 texts gather overall; for which items they are about, use the depth numbers and the hover panel, which do not depend
 on the placement.</p>
 <p class="cap"><strong>One Urza average vs one average per source:</strong> the third placement removes only what
 all of Urza's texts share. It reaches __GCELLS__ cells (densest 5%: __GDENSE__), __GOUT__ land outside the items'
-area, and the nearest item on the map is one of the five most similar for __GFAITH__ of chunks. It keeps
-the differences between sources, but they barely show: among a chunk's 10 nearest chunks on the map, __SSG__ come
+area, and the nearest item on the map is one of the five most similar for __GFAITH__ of chunks. __GTXT__among a chunk's 10 nearest chunks on the map, __SSG__ come
 from the same source (articles, books or videos), against __SST__ with the per-source averages removed, __SSK__ for
-“among nearest items”, and __SSCH__ if sources were mixed at random. So once Urza's overall average is removed,
-the remaining differences between articles, books and videos hardly change where his texts land in the political
-space, and this map looks almost the same as the second one.</p>
+“among nearest items”, and __SSCH__ if sources were mixed at random. __GEND__</p>
 
 <h2 class="sec">Coverage by policy area</h2>
 <div class="controls"><span>Sort</span><span id="sortb"></span></div>
@@ -401,8 +460,8 @@ about __VOLBOT__. By depth, he answers questions best in __DEPTOP__, and least i
 <div class="two"><div><h3 style="font-size:14px;margin:0 0 6px">Best-covered questions</h3><div id="qtop"></div></div>
 <div><h3 style="font-size:14px;margin:0 0 6px">Least covered questions (blind spots)</h3><div id="qbot"></div></div></div>
 <p class="cap"><strong>Reading it:</strong> “texts” counts how many different articles, book sections or videos
-reach __SOME__ for the question. The least covered questions, such as __BLIND__, have no passage that addresses them
-directly; the nearest one is shown to make the gap visible.</p>
+reach __SOME__ for the question. The least covered questions, such as __BLIND__, __BLINDNO__;
+the nearest one is shown to make the gap visible.</p>
 <div class="two" style="margin-top:16px"><div><h3 style="font-size:14px;margin:0 0 6px">Best-covered concepts</h3><div id="ctop"></div></div>
 <div><h3 style="font-size:14px;margin:0 0 6px">Least covered concepts</h3><div id="cbot"></div></div></div>
 
@@ -410,7 +469,7 @@ directly; the nearest one is shown to make the gap visible.</p>
 <ul>
  <li><strong>The list defines the result.</strong> It was drafted for this report and is one reasonable map of
  politics, not the only one. It deliberately includes a few classic questions from the anarcho-capitalist
- debate (“Kdo by stavěl silnice?”, “Je zdanění krádež?”), which Urza naturally covers well. Edit
+ debate (“__ROADQ__”, “__TAXQ__”), which Urza naturally covers well. Edit
  <code>Questions/political_space.tsv</code> and rerun both scripts to change it.</li>
  <li><strong>Similarity is not agreement.</strong> A high match means Urza discusses the question, not which
  answer he gives.</li>
@@ -429,8 +488,8 @@ directly; the nearest one is shown to make the gap visible.</p>
  relevant passage and __QSTRONG__ a strongly matching one; his texts reach __USED__ of the __NS__ subtopics.</li>
  <li><strong>His attention is uneven, in a recognisable way:</strong> most of it goes to __VOLTOP__; the deepest
  answers are in __DEPTOP__.</li>
- <li><strong>Blind spots</strong> are mainly areas of conventional policy-making, led by __DEPBOT__: questions
- such as __BLIND__ get no passage that addresses them directly. An anarchist framework tends to answer them only
+ <li><strong>Blind spots</strong> lie in areas of conventional policy-making; the lowest depth is in __DEPBOT__.
+ Questions such as __BLIND__ __BLINDNO2__. An anarchist framework tends to answer them only
  through general arguments about the state.</li>
  <li><strong>Next step for UrzaLLM:</strong> the blind-spot questions are where a debating assistant would have
  to reason from Urza's general principles rather than quote him, and where it should say so.</li>

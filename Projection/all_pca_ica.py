@@ -24,7 +24,7 @@ from cumvar import cumvar_svg, needed  # noqa: E402
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+from dataset import CHUNKS, ENGLISH, OUT_DIR, nm, read_chunks, results_dir  # noqa: E402
 OUT = OUT_DIR
 VARIANT = "textonly"
 SOURCES = ["article", "book", "video"]
@@ -52,13 +52,37 @@ def esc(s):
     return str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
 
+# Video tags are Czech YouTube keywords; for the English reports the common ones are translated (names stay as they are)
+TAG_EN = {
+    "agorismus": "agorism", "alkohol": "alcohol", "cla": "tariffs", "diskuse": "discussion", "ekonomie": "economics",
+    "kampaň na knihu Anarchoagorismus": "Anarchoagorism book campaign", "kniha": "book",
+    "kryptoměny": "cryptocurrencies", "legalizace": "legalisation", "legalizace drog": "drug legalisation",
+    "minarchismus": "minarchism", "monopol": "monopoly", "narkotika": "narcotics", "panelová diskuse": "panel discussion",
+    "pedagogika": "pedagogy", "politici": "politicians", "prohibice": "prohibition",
+    "rakouská ekonomická škola": "Austrian school of economics", "represe": "repression", "respekt": "respect",
+    "sebeřízené vzdělávání": "self-directed education", "sebeřízení": "self-management", "stát": "state",
+    "státní propaganda": "state propaganda", "svobodné vzdělávání": "free education", "svobodné školy": "free schools",
+    "vzdělávání": "education", "zbraně": "guns", "školství": "education system", "Svoboda učení": "Freedom of learning",
+    "Misesova akademie": "Mises Academy", "Liberální institut": "Liberal Institute", "Debatní Deník": "Debate Diary",
+    "anarchokapitalismus": "anarcho-capitalism", "anarchie": "anarchy", "svoboda": "freedom", "daně": "taxes",
+    "drogy": "drugs", "peníze": "money", "demokracie": "democracy", "volby": "elections", "politika": "politics",
+    "anarchismus": "anarchism", "libertarianismus": "libertarianism", "neposlušnost": "disobedience",
+    "poslušnost": "obedience", "volný trh": "free market", "vlastnictví": "property", "násilí": "violence",
+}
+
+
+def tag_en(t):
+    return (nm(t) if nm(t) != t else TAG_EN.get(t, t)) if ENGLISH else t
+
+
 def describe(v, rows, src, alltags, nvid, top=TOP):
     """What sits at the high end of an axis: source mix, enriched video tags, book chapters, titles."""
     hi = np.argsort(-v)[:top]
     mix = Counter(src[hi])
     vt = Counter(t for i in hi if src[i] == "video" for t in set(rows[i]["tags"]))
     nv = max(sum(1 for i in hi if src[i] == "video"), 1)
-    tags = [t for t, c in sorted(vt.items(), key=lambda tc: -(tc[1] / nv) / (alltags[tc[0]] / nvid)) if c >= 3][:4]
+    tags = [tag_en(t) for t, c in sorted(vt.items(), key=lambda tc: -(tc[1] / nv) / (alltags[tc[0]] / nvid))
+            if c >= 3][:4]
     chs = [c for c, _ in Counter(rows[i]["chapter"] for i in hi if src[i] == "book").most_common(2)]
     titles, seen = [], set()
     for i in hi:
@@ -72,9 +96,8 @@ def describe(v, rows, src, alltags, nvid, top=TOP):
 
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
-    rows = pq.read_table(CHUNKS,
-                         columns=["chunk_id", "doc_id", "source", "kind", "title", "year", "tags", "chapter",
-                                  "subchapter", "text"]).to_pylist()
+    rows = read_chunks(CHUNKS, ["chunk_id", "doc_id", "source", "kind", "title", "year", "tags", "chapter",
+                                  "subchapter", "text"])
     X = np.load(results_dir(VARIANT) / "embeddings.npy")
     ids = (results_dir(VARIANT) / "chunk_ids.txt").read_text(encoding="utf-8").split()
     assert ids == [r["chunk_id"] for r in rows], "embeddings don't match chunks.parquet"
@@ -227,7 +250,32 @@ def html(pts, src, evr, n50, pcs, comps, ax_i, ax_j, rp, ri, umap_rates, cum, pa
         cmp_rows += (f"<tr><td>UMAP map, raw</td>" + "".join(f"<td>{p(umap_rates['raw_2d'][s])}</td>" for s in SOURCES) + "</tr>"
                      + f"<tr><td>UMAP map, source-centred</td>" + "".join(f"<td>{p(umap_rates['centred_2d'][s])}</td>" for s in SOURCES) + "</tr>")
     cmp_rows += "<tr><td>Expected at random</td>" + "".join(f"<td>{p(rnd[s])}</td>" for s in SOURCES) + "</tr>"
-    fill = {
+    # Data-backed wording
+    lab = lambda s: SRC_LABEL[s].lower()
+    order = sorted(SOURCES, key=lambda s: pcs[0]["means"][s])           # PC1: low → high
+    noun = {"article": "articles", "book": "book prose", "video": "video descriptions"}
+    eta1 = pcs[0]["eta"]
+    rest_eta = max(c["eta"] for c in pcs[1:])
+    later_eta = max(c["eta"] for c in pcs[2:])
+    top_src_pc = max(pcs, key=lambda c: c["eta"])["label"] == "PC1"
+    n_ic_low = sum(c["eta"] < 0.1 for c in comps)
+    fmt_b = [c for c in formats if c["main_src"] == "book"]
+    fmt_av = [c for c in formats if c["main_src"] != "book"]
+    fmt_txt = []
+    if fmt_av:
+        fmt_txt.append(f"The {len(fmt_av)} drawn from articles or videos are mostly recurring formats or series "
+                       f"(yearly notices, article series, video series, panel discussions) whose texts are alike because of "
+                       f"their template.")
+    if fmt_b:
+        fmt_txt.append(f"The {len(fmt_b)} drawn from the books are book chapters or parts (in subject or style) with "
+                       f"no close counterpart elsewhere.")
+    fmt_txt.append("Some single-source components are subjects that only one source covers in depth (check their "
+                   "top texts): that is itself a coverage finding, not a defect.")
+    mix_gain = np.mean([rp[s] - ri[s] for s in SOURCES])
+    mix_txt = ("A map built on the two focused ICA themes mixes sources " + ("far more" if mix_gain >= 0.1 else "more")
+               + " than PC1 × PC2, because it leaves out the source direction in PC1." if mix_gain > 0 else
+               "Here the ICA map does not mix sources more than PC1 × PC2.")
+    fill = {"__DRUG__": "drug" if ENGLISH else "drog", "__SCHOOL__": "school" if ENGLISH else "škol",
         "__N__": f"{len(pts):,}", "__NA__": f"{(src == 'article').sum():,}", "__NB__": f"{(src == 'book').sum():,}",
         "__NV__": f"{(src == 'video').sum():,}", "__N_ICA__": str(N_ICA), "__VARSVG__": variance_svg(evr),
         "__PC1__": f"{evr[0]:.1%}", "__PC2__": f"{evr[1]:.1%}", "__PC20__": f"{evr.sum():.0%}", "__N50__": str(n50), "__UNITS__": "chunks",
@@ -240,7 +288,20 @@ def html(pts, src, evr, n50, pcs, comps, ax_i, ax_j, rp, ri, umap_rates, cum, pa
         "__FORMATS__": "; ".join(f"{c['label']}: {esc(c['titles'][0][1][:45])} ({SRC_LABEL[c['main_src']].lower()})"
                                  for c in formats),
         "__AXI__": ax_i["label"], "__AXJ__": ax_j["label"], "__AXI_D__": esc(short(ax_i)), "__AXJ_D__": esc(short(ax_j)),
-        "__CMP_ROWS__": cmp_rows,
+        "__CMP_ROWS__": cmp_rows, "__FMT_TXT__": " ".join(fmt_txt), "__MIX_TXT__": mix_txt,
+        "__PC1R__": f"{evr[0] / evr[1]:.1f}", "__PC1ETAP__": f"{eta1:.0%}",
+        "__PC1LO__": noun[order[0]], "__PC1HI__": noun[order[-1]],
+        "__PC1STRONG__": ("This is the source clustering found in the UMAP reports, appearing as the linear direction "
+                          "with the largest source effect." if top_src_pc else
+                          "This is the source clustering found in the UMAP reports, appearing in linear form."),
+        "__RESTETA__": f"{rest_eta:.2f}",
+        "__PCAMAP__": (f"the sources are ordered along PC1: {lab(order[0])} towards the left, {lab(order[-1])} towards "
+                       f"the right, {lab(order[1])} in between. "
+                       + ("PC2 runs across all three sources. " if pcs[1]["eta"] < 0.1 else
+                          f"PC2 also differs by source (η² {pcs[1]['eta']:.2f}). ")
+                       + "Use the selectors to view PC3–PC6"
+                       + (", where the colours mix more" if later_eta < eta1 / 2 else "")),
+        "__NICLOW__": str(n_ic_low),
         "__DATA__": json.dumps(pts, ensure_ascii=False).replace("</", "<\\/"),
         "__PCOPTS__": json.dumps([{"label": f"{c['label']} ({c['evr']:.1%})",
                                    "desc": f"low: {pc_end(c['low'])} … high: {pc_end(c['high'])}"} for c in pcs],
@@ -318,29 +379,26 @@ are over-represented there, and how much of it is explained by the source.</p>
 <h2 class="sec">PCA: how much does each direction explain?</h2>
 <div class="panel">__VARSVG__</div>
 <p class="cap"><strong>Reading it:</strong> PC1 explains __PC1__, PC2 __PC2__; the first 20 components explain
-__PC20__, and __N50__ are needed for half. PC1 stands out more than in the books alone, and the table below shows
-why: it is largely the kind of text.</p>
+__PC20__, and __N50__ are needed for half. PC1 is __PC1R__ times as large as PC2, and the table below shows that
+it is partly the kind of text: the source alone explains __PC1ETAP__ of its variance.</p>
 <p class="cap" style="margin-top:14px"><strong>Cumulative variance:</strong></p>
 <div class="panel">__CUMSVG__</div>
 <p class="cap"><strong>Reading it:</strong> the share of all differences between __UNITS__ explained by the first k
 principal components together (out of __NPC__ components in total). Two components, the most a flat PCA map can
 show, explain __CUM2__. Half needs __N50__ components, 80% __N80__, 90% __N90__ and 95% __N95__. The curve rises
-slowly and without a clear elbow: no small set of directions captures most of the content.</p>
+gradually: no small set of directions captures most of the content.</p>
 <div class="tw"><table><thead><tr><th>Axis</th><th class="r">Variance</th><th class="r">Source η²</th><th>Lowest-scoring texts</th><th>Highest-scoring texts</th></tr></thead>
 <tbody>__PC_ROWS__</tbody></table></div>
-<p class="cap"><strong>Reading it:</strong> PC1 has a source η² of __PC1ETA__: it mostly separates book prose
-(low end) from video descriptions (high end); average PC1 scores: __PC1MEANS__. This is the source clustering found
-in the UMAP reports, appearing as the single strongest linear direction. The further components are mostly
-topical (small η²): capitalism and anarchist theory against practical life, crypto against
-self-governance, and so on.</p>
+<p class="cap"><strong>Reading it:</strong> PC1 has a source η² of __PC1ETA__: on average it separates __PC1LO__
+(low end) from __PC1HI__ (high end); average PC1 scores: __PC1MEANS__. __PC1STRONG__ The further components
+have small source η² (at most __RESTETA__ for PC2–PC6) and are mostly topical: the texts at their two ends show the
+subjects they contrast.</p>
 
 <h2 class="sec">PCA map</h2>
 <div class="controls" id="ctl0"><label>X <select id="pcx"></select></label><label>Y <select id="pcy"></select></label></div>
 <div class="panel"><canvas id="cv0"></canvas><div class="axes" id="ax0"></div></div>
-<p class="cap"><strong>What you see (PC1 × PC2):</strong> the sources line up along PC1: books on the left,
-videos on the right, articles spread across the middle. PC2 runs across all three sources. Use the selectors to
-view PC3–PC6, where the colours mix much more, and the search box to highlight a subject (try <em>drog</em>,
-<em>škol</em>, <em>bitcoin</em>).</p>
+<p class="cap"><strong>What you see (PC1 × PC2):</strong> __PCAMAP__, and the search box to highlight a subject (try <em>__DRUG__</em>,
+<em>__SCHOOL__</em>, <em>bitcoin</em>).</p>
 
 <h2 class="sec">ICA: themes and formats</h2>
 <p class="sub">The __N_ICA__ components, split into <strong>themes</strong> (their top chunks come from several
@@ -348,12 +406,9 @@ sources) and <strong>format / series</strong> components (at least 80% of their 
 typically one recurring kind of post). Within each group they are ordered by kurtosis (higher = more focused).</p>
 <div class="tw"><table><thead><tr><th>Component</th><th>Sources of top 30</th><th>Over-represented video tags</th><th>Book chapters</th><th>Top texts</th><th class="r">Kurtosis</th></tr></thead>
 <tbody>__IC_ROWS__</tbody></table></div>
-<p class="cap"><strong>Reading it:</strong> __NTHEME__ components are themes that run across articles, books and
-videos: __THEMES__. They are the linear counterpart of the topic regions on the maps, and they connect the same
-subject across sources. __NFORMAT__ components describe a kind of text rather than a subject: __FORMATS__.
-Most are recurring formats (announcements, yearly notices, a video series, conference recordings) whose texts are
-alike because of their template. A few may instead be subjects that only one source covers (check their top
-texts): that is itself a coverage finding, not a defect.</p>
+<p class="cap"><strong>Reading it:</strong> __NTHEME__ components are themes whose top chunks come from more
+than one source: __THEMES__. They are the linear counterpart of the topic regions on the maps, and they connect the
+same subject across sources. __NFORMAT__ components are dominated by a single source: __FORMATS__. __FMT_TXT__</p>
 
 <h2 class="sec">ICA map</h2>
 <div class="controls"><label>X <select id="icx"></select></label><label>Y <select id="icy"></select></label></div>
@@ -368,20 +423,21 @@ see a single-colour arm instead.</p>
 UMAP maps of the same embeddings and with chance.</p>
 <div class="tw"><table><thead><tr><th>Map</th><th class="r">Articles</th><th class="r">Books</th><th class="r">Videos</th></tr></thead>
 <tbody>__CMP_ROWS__</tbody></table></div>
-<p class="cap"><strong>Reading it:</strong> lower is more mixed. A map built on the two focused ICA themes mixes
-sources far more than PC1 × PC2, because it leaves out the source direction that dominates PC1.</p>
+<p class="cap"><strong>Reading it:</strong> lower is more mixed. __MIX_TXT__</p>
 
 <h2 class="sec">Conclusions</h2>
 <ul>
- <li><strong>The strongest linear direction is the kind of text.</strong> PC1 separates book prose from video
- descriptions (η² __PC1ETA__), confirming in linear form what the UMAP reports found: style and length are a large
- part of the embedding.</li>
- <li><strong>Beneath it, the directions are topical.</strong> From PC2 on, and in most ICA components, the source
- explains little; the axes are subjects.</li>
- <li><strong>ICA separates themes from formats.</strong> __NTHEME__ of __N_ICA__ components are cross-source themes,
- __NFORMAT__ are formats or series. The theme components show where Urza addresses the same idea in books,
- articles and videos; the format components identify template texts (announcements, notices, series intros) that a
- coverage measure may want to discount.</li>
+ <li><strong>The strongest linear direction is partly the kind of text.</strong> PC1 separates __PC1LO__ from
+ __PC1HI__ (source η² __PC1ETA__), confirming in linear form what the UMAP reports found: the kind of text is a
+ substantial part of the embedding.</li>
+ <li><strong>Beneath it, the directions are topical.</strong> From PC2 on (source η² at most __RESTETA__ up to
+ PC6), and in __NICLOW__ of __N_ICA__ ICA components (η² below 0.10), the source explains little; the axes are
+ subjects.</li>
+ <li><strong>ICA separates themes from single-source components.</strong> __NTHEME__ of __N_ICA__ components are
+ cross-source themes, __NFORMAT__ are dominated by one source (formats, series, or chapters of the books). The theme
+ components show where Urza addresses the same idea in more than one source; the single-source ones point to
+ template texts (notices, series intros) that a coverage measure may want to discount, or to subjects only one
+ source covers.</li>
  <li><strong>For the coverage map:</strong> scoring a political question along the theme components would show
  which of Urza's themes it touches; the format components are a tool for spotting boilerplate. As in the book
  report, components depend on the number chosen and the random start: a lens, not a fixed taxonomy.</li>

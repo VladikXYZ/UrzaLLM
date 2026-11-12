@@ -8,7 +8,7 @@ links. The report shows the graph over the UMAP book map, its backbone (maximum 
 path explorer: the chain of strongest links between any two sections, with the passages that bridge
 each step.
 
-Writes Projection/output/book_trails_textonly.html (+ .png)
+Writes book_trails_textonly.html (+ .png) to the dataset's report folder (see dataset.py).
 """
 import json
 import sys
@@ -25,7 +25,7 @@ from timeline_map import region_of  # noqa: E402
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+from dataset import CHUNKS, ENGLISH, OUT_DIR, nm, read_chunks, results_dir  # noqa: E402
 OUT = OUT_DIR
 VARIANT = "textonly"
 K = 10                # nearest neighbours per chunk
@@ -39,8 +39,7 @@ SUGGESTED = [("2. Školství", "9. Demokracie"), ("8. Školství", "8. Stát"), 
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     import umap
-    rows = pq.read_table(CHUNKS,
-                         columns=["chunk_id", "source", "book", "chapter", "subchapter", "text"]).to_pylist()
+    rows = read_chunks(CHUNKS, ["chunk_id", "source", "book", "chapter", "subchapter", "text"])
     E = np.load(results_dir(VARIANT) / "embeddings.npy")
     b = [i for i, r in enumerate(rows) if r["source"] == "book"]
     B, X = [rows[i] for i in b], E[b]
@@ -97,7 +96,8 @@ def main():
               "deg": int(sum(1 for e in edges if k in (e["a"], e["b"])))} for k, g in enumerate(groups)]
     pts = [[round(float(Pd[i, 0]), 4), round(float(Pd[i, 1]), 4), 0 if B[i]["book"] == "Anarchokapitalismus" else 1]
            for i in range(N)]
-    sugg = [[groups.index(a), groups.index(c)] for a, c in SUGGESTED if a in groups and c in groups]
+    sugg = [[groups.index(a), groups.index(c)] for a, c in ((nm(a0), nm(c0)) for a0, c0 in SUGGESTED)
+            if a in groups and c in groups]
 
     OUT.mkdir(exist_ok=True)
     png(nodes, edges, Pd, B, OUT / f"book_trails_{VARIANT}.png")
@@ -106,6 +106,29 @@ def main():
     print(f"{n} sections, {len(edges)} links (lift ≥ {MIN_LIFT}, ≥ {MIN_LINKS} neighbour links), backbone {len(tree)}")
     print("isolated:", [nd["name"] for nd in nodes if nd["deg"] == 0])
     print(f"Wrote {OUT / f'book_trails_{VARIANT}.html'}")
+
+
+def trail(nodes, edges, s, t):
+    """Cheapest chain of links (cost 1 / lift), as in the page's path explorer; list of node ids or []."""
+    adj = {k: [] for k in range(len(nodes))}
+    for e in edges:
+        adj[e["a"]].append((e["b"], 1 / e["lift"]))
+        adj[e["b"]].append((e["a"], 1 / e["lift"]))
+    d, prev, done = {s: 0.0}, {}, set()
+    while True:
+        u = min((k for k in d if k not in done), key=d.get, default=None)
+        if u is None or u == t:
+            break
+        done.add(u)
+        for v, c in adj[u]:
+            if d[u] + c < d.get(v, float("inf")):
+                d[v], prev[v] = d[u] + c, u
+    if t not in d:
+        return []
+    p = [t]
+    while p[-1] != s:
+        p.append(prev[p[-1]])
+    return p[::-1]
 
 
 def sec(r):
@@ -143,7 +166,31 @@ def html(nodes, edges, pts, sugg, moved, path):
     hubs = sorted(nodes, key=lambda nd: -nd["deg"])[:5]
     cross = [e for e in tree if nodes[e["a"]]["book"] != nodes[e["b"]]["book"]]
     iso = [nd["name"] for nd in nodes if nd["deg"] == 0]
-    fill = {"__LABELJS__": LABEL_JS,"__NODES__": j(nodes), "__EDGES__": j(edges), "__PTS__": j(pts), "__SUGG__": j(sugg),
+    # Example trails: the computed chains for the first suggested pairs (school, money, drugs)
+    chains = []
+    for a, c in sugg:
+        p = trail(nodes, edges, a, c)
+        if len(p) > 2:
+            chains.append(" → ".join(esc(nodes[k]["name"]) for k in p))
+    chain0 = f"for example {chains[0]}" if chains else "related sections lead on to related sections"
+    ex = [chains[i] for i in (0, 3, 2) if i < len(chains)] or chains[:3]
+    examples = ("Chains such as " + "; ".join(f"<em>{x}</em>" for x in ex) +
+                " link related topics step by step, found from the text alone.") if ex else \
+        "Related sections are linked step by step, found from the text alone."
+    # Degrees of the specific chapters (money, drugs, school) against the median section
+    med = float(np.median([nd["deg"] for nd in nodes]))
+    spec = [nd for name in (nm("5. Peníze"), nm("Drogy"), nm("8. Školství")) for nd in nodes if nd["name"] == name]
+    spec_txt = ", ".join(f"{q(nd['name'])} {nd['deg']}" for nd in spec)
+    if spec and all(nd["deg"] < med for nd in spec):
+        specific = (f"the specific chapters sit at the ends of trails, with few links ({spec_txt}; "
+                    f"the median section has {med:g}).")
+    elif spec:
+        specific = f"specific chapters have {spec_txt} links (the median section has {med:g})."
+    else:
+        specific = f"the median section has {med:g} links."
+    isotxt = (f"; only {', '.join(q(x) for x in iso)} {'has' if len(iso) == 1 else 'have'} no strong link"
+              if iso else "")
+    fill = {"__ISOTXT__": isotxt, "__CHAIN0__": chain0, "__EXAMPLES__": examples, "__SPECIFIC__": specific,"__LABELJS__": LABEL_JS,"__NODES__": j(nodes), "__EDGES__": j(edges), "__PTS__": j(pts), "__SUGG__": j(sugg),
             "__K__": str(K), "__MINL__": str(MIN_LINKS), "__MINLIFT__": f"{MIN_LIFT:g}",
             "__NN__": str(len(nodes)), "__NE__": str(len(edges)), "__NT__": str(len(tree)),
             "__STRONG__": strongest, "__HUBS__": ", ".join(f"{q(nd['name'])} ({nd['deg']} links)" for nd in hubs),
@@ -186,7 +233,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}.tw{overflow-x:auto
 </style></head><body><div class="wrap">
 <h1>Trails between the books' topics <span style="font-weight:400;color:var(--ink2)">· variant <code>textonly</code></span></h1>
 <p class="sub">On the book map, sections sit next to related sections, and following those neighbours reads like a
-line of argument: school → indoctrination → state → democracy. This report turns those neighbourhoods into a
+line of argument, __CHAIN0__. This report turns those neighbourhoods into a
 graph of links between the __NN__ book sections, shows its backbone, and lets you find the chain of strongest
 links between any two topics, with the passages that bridge each step.</p>
 
@@ -232,12 +279,10 @@ the two books, for example __CROSS__: these are the places where <em>Anarchokapi
 
 <h2 class="sec">Conclusions</h2>
 <ul>
- <li><strong>The books' topics form connected trails, not isolated islands.</strong> Chains such as school →
- indoctrination → democracy, money → cryptocurrency → crypto-anarchy → agora, or drugs → smugglers and dealers →
- liberation follow the books' own lines of argument, found from the text alone.</li>
- <li><strong>The hubs are the broad, summarising sections:</strong> __HUBS__. They draw together themes from
- across the books, so many trails pass through them; the specific chapters (money, drugs, school) sit at the
- ends of trails.</li>
+ <li><strong>The books' topics form connected trails, not isolated islands</strong>__ISOTXT__.
+ __EXAMPLES__</li>
+ <li><strong>The hubs are broad or central sections:</strong> __HUBS__. They draw together themes from
+ across the books, so many trails pass through them; __SPECIFIC__</li>
  <li><strong>For UrzaLLM:</strong> the trails are a ready-made structure for the reasoning-tree interface. A
  debate that starts at one topic can follow the strongest links to the next argument, citing the bridging
  passages along the way.</li>

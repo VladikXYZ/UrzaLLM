@@ -81,9 +81,7 @@ which parts of it he attends to, how deeply, and where his blind spots are.</p>
 <h2 class="sec">Does it find the right texts? Spot checks</h2>
 <p class="sub">Questions on subjects Urza is known for, and his three best-matching passages:</p>
 <div id="checks"></div>
-<p class="cap"><strong>Reading it:</strong> the questions find his own texts on exactly those subjects (the gun
-chapter, “Loupež zvaná daně”, his road-building lecture), usually at similarities of 0.60–0.70. Questions on
-subjects he treats only in passing find related but less direct texts around 0.55.</p>
+<p class="cap"><strong>Reading it:</strong> the 6 questions on his core subjects find, as best passage, his own texts on those subjects (such as “Léčivá tráva”, “Povinná školka”, “Kryptopeníze”, “Loupež zvaná daně”), at similarities of 0.64–0.71. For the 4 questions on subjects he treats only in passing, his best passages score lower (0.56–0.61).</p>
 
 <h2 class="sec">The map of the political space</h2>
 <div class="controls"><span>Urza's chunks:</span>
@@ -103,8 +101,7 @@ its best passages.</p>
 <p class="cap"><strong>Nearest items vs UMAP transform:</strong> in all three placements, the political items stay
 exactly where they are; only Urza's chunks are placed differently. <em>Among nearest items</em> spreads them over 813 of 1,600 grid cells
 (the 5% densest cells hold 27% of the chunks) and never puts a chunk outside the area of the political items.
-<em>UMAP transform</em> reaches more cells (915) but also piles more chunks onto a few spots (34% in the
-densest 5%), and it lets some fall away from the items (12% land outside the items' area). A chunk moves by a median of 0.11 map widths between
+<em>UMAP transform</em> reaches more cells (915) but also piles more chunks onto a few spots (34% in the densest 5%), and it lets some fall away from the items (12% land outside the items' area). A chunk moves by a median of 0.11 map widths between
 the two. Neither keeps a chunk next to the items it is most similar to: the item closest to a chunk on the map is one
 of its five most similar items for only 30% (nearest items) and 28% (transform) of chunks, because a 2D
 map cannot keep 326 items and thousands of passages in their true neighbourhoods. Read both maps for where his
@@ -112,12 +109,9 @@ texts gather overall; for which items they are about, use the depth numbers and 
 on the placement.</p>
 <p class="cap"><strong>One Urza average vs one average per source:</strong> the third placement removes only what
 all of Urza's texts share. It reaches 911 cells (densest 5%: 34%), 12% land outside the items'
-area, and the nearest item on the map is one of the five most similar for 29% of chunks. It keeps
-the differences between sources, but they barely show: among a chunk's 10 nearest chunks on the map, 40% come
+area, and the nearest item on the map is one of the five most similar for 29% of chunks. It keeps the differences between sources, but they barely show: among a chunk's 10 nearest chunks on the map, 40% come
 from the same source (articles, books or videos), against 38% with the per-source averages removed, 37% for
-“among nearest items”, and 35% if sources were mixed at random. So once Urza's overall average is removed,
-the remaining differences between articles, books and videos hardly change where his texts land in the political
-space, and this map looks almost the same as the second one.</p>
+“among nearest items”, and 35% if sources were mixed at random. So once Urza's overall average is removed, the remaining differences between articles, books and videos hardly change where his texts land in the political space; a chunk moves by a median of only 0.05 map widths between this placement and the second one (against 0.11 between the first two).</p>
 
 <h2 class="sec">Coverage by policy area</h2>
 <div class="controls"><span>Sort</span><span id="sortb"></span></div>
@@ -133,8 +127,8 @@ about “Bydlení a obce” (1%), “Evropská unie a mezinárodní vztahy” (1
 <div class="two"><div><h3 style="font-size:14px;margin:0 0 6px">Best-covered questions</h3><div id="qtop"></div></div>
 <div><h3 style="font-size:14px;margin:0 0 6px">Least covered questions (blind spots)</h3><div id="qbot"></div></div></div>
 <p class="cap"><strong>Reading it:</strong> “texts” counts how many different articles, book sections or videos
-reach 0.55 for the question. The least covered questions, such as “Měla by se stavět nová jaderná elektrárna?”, “Měly by být geneticky modifikované plodiny povoleny?”, “Je střet zájmů premiéra-podnikatele nepřijatelný?”, “Měla by Česká republika zůstat v NATO?”, “Mělo by vlastníkovi stačit k stavbě na vlastním pozemku jen souhlas sousedů?”, “Má zahraniční politika prosazovat lidská práva i za cenu obchodních ztrát?”, have no passage that addresses them
-directly; the nearest one is shown to make the gap visible.</p>
+reach 0.55 for the question. The least covered questions, such as “Měla by se stavět nová jaderná elektrárna?”, “Měly by být geneticky modifikované plodiny povoleny?”, “Je střet zájmů premiéra-podnikatele nepřijatelný?”, “Měla by Česká republika zůstat v NATO?”, “Mělo by vlastníkovi stačit k stavbě na vlastním pozemku jen souhlas sousedů?”, “Má zahraniční politika prosazovat lidská práva i za cenu obchodních ztrát?”, have no passage that reaches 0.55, i.e. none that addresses them directly;
+the nearest one is shown to make the gap visible.</p>
 <div class="two" style="margin-top:16px"><div><h3 style="font-size:14px;margin:0 0 6px">Best-covered concepts</h3><div id="ctop"></div></div>
 <div><h3 style="font-size:14px;margin:0 0 6px">Least covered concepts</h3><div id="cbot"></div></div></div>
 
@@ -142,7 +136,7 @@ directly; the nearest one is shown to make the gap visible.</p>
 <ul>
  <li><strong>The list defines the result.</strong> It was drafted for this report and is one reasonable map of
  politics, not the only one. It deliberately includes a few classic questions from the anarcho-capitalist
- debate (“Kdo by stavěl silnice?”, “Je zdanění krádež?”), which Urza naturally covers well. Edit
+ debate (“Kdo by stavěl silnice, kdyby nebyl stát?”, “Je zdanění krádež, nebo legitimní poplatek za veřejné služby?”), which Urza naturally covers well. Edit
  <code>Questions/political_space.tsv</code> and rerun both scripts to change it.</li>
  <li><strong>Similarity is not agreement.</strong> A high match means Urza discusses the question, not which
  answer he gives.</li>
@@ -161,8 +155,8 @@ directly; the nearest one is shown to make the gap visible.</p>
  relevant passage and 55% a strongly matching one; his texts reach 85 of the 85 subtopics.</li>
  <li><strong>His attention is uneven, in a recognisable way:</strong> most of it goes to “Stát a veřejná správa” (12%), “Vzdělávání” (10%), “Právo a soudnictví” (10%), “Občanská práva a svobody” (9%); the deepest
  answers are in “Vzdělávání” (0.64), “Podnikání a finance” (0.63), “Sociální politika” (0.62), “Doprava” (0.62).</li>
- <li><strong>Blind spots</strong> are mainly areas of conventional policy-making, led by “Zahraniční obchod” (0.58), “Zemědělství” (0.57), “Evropská unie a mezinárodní vztahy” (0.56), “Energetika” (0.54): questions
- such as “Měla by se stavět nová jaderná elektrárna?”, “Měly by být geneticky modifikované plodiny povoleny?”, “Je střet zájmů premiéra-podnikatele nepřijatelný?”, “Měla by Česká republika zůstat v NATO?”, “Mělo by vlastníkovi stačit k stavbě na vlastním pozemku jen souhlas sousedů?”, “Má zahraniční politika prosazovat lidská práva i za cenu obchodních ztrát?” get no passage that addresses them directly. An anarchist framework tends to answer them only
+ <li><strong>Blind spots</strong> lie in areas of conventional policy-making; the lowest depth is in “Zahraniční obchod” (0.58), “Zemědělství” (0.57), “Evropská unie a mezinárodní vztahy” (0.56), “Energetika” (0.54).
+ Questions such as “Měla by se stavět nová jaderná elektrárna?”, “Měly by být geneticky modifikované plodiny povoleny?”, “Je střet zájmů premiéra-podnikatele nepřijatelný?”, “Měla by Česká republika zůstat v NATO?”, “Mělo by vlastníkovi stačit k stavbě na vlastním pozemku jen souhlas sousedů?”, “Má zahraniční politika prosazovat lidská práva i za cenu obchodních ztrát?” get no passage that addresses them directly. An anarchist framework tends to answer them only
  through general arguments about the state.</li>
  <li><strong>Next step for UrzaLLM:</strong> the blind-spot questions are where a debating assistant would have
  to reason from Urza's general principles rather than quote him, and where it should say so.</li>

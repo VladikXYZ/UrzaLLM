@@ -10,3 +10,10 @@ Embedding/.partial/
 Embedding/.dryrun_*/
 Embedding/results_*/chunks_embedded.parquet
 Embedding/results_*/embeddings_source_centred.npy
+
+# Final corpus: embedding cache, snapshot, files analyze.py rebuilds, report working folder (copied to FinalReports/)
+Chunks/output/embed_cache/
+Chunks/output/_embed_cs_input.parquet
+Chunks/output/results_*/chunks_embedded.parquet
+Chunks/output/results_*/embeddings_source_centred.npy
+Chunks/output/projection/
