@@ -13,9 +13,14 @@ with open("preprocessed/ancap_en.json") as f:
 
 chunks = []
 en_chunks = []
+
+en_concepts = []
+concepts = []
 for chapter in anag:
     splitted = chapter["text"].split("\n\n")
     # print(splitted)
+    concept = chapter["name"] if chapter["chapter"] == "" else chapter["chapter"]
+    concepts.append({"type": "concept", "title": concept, "subtitle": "", "text": concept, "source": "AG"})
     for chunk in splitted:
         if chapter["chapter"] == "":
             title = chapter["name"]
@@ -28,6 +33,8 @@ for chapter in anag:
 for chapter in ancap:
     splitted = chapter["text"].split("\n\n")
     # print(splitted)
+    concept = chapter["name"] if chapter["chapter"] == "" else chapter["chapter"]
+    concepts.append({"type": "concept", "title": concept, "subtitle": "", "text": concept, "source": "AC"})
     for chunk in splitted:
         if chapter["chapter"] == "":
             title = chapter["name"]
@@ -40,6 +47,8 @@ for chapter in ancap:
 for chapter in anagen:
     splitted = chapter["text"].split("\n\n")
     # print(splitted)
+    concept = chapter["name"] if chapter["chapter"] == "" else chapter["chapter"]
+    en_concepts.append({"type": "concept", "title": concept, "subtitle": "", "text": concept, "source": "AG"})
     for chunk in splitted:
         if chapter["chapter"] == "":
             title = chapter["name"]
@@ -52,6 +61,8 @@ for chapter in anagen:
 for chapter in ancapen:
     splitted = chapter["text"].split("\n\n")
     # print(splitted)
+    concept = chapter["name"] if chapter["chapter"] == "" else chapter["chapter"]
+    en_concepts.append({"type": "concept", "title": concept, "subtitle": "", "text": concept, "source": "AC"})
     for chunk in splitted:
         if chapter["chapter"] == "":
             title = chapter["name"]
@@ -61,8 +72,58 @@ for chapter in ancapen:
             subtitle = chapter["name"]
         en_chunks.append({"type": "book", "title": title, "subtitle": subtitle, "text": chunk, "source": "AC"})
 
-with open("preprocessed/arts.json.json") as f:
+with open("preprocessed/arts.json") as f:
     arts = json.load(f)
 
-with open("preprocessed/chunks.json","w") as f:
+for art in arts:
+    chunks.append({"type": "article", "title": art["title"], "subtitle": "", "text": art["text"], "source": art["url"]})
+
+# with open("preprocessed/arts_en.json") as f:
+#     trarts = json.load(f)
+#
+# enarts = []
+# for tr, a in zip(trarts, arts):
+#     tempart = a
+#     tempart["title"] = tr[0]
+#     tempart["text"] = tr[1]
+#     enarts.append(tempart)
+#
+# with open("preprocessed/arts_en_full.json", "w") as f:
+#     json.dump(enarts, f, indent=1, ensure_ascii=False)
+
+with open("preprocessed/arts_en_full.json") as f:
+    enarts = json.load(f)
+for art in enarts:
+    en_chunks.append({"type": "article", "title": art["title"], "subtitle": "", "text": art["text"], "source": art["url"]})
+
+
+with open("preprocessed/yt.json") as f:
+    yt = json.load(f)
+with open("preprocessed/yt_en_full.json") as f:
+    enyt = json.load(f)
+
+# enyts_corr = []
+# for c,e in zip(yt,enyt):
+#     en = c
+#     en["title"] = e[0]
+#     en["desc"] = e[1]
+#     enyts_corr.append(en)
+#
+# with open("preprocessed/yt_en_full.json", "w") as f:
+#     json.dump(enyts_corr, f, indent=1, ensure_ascii=False)
+
+
+for vid in yt:
+    chunks.append({"type": "video", "title": vid["title"], "subtitle": "", "text": vid["desc"], "source": vid["url"]})
+
+for vid in enyt:
+    en_chunks.append({"type": "video", "title": vid["title"], "subtitle": "", "text": vid["desc"], "source": vid["url"]})
+
+chunks.extend(concepts)
+en_chunks.extend(en_concepts)
+print(len(chunks))
+print(len(en_chunks))
+with open("chunked/chunks.json","w") as f:
+    json.dump(chunks, f, indent=1, ensure_ascii=False)
+with open("chunked/en_chunks.json","w") as f:
     json.dump(chunks, f, indent=1, ensure_ascii=False)
