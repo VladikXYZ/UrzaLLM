@@ -17,6 +17,7 @@ from pathlib import Path
 
 import numpy as np
 import pyarrow.parquet as pq
+from labels import LABEL_JS, place_labels  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -34,6 +35,59 @@ def chapter_group(r) -> str:
     if ch.startswith("AMEN"):
         return "AMEN: aforismy"
     return ch
+
+
+ISLAND_LINK = 0.04     # points closer than this (map units) belong to the same island
+ISLAND_GAP = 0.12      # an island farther than this from the main cloud gets pulled in…
+ISLAND_NEW_GAP = 0.05  # …to this distance, keeping its own shape
+
+
+def compact(P, grp):
+    """Pull far-away islands towards the main cloud so the map has no large empty areas.
+
+    Shapes and scale inside the main cloud and inside each island are unchanged (pure
+    translation); only the empty gap between an island and the rest shrinks. Returns the
+    display coordinates (rescaled to start at 0, same scale on both axes) and a list of
+    moved islands with how much their gap was shortened.
+    """
+    from scipy.sparse.csgraph import connected_components
+    from sklearn.neighbors import radius_neighbors_graph
+    _, comp = connected_components(radius_neighbors_graph(P, ISLAND_LINK), directed=False)
+    sizes = np.bincount(comp)
+    main = comp == sizes.argmax()
+    # Grow the main cloud with every component that is already close to it.
+    changed = True
+    while changed:
+        changed = False
+        for c in np.unique(comp[~main]):
+            m = comp == c
+            gap = np.sqrt(((P[m][:, None] - P[main][None]) ** 2).sum(-1)).min()
+            if gap <= ISLAND_GAP:
+                main |= m
+                changed = True
+    Q = P.copy()
+    moved = []
+    centre = P[main].mean(0)
+    for c in np.unique(comp[~main]):
+        m = comp == c
+        d = np.sqrt(((Q[m][:, None] - Q[main][None]) ** 2).sum(-1))
+        gap = d.min()
+        direction = Q[m].mean(0) - centre
+        direction /= np.linalg.norm(direction)
+        # Move along the line to the main cloud until the gap is ISLAND_NEW_GAP.
+        lo, hi = 0.0, gap
+        for _ in range(40):
+            t = (lo + hi) / 2
+            g = np.sqrt(((Q[m] - t * direction)[:, None] - Q[main][None]) ** 2).sum(-1).min()
+            lo, hi = (t, hi) if g > ISLAND_NEW_GAP else (lo, t)
+        Q[m] -= lo * direction
+        groups = Counter(grp[m]).most_common()
+        moved.append({"idx": np.where(m)[0], "gap_before": float(gap), "gap_after": ISLAND_NEW_GAP,
+                      "groups": [g for g, _ in groups]})
+        main |= m
+    Q -= Q.min(0)
+    Q /= Q.max()
+    return Q, moved
 
 
 def neighbour_rate(nn, lab):
@@ -79,73 +133,214 @@ def main():
     print(f"UMAP on {len(B)} book chunks …")
     P = umap.UMAP(**UMAP_PARAMS).fit_transform(X)
     P = (P - P.min(0)) / (P.max(0) - P.min(0)).max()
+    # Display copy: far-off islands pulled in (measurements below use the original P).
+    Pd, moved = compact(P, grp)
+
+    print("t-SNE …")
+    from sklearn.manifold import TSNE
+    T = TSNE(n_components=2, metric="cosine", perplexity=30, init="pca", random_state=42).fit_transform(X)
+    a, b = P - P.mean(0), T - T.mean(0)
+    u, _, vt = np.linalg.svd(b.T @ a)          # rotate/flip t-SNE to line up with UMAP (no distortion)
+    T = b @ (u @ vt)
+    T = (T - T.min(0)) / (T.max(0) - T.min(0)).max()
+    Td, moved_t = compact(T, grp)
 
     rng = np.random.default_rng(0)
 
-    def spread(ix):
-        Q = P[ix]
+    def spread(ix, Q=None):
+        Q = (P if Q is None else Q)[ix]
         return float(np.sqrt(((Q - Q.mean(0)) ** 2).sum(1)).mean())
 
     chapters = []
     for g, cnt in Counter(grp).items():
         ix = np.where(grp == g)[0]
-        ratio = None
+        ratio = ratio_t = None
         if cnt >= 3:
-            ratio = spread(ix) / np.mean([spread(rng.choice(len(P), cnt, replace=False)) for _ in range(50)])
+            draws = [rng.choice(len(P), cnt, replace=False) for _ in range(50)]
+            ratio = spread(ix) / np.mean([spread(r) for r in draws])
+            ratio_t = spread(ix, T) / np.mean([spread(r, T) for r in draws])
         nn_same = float((grp[nn[ix]] == g).mean())
-        chapters.append({"name": g, "book": B[ix[0]]["book"], "n": int(cnt), "ratio": ratio,
-                         "nn_same": nn_same, "cx": float(P[ix, 0].mean()), "cy": float(P[ix, 1].mean()),
+        chapters.append({"name": g, "book": B[ix[0]]["book"], "n": int(cnt), "ratio": ratio, "ratio_t": ratio_t,
+                         "tx": float(Td[ix, 0].mean()), "ty": float(Td[ix, 1].mean()),
+                         "nn_same": nn_same, "cx": float(Pd[ix, 0].mean()), "cy": float(Pd[ix, 1].mean()),
+                         "ox": float(P[ix, 0].mean()), "oy": float(P[ix, 1].mean()),
                          "first": int(min(ix))})
     chapters.sort(key=lambda c: c["first"])
     for k, c in enumerate(chapters):
         c["id"] = k
     gid = {c["name"]: c["id"] for c in chapters}
 
+    # Which chapters are closest in meaning? (centroids of the full vectors)
+    names = [c["name"] for c in chapters]
+    C = np.array([X[grp == nm].mean(0) for nm in names])
+    C /= np.linalg.norm(C, axis=1, keepdims=True)
+    CS = C @ C.T
+    np.fill_diagonal(CS, -1)
+    nearest = {nm: [names[j] for j in np.argsort(-CS[i])[:2]] for i, nm in enumerate(names)}
+    # Map distance from each chapter's centre to the closest other chapter centre (isolation)
+    cen = np.array([[c["ox"], c["oy"]] for c in chapters])   # original layout
+    dd = np.sqrt(((cen[:, None] - cen[None]) ** 2).sum(-1))
+    np.fill_diagonal(dd, np.inf)
+    isolated = names[int(dd.min(1).argmax())]
+
     OUT.mkdir(exist_ok=True)
-    png(P, book, chapters, OUT / f"book_map_{variant}.png")
-    pts = [[round(float(P[i, 0]), 4), round(float(P[i, 1]), 4), 0 if b["book"] == "Anarchokapitalismus" else 1,
-            gid[grp[i]], " › ".join(x for x in (b["chapter"], b["subchapter"]) if x), b["text"][:240]]
+    ratios = sorted(c["ratio"] for c in chapters if c["ratio"] is not None)
+    ratios_t = sorted(c["ratio_t"] for c in chapters if c["ratio_t"] is not None)
+    stats = {"rates": rates, "cross": cross, "median_ratio": ratios[len(ratios) // 2],
+             "median_ratio_tsne": ratios_t[len(ratios_t) // 2], "tight_tsne": sum(1 for r in ratios_t if r < 0.2),
+             "tight": sum(1 for r in ratios if r < 0.2), "n_ratios": len(ratios)}
+    (OUT / f"book_stats_{variant}.json").write_text(json.dumps(stats, indent=2), encoding="utf-8")
+    png(Pd, book, chapters, moved, OUT / f"book_map_{variant}.png")
+    png(Td, book, chapters, moved_t, OUT / f"book_map_{variant}_tsne.png", keys=("tx", "ty"),
+        title="Book chunks, t-SNE projection, labelled at each chapter's centre")
+    pts = [[round(float(Pd[i, 0]), 4), round(float(Pd[i, 1]), 4), 0 if b["book"] == "Anarchokapitalismus" else 1,
+            gid[grp[i]], " › ".join(x for x in (b["chapter"], b["subchapter"]) if x), b["text"][:240],
+            round(float(Td[i, 0]), 4), round(float(Td[i, 1]), 4)]
            for i, b in enumerate(B)]
-    html(pts, chapters, rates, cross, variant, len(B), OUT / f"book_map_{variant}.html")
+    html(pts, chapters, rates, cross, variant, len(B), OUT / f"book_map_{variant}.html", nearest, isolated, moved, Pd, moved_t, Td)
     print("same-section / chapter / book neighbours:",
           {k: f"{v[0]:.0%} vs {v[1]:.0%}" for k, v in rates.items()}, f"cross-section same chapter {cross:.0%}")
     print(f"Wrote {OUT / f'book_map_{variant}.html'}")
 
 
-def png(P, book, chapters, path):
+def png(P, book, chapters, moved, path, keys=("cx", "cy"),
+        title="Book chunks (raw embeddings), labelled at each chapter's centre"):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    fig, ax = plt.subplots(figsize=(11, 11), facecolor="#fcfcfb")
+    W, H = P.max(0)
+    fig, ax = plt.subplots(figsize=(11, max(5.0, 11 * H / W + 0.6)), facecolor="#fcfcfb")
     ax.set_facecolor("#fcfcfb")
     for b, col in BOOK_COLORS.items():
         m = book == b
         ax.scatter(P[m, 0], P[m, 1], s=10, c=col, alpha=0.6, linewidths=0, label=b)
-    for c in chapters:
-        if c["n"] >= 5:
-            ax.text(c["cx"], c["cy"], c["name"], fontsize=7, ha="center", va="center", color="#0b0b0b",
-                    bbox=dict(boxstyle="round,pad=0.15", fc="#fcfcfb", ec="none", alpha=0.75))
+    from matplotlib.patches import FancyBboxPatch
+    for mv in moved:
+        Q = P[mv["idx"]]
+        lo, hi = Q.min(0) - 0.012, Q.max(0) + 0.012
+        ax.add_patch(FancyBboxPatch(lo, *(hi - lo), boxstyle="round,pad=0,rounding_size=0.01", fill=False,
+                                    ec="#52514e", lw=0.8, ls=(0, (3, 3))))
+        ax.text(lo[0], hi[1] + 0.008, f"moved closer: really {mv['gap_before'] / mv['gap_after']:.0f}× farther away",
+                fontsize=7, color="#52514e", va="bottom")
+    ax.set_aspect("equal")
+    ax.set_xlim(-0.03, W + 0.03); ax.set_ylim(-0.03, H + 0.05)
     ax.set_xticks([]); ax.set_yticks([])
     for sp in ax.spines.values():
         sp.set_color("#e4e3df")
     ax.legend(frameon=False, loc="upper left", markerscale=2)
-    ax.set_title("Book chunks (raw embeddings), labelled at each chapter's centre", loc="left", fontsize=12)
+    ax.set_title(title, loc="left", fontsize=12)
     fig.tight_layout()
-    fig.savefig(path, dpi=150, facecolor="#fcfcfb")
+    place_labels(ax, [(c[keys[0]], c[keys[1]], c["name"]) for c in sorted(chapters, key=lambda c: -c["n"])], fontsize=7)
+    fig.savefig(path, dpi=150, facecolor="#fcfcfb", bbox_inches="tight", pad_inches=0.15)
     plt.close(fig)
 
 
-def html(pts, chapters, rates, cross, variant, n, path):
+PROBES = ["AMEN: Peníze a bankovnictví", "AMEN: Ekonomie", "AMEN: Přirozené právo", "8. Školství", "11. Zločin",
+          "Drogy", "10. Zdravotnictví"]
+CONTEXT = {"withsource": "“Kniha Anarchokapitalismus › 10. Zdravotnictví”",
+           "nosource": "“Anarchokapitalismus › 10. Zdravotnictví”",
+           "textonly": "nothing: only the chunk's own text"}
+
+
+def html(pts, chapters, rates, cross, variant, n, path, nearest, isolated, moved, Pd, moved_t, Td):
     p = lambda v: f"{round(v * 100)}%"
+    q = lambda s: f"“{esc(s)}”"
+    dims = Pd.max(0)
+    islands = [{"x0": float(Pd[m["idx"], 0].min()) - 0.012, "y0": float(Pd[m["idx"], 1].min()) - 0.012,
+                "x1": float(Pd[m["idx"], 0].max()) + 0.012, "y1": float(Pd[m["idx"], 1].max()) + 0.012,
+                "f": round(m["gap_before"] / m["gap_after"])} for m in moved]
+    island_note = ("To avoid a mostly empty picture, " + "; ".join(
+        f"the island {', '.join(q(g) for g in m['groups'][:3])} was moved closer to the rest (its gap shortened "
+        f"about {round(m['gap_before'] / m['gap_after'])}×; dashed box on the map)" for m in moved)
+        + ". Distances inside the main cloud and inside each island are unchanged; all measurements use the "
+          "original layout.") if moved else ""
+    dims2 = Td.max(0)
+    islands2 = [{"x0": float(Td[m["idx"], 0].min()) - 0.012, "y0": float(Td[m["idx"], 1].min()) - 0.012,
+                 "x1": float(Td[m["idx"], 0].max()) + 0.012, "y1": float(Td[m["idx"], 1].max()) + 0.012,
+                 "f": round(m["gap_before"] / m["gap_after"])} for m in moved_t]
     ratios = sorted(c["ratio"] for c in chapters if c["ratio"] is not None)
     med = ratios[len(ratios) // 2]
     tight = sum(1 for r in ratios if r < 0.2)
+    rt = sorted(c["ratio_t"] for c in chapters if c["ratio_t"] is not None)
+    med_t, tight_t = rt[len(rt) // 2], sum(1 for r in rt if r < 0.2)
+    both = [c for c in chapters if c["ratio"] is not None]
+    from scipy.stats import spearmanr
+    rho = spearmanr([c["ratio"] for c in both], [c["ratio_t"] for c in both]).correlation
+    loose_t = [c["name"] for c in sorted(both, key=lambda c: -c["ratio_t"])[:4]]
+    tsne_side = (f"Median chapter spread vs random: <strong>{med_t:.2f}</strong> (UMAP {med:.2f}). Chapters below "
+                 f"0.20: <strong>{tight_t} of {len(rt)}</strong> (UMAP {tight}). Agreement on which chapters are "
+                 f"tight or loose (rank correlation of the two columns in the table below): "
+                 f"<strong>{rho:.2f}</strong>.")
+    agree = "agree closely" if rho >= 0.7 else "broadly agree" if rho >= 0.4 else "agree only weakly"
+    tsne_caption = (
+        f"<strong>What you see:</strong> the same chapters form islands in the t-SNE map, and the two methods "
+        f"{agree} on which chapters are compact and which are spread out (rank correlation {rho:.2f}). t-SNE "
+        f"packs chapters {'tighter' if med_t < med else 'less tightly'} overall (median {med_t:.2f} vs "
+        f"{med:.2f} for UMAP)"
+        + (", which is typical of the method: it spreads clusters more evenly over the map, so a chapter's "
+           "spread is smaller relative to a random set of chunks" if med_t < med else
+           ": t-SNE keeps more space inside groups and pulls clusters less apart than UMAP, so the same "
+           "chapters look looser relative to a random set of chunks")
+        + f". The loosest groups in t-SNE are {', '.join(q(x) for x in loose_t)}. Because a "
+        f"differently built method shows the same chapter structure, the islands are a property of the "
+        f"embeddings, not an artefact of UMAP.")
+    if moved_t:
+        tsne_caption += (" As on the UMAP map, far-away islands were moved closer (dashed box); measurements "
+                         "use the original layout.")
+    by_ratio = [c for c in sorted(chapters, key=lambda c: c["ratio"] if c["ratio"] is not None else 9)
+                if c["ratio"] is not None]
+    tightest = ", ".join(q(c["name"]) for c in by_ratio[:6])
+    pairs = "; ".join(f"{q(nm)} → {q(nearest[nm][0])}, {q(nearest[nm][1])}" for nm in PROBES if nm in nearest)
+    caption = (
+        f"<strong>What you see:</strong> chapters form islands with their label on top; the most compact are "
+        f"{tightest}. <strong>Related chapters are neighbours.</strong> Closest chapters in meaning (average "
+        f"vector of each chapter, full 1,024 dimensions): {pairs}. <strong>The two books</strong> keep largely "
+        f"apart: {p(rates['book'][0])} of a chunk's nearest neighbours are from the same book (50% by chance), "
+        f"because <em>Anarchokapitalismus</em> argues about institutions and economics and "
+        f"<em>Anarchoagorismus</em> about freedom, obedience and self-development; where they meet, they share a "
+        f"subject (as with school in the list above). The most isolated group on the map is {q(isolated)}.")
+    # The effect of the context line, measured if the other variants' book maps exist.
+    other = {v: json.loads((path.parent / f"book_stats_{v}.json").read_text(encoding="utf-8"))
+             for v in ("withsource", "nosource", "textonly")
+             if v != variant and (path.parent / f"book_stats_{v}.json").exists()}
+    other[variant] = {"rates": rates, "cross": cross, "median_ratio": med, "tight": tight, "n_ratios": len(ratios)}
+    if "textonly" in other and len(other) > 1:
+        rows_html = "".join(
+            f"<tr><td>{'<strong>' if v == variant else ''}<code>{v}</code>{'</strong>' if v == variant else ''}: "
+            f"{CONTEXT[v]}</td><td>{p(o['rates']['chapter'][0])}</td><td>{p(o['cross'])}</td>"
+            f"<td>{o['median_ratio']:.2f}</td><td>{o['tight']} of {o['n_ratios']}</td></tr>"
+            for v, o in sorted(other.items(), key=lambda kv: ["withsource", "nosource", "textonly"].index(kv[0])))
+        t, ref = other["textonly"], other.get("nosource") or other.get("withsource")
+        caveat = (
+            "<strong>The chapter name in the context line inflated the effect, but the content alone still "
+            "groups chapters.</strong> The same chunks embedded with and without the chapter path at the start "
+            f"(chance: {p(rates['chapter'][1])} same-chapter neighbours, spread 1.00):</li></ul>"
+            "<div class='tw'><table><thead><tr><th>Variant: text in front of each chunk</th><th>Neighbours from "
+            "same chapter</th><th>…from other sections</th><th>Median spread vs random</th><th>Chapters below "
+            f"0.20</th></tr></thead><tbody>{rows_html}</tbody></table></div><ul><li style='list-style:none'>"
+            f"Without the chapter path, same-chapter neighbours fall from {p(ref['rates']['chapter'][0])} to "
+            f"{p(t['rates']['chapter'][0])} and the median chapter is about {1 / t['median_ratio']:.0f}× tighter "
+            f"than random instead of {1 / ref['median_ratio']:.0f}×. So roughly half of the apparent chapter "
+            "clustering came from the shared label; the rest comes from what the chapters actually say.")
+    else:
+        caveat = ("<strong>Caveat: the chapter name is in the text.</strong> Every chunk starts with its chapter "
+                  "path, which helps chunks of one chapter find each other. The <code>textonly</code> variant "
+                  "measures how much.")
+    if variant == "textonly":
+        verdict = (f"<strong>Yes, regions correspond to ideas, on content alone.</strong> Without any label in "
+                   f"the text, {tight} of {len(ratios)} chapters still form a compact region (median {1 / med:.0f}× "
+                   f"tighter than random), and the nearest chapters in meaning are the related ones listed under "
+                   f"the map. This is the honest evidence that the embedding organises Urza's texts by topic.")
+    else:
+        verdict = (f"<strong>Regions of the map correspond to ideas.</strong> {tight} of {len(ratios)} chapters "
+                   f"form a compact region and related chapters lie next to each other; see the caveat below "
+                   f"about the chapter name in the text.")
     loose = [c for c in sorted(chapters, key=lambda c: -(c["ratio"] or 0)) if (c["ratio"] or 0) >= 0.3]
     rows = sorted([c for c in chapters if c["ratio"] is not None], key=lambda c: c["ratio"])
     table = "".join(
         f'<tr data-g="{c["id"]}"><td><span class="sw" style="background:var(--b{0 if c["book"] == "Anarchokapitalismus" else 1})"></span>'
-        f'{esc(c["name"])}</td><td>{c["n"]}</td><td>{c["ratio"]:.2f}</td><td>{p(c["nn_same"])}</td></tr>' for c in rows)
-    fill = {
+        f'{esc(c["name"])}</td><td>{c["n"]}</td><td>{c["ratio"]:.2f}</td><td>{c["ratio_t"]:.2f}</td><td>{p(c["nn_same"])}</td></tr>' for c in rows)
+    fill = {"__LABELJS__": LABEL_JS,
         "__N__": str(n), "__NCH__": str(len(chapters)), "__VARIANT__": variant,
         "__SEC__": p(rates["section"][0]), "__SECR__": p(rates["section"][1]),
         "__CH__": p(rates["chapter"][0]), "__CHR__": p(rates["chapter"][1]),
@@ -153,9 +348,13 @@ def html(pts, chapters, rates, cross, variant, n, path):
         "__CROSS__": p(cross), "__MED__": f"{med:.2f}", "__MEDX__": f"{1 / med:.0f}",
         "__TIGHT__": str(tight), "__NRAT__": str(len(ratios)),
         "__LOOSE__": ", ".join(f"{esc(c['name'])} ({c['ratio']:.2f})" for c in loose),
-        "__TABLE__": table,
+        "__ISLAND_NOTE__": island_note, "__ISLANDS__": json.dumps(islands),
+        "__ISLANDS2__": json.dumps(islands2), "__W2__": f"{dims2[0]:.4f}", "__H2__": f"{dims2[1]:.4f}",
+        "__TSNE_SIDE__": tsne_side, "__TSNE_CAPTION__": tsne_caption, "__W__": f"{dims[0]:.4f}", "__H__": f"{dims[1]:.4f}",
+        "__TABLE__": table, "__CAPTION__": caption, "__CAVEAT__": caveat, "__VERDICT__": verdict,
+        "__CONTEXT__": CONTEXT.get(variant, variant),
         "__DATA__": json.dumps(pts, ensure_ascii=False).replace("</", "<\\/"),
-        "__CHAPTERS__": json.dumps([{k: c[k] for k in ("id", "name", "n", "cx", "cy", "book")} for c in chapters],
+        "__CHAPTERS__": json.dumps([{k: c[k] for k in ("id", "name", "n", "cx", "cy", "tx", "ty", "book")} for c in chapters],
                                    ensure_ascii=False).replace("</", "<\\/"),
     }
     page = TEMPLATE
@@ -183,7 +382,7 @@ ol,ul{max-width:900px;padding-left:20px}li{margin:6px 0}
 code{background:var(--line);padding:1px 5px;border-radius:4px;font-size:12.5px}
 .mapwrap{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:16px;align-items:start}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}
-canvas{width:100%;aspect-ratio:1/1;display:block;cursor:crosshair}
+canvas{width:100%;display:block;cursor:crosshair}
 .side{max-height:820px;overflow:auto;font-size:12.5px}.side h3{font-size:13px;margin:0 0 6px}
 .side div.c{padding:3px 6px;border-radius:5px;cursor:pointer;display:flex;gap:6px;align-items:center}
 .side div.c:hover,.side div.c.on{background:var(--line)}.side .n{color:var(--ink2);margin-left:auto}
@@ -207,13 +406,12 @@ embeddings (no source-centring, which is unnecessary when all chunks come from o
 <h2 class="sec">What was done</h2>
 <ol>
  <li><strong>Data.</strong> The __N__ book chunks (about 150 words each) from <em>Anarchokapitalismus</em> and
- <em>Anarchoagorismus</em>, with their bge-m3 embeddings (variant <code>__VARIANT__</code>: the context line is
- “Anarchokapitalismus › 10. Zdravotnictví” etc., without the word “Kniha”).</li>
+ <em>Anarchoagorismus</em>, with their bge-m3 embeddings (variant <code>__VARIANT__</code>; text in front of each chunk: __CONTEXT__).</li>
  <li><strong>Chapter groups.</strong> Each chunk belongs to one of __NCH__ groups: a chapter, or in the appendix
  of <em>Anarchokapitalismus</em> its own topic (Drogy, Zbraně, Věda, Práce) or AMEN category (Ekonomie,
  Historie, …). All AMEN aphorisms of <em>Anarchoagorismus</em> form one group.</li>
  <li><strong>Map.</strong> UMAP to 2D (cosine distance, 15 neighbours, min_dist 0.1, fixed seed) on these chunks
- only. Each chapter's name is placed at the average position of its chunks.</li>
+ only. Each chapter's name is placed at the average position of its chunks. __ISLAND_NOTE__</li>
  <li><strong>Measurements.</strong> Who are each chunk's 10 nearest neighbours (full 1,024-dim vectors), and how
  tightly each chapter's chunks sit together on the map.</li>
 </ol>
@@ -228,18 +426,19 @@ chapter in the list (or in the table below) to highlight its chunks; click again
  <div class="panel"><canvas id="cv"></canvas></div>
  <div class="panel side"><h3>Chapters (book order)</h3><div id="list"></div></div>
 </div>
-<p class="cap"><strong>What you see:</strong> chapters form compact islands with their label on top:
-“10. Zdravotnictví”, “Drogy”, “6. Hasiči”, “12. Silnice a dopravní pravidla”, “14. Soudnictví” each occupy
-their own spot. <strong>Related chapters are neighbours:</strong> “AMEN: Peníze a bankovnictví” sits between
-“5. Peníze” and the economics chapters; “AMEN: Ekonomie” next to “1. Vzácné zdroje” and “2. Proč selhává
-centrální plánování?”; “AMEN: Přirozené právo” next to “3. Princip neagrese”; law and enforcement
-(“14. Soudnictví”, “15. Vymáhání práva”) together. <strong>The two books occupy different halves</strong>
-(<em>Anarchokapitalismus</em> at the bottom: institutions and economics; <em>Anarchoagorismus</em> at the
-top: freedom, obedience, self-development). <strong>Where they cross, they share a subject:</strong>
-<em>Anarchokapitalismus</em> “8. Školství” sits among the education chapters of <em>Anarchoagorismus</em>
-(“2. Školství”, “3. Indoktrinace”); <em>Anarchoagorismus</em> “11. Zločin” sits by the law chapters, and its
-“19. Praxe › Kryptopeníze” inside the money region. The three opening stories (“Tři příběhy”) are an island
-far to the side: narrative fiction, unlike everything else.</p>
+<p class="cap">__CAPTION__</p>
+
+<h2 class="sec">A second projection: t-SNE</h2>
+<p class="sub">UMAP is one way to flatten 1,024 dimensions into two. To check that the chapter islands are a
+property of the embeddings and not of UMAP, the same chunks are projected with <strong>t-SNE</strong>, a method
+built on a different principle (it matches neighbour probabilities rather than a neighbourhood graph). Settings:
+cosine distance, perplexity 30, PCA initialisation, fixed seed; the layout is rotated to line up with the UMAP
+map. Colours, labels, hover and chapter highlighting work as above and are linked between the two maps.</p>
+<div class="mapwrap">
+ <div class="panel"><canvas id="cv2"></canvas></div>
+ <div class="panel side"><h3>t-SNE in numbers</h3><p style="margin:0;color:var(--ink2)">__TSNE_SIDE__</p></div>
+</div>
+<p class="cap">__TSNE_CAPTION__</p>
 
 <h2 class="sec">Who are a chunk's nearest neighbours?</h2>
 <p class="sub"><strong>How it is computed:</strong> for each book chunk, the 10 most similar book chunks (cosine
@@ -260,11 +459,12 @@ __BK__ of neighbours are from the same book (50% by chance): the two books diffe
 
 <h2 class="sec">How tight is each chapter?</h2>
 <p class="sub"><strong>How it is computed:</strong> the average distance of a chapter's chunks from their centre
-on the map, divided by the same for random sets of chunks of the same size (50 draws).
+on a map, divided by the same for random sets of chunks of the same size (50 draws), once for the UMAP map and
+once for the t-SNE map.
 <strong>1.00</strong> = no more clustered than random; <strong>0.10</strong> = packed into a tenth of the
 spread. “Neighbours in chapter” is the share of the chunks' 10 nearest neighbours from the same chapter.
 Click a row to highlight it on the map.</p>
-<div class="scroll"><table id="ctab"><thead><tr><th>Chapter group</th><th>Chunks</th><th>Spread vs random</th><th>Neighbours in chapter</th></tr></thead>
+<div class="scroll"><table id="ctab"><thead><tr><th>Chapter group</th><th>Chunks</th><th>Spread vs random (UMAP)</th><th>Spread vs random (t-SNE)</th><th>Neighbours in chapter</th></tr></thead>
 <tbody>__TABLE__</tbody></table></div>
 <p class="cap"><strong>Reading it:</strong> the median chapter has a spread ratio of __MED__, i.e. its chunks are
 about __MEDX__× more concentrated than random; __TIGHT__ of __NRAT__ groups are below 0.20. The loosest groups
@@ -274,58 +474,59 @@ their content is.</p>
 
 <h2 class="sec">Conclusions</h2>
 <ul>
- <li><strong>Yes: regions of the map correspond to ideas.</strong> In the books, almost every chapter occupies
- its own compact region, and chapters that discuss related subjects lie next to each other. This is the
- evidence that the embedding organises Urza's texts by topic, which the coverage map relies on.</li>
+ <li>__VERDICT__</li>
  <li><strong>Where a chapter is spread out, its content is mixed.</strong> The loose groups are exactly the ones
  that cover several subjects, not failures of the embedding.</li>
- <li><strong>Caveat: the chapter name is in the text.</strong> Every chunk starts with its chapter path
- (“Anarchokapitalismus › 10. Zdravotnictví”), which helps chunks of one chapter find each other. The
- cross-section figure (__CROSS__) and the fact that related chapters sit side by side suggest the content
- does most of the work, but the effect of the name is not measured separately here.</li>
+ <li>__CAVEAT__</li>
  <li><strong>The books are a good “skeleton” for the full map.</strong> Their chapter labels can name the
  regions of the full map (articles and videos included), since the same topics recur across sources.</li>
 </ul>
 </div><div id="tip"></div>
 <script>
-const P=__DATA__, CH=__CHAPTERS__;
+__LABELJS__
+const P=__DATA__, CH=__CHAPTERS__, TOP=18, PAD=14;
+const MAPS=[{cv:document.getElementById("cv"),xi:0,yi:1,cx:"cx",cy:"cy",isl:__ISLANDS__,W:__W__,H:__H__},
+            {cv:document.getElementById("cv2"),xi:6,yi:7,cx:"tx",cy:"ty",isl:__ISLANDS2__,W:__W2__,H:__H2__}];
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const cv=document.getElementById("cv"), tip=document.getElementById("tip"), PAD=14;
+const tip=document.getElementById("tip");
 let sel=-1, hover=-1, showLabels=true;
 const list=document.getElementById("list");
 CH.forEach(c=>{const d=document.createElement("div");d.className="c";d.dataset.g=c.id;
  d.innerHTML=`<span class="sw" style="background:var(--b${c.book==="Anarchokapitalismus"?0:1})"></span>${esc(c.name)}<span class="n">${c.n}</span>`;
  d.onclick=()=>select(c.id);list.appendChild(d)});
-document.querySelectorAll("#ctab tbody tr").forEach(tr=>tr.onclick=()=>{select(+tr.dataset.g);cv.scrollIntoView({behavior:"smooth",block:"center"})});
-document.getElementById("labels").onchange=e=>{showLabels=e.target.checked;draw()};
-function select(g){sel=sel===g?-1:g;document.querySelectorAll(".side div.c").forEach(d=>d.classList.toggle("on",+d.dataset.g===sel));draw()}
-function size(){const r=cv.getBoundingClientRect(),d=devicePixelRatio||1;cv.width=r.width*d;cv.height=r.width*d}
-function xy(x,y){const d=devicePixelRatio||1,w=cv.width-2*PAD*d;return[PAD*d+x*w,cv.height-PAD*d-y*w]}
-function draw(){const g=cv.getContext("2d"),d=devicePixelRatio||1,col=[css("--b0"),css("--b1")],bg=css("--card"),ink=css("--ink");
+document.querySelectorAll("#ctab tbody tr").forEach(tr=>tr.onclick=()=>{select(+tr.dataset.g);MAPS[0].cv.scrollIntoView({behavior:"smooth",block:"center"})});
+document.getElementById("labels").onchange=e=>{showLabels=e.target.checked;drawAll()};
+function select(g){sel=sel===g?-1:g;document.querySelectorAll(".side div.c").forEach(d=>d.classList.toggle("on",+d.dataset.g===sel));drawAll()}
+function size(m){const cv=m.cv,r=cv.getBoundingClientRect(),d=devicePixelRatio||1,h=(r.width-2*PAD)*m.H/m.W+2*PAD+TOP;
+ cv.style.height=h+"px";cv.width=r.width*d;cv.height=h*d}
+function xy(m,x,y){const d=devicePixelRatio||1,k=(m.cv.width-2*PAD*d)/m.W;return[PAD*d+x*k,m.cv.height-PAD*d-y*k]}
+function drawAll(){MAPS.forEach(draw)}
+function draw(m){const cv=m.cv,g=cv.getContext("2d"),d=devicePixelRatio||1,col=[css("--b0"),css("--b1")],bg=css("--card"),ink=css("--ink");
  g.clearRect(0,0,cv.width,cv.height);
- P.forEach(p=>{const[x,y]=xy(p[0],p[1]);g.globalAlpha=sel<0?.7:(p[3]===sel?.95:.1);g.fillStyle=col[p[2]];
+ P.forEach(p=>{const[x,y]=xy(m,p[m.xi],p[m.yi]);g.globalAlpha=sel<0?.7:(p[3]===sel?.95:.1);g.fillStyle=col[p[2]];
   g.beginPath();g.arc(x,y,(sel===p[3]?4:3)*d,0,7);g.fill()});
  g.globalAlpha=1;
- if(hover>=0){const[x,y]=xy(P[hover][0],P[hover][1]);g.strokeStyle=bg;g.lineWidth=4*d;g.beginPath();g.arc(x,y,7*d,0,7);g.stroke();
+ if(hover>=0){const[x,y]=xy(m,P[hover][m.xi],P[hover][m.yi]);g.strokeStyle=bg;g.lineWidth=4*d;g.beginPath();g.arc(x,y,7*d,0,7);g.stroke();
   g.strokeStyle=css("--hl");g.lineWidth=2*d;g.beginPath();g.arc(x,y,7*d,0,7);g.stroke()}
+ g.setLineDash([4*d,4*d]);g.strokeStyle=css("--ink2");g.lineWidth=1*d;g.font=`${10.5*d}px system-ui,sans-serif`;
+ g.fillStyle=css("--ink2");g.textAlign="left";g.textBaseline="bottom";
+ m.isl.forEach(b=>{const[x0,y0]=xy(m,b.x0,b.y1),[x1,y1]=xy(m,b.x1,b.y0);g.strokeRect(x0,y0,x1-x0,y1-y0);
+  g.fillText(`moved closer: really ${b.f}× farther away`,Math.min(x0,cv.width-200*d),y0-3*d)});
+ g.setLineDash([]);
  if(!showLabels&&sel<0)return;
- g.font=`${11*d}px system-ui,sans-serif`;g.textAlign="center";g.textBaseline="middle";
- const boxes=[];
- const order=CH.filter(c=>sel<0?c.n>=3:c.id===sel).sort((a,b)=>(b.id===sel)-(a.id===sel)||b.n-a.n);
- order.forEach(c=>{let[x,y]=xy(c.cx,c.cy);const w=g.measureText(c.name).width+8*d,h=15*d;
-  x=Math.min(Math.max(x,w/2+2*d),cv.width-w/2-2*d);y=Math.min(Math.max(y,h/2+2*d),cv.height-h/2-2*d);const b=[x-w/2,y-h/2,x+w/2,y+h/2];
-  if(c.id!==sel&&boxes.some(o=>!(b[2]<o[0]||b[0]>o[2]||b[3]<o[1]||b[1]>o[3])))return;boxes.push(b);
-  g.globalAlpha=.85;g.fillStyle=bg;g.fillRect(b[0],b[1],w,h);g.globalAlpha=1;g.fillStyle=ink;g.fillText(c.name,x,y)})}
-cv.onmousemove=e=>{const r=cv.getBoundingClientRect(),d=devicePixelRatio||1,mx=(e.clientX-r.left)*d,my=(e.clientY-r.top)*d;
- let best=-1,bd=(9*d)**2;P.forEach((p,i)=>{const[x,y]=xy(p[0],p[1]),dd=(x-mx)**2+(y-my)**2;if(dd<bd){bd=dd;best=i}});
- if(best!==hover){hover=best;draw()}if(best<0){tip.style.display="none";return}const p=P[best];
- tip.innerHTML=`<div class="t">${esc(p[4])}</div><div class="m">${esc(p[5])}…</div>`;tip.style.display="block";
- const tw=tip.offsetWidth,th=tip.offsetHeight;tip.style.left=Math.min(e.clientX+14,innerWidth-tw-8)+"px";tip.style.top=Math.min(e.clientY+14,innerHeight-th-8)+"px"};
-cv.onmouseleave=()=>{hover=-1;tip.style.display="none";draw()};
-cv.onclick=()=>{if(hover>=0)select(P[hover][3])};
+ const order=CH.filter(c=>showLabels||c.id===sel).sort((a,b)=>(b.id===sel)-(a.id===sel)||b.n-a.n);
+ placeLabels(g,order.map(c=>{const[x,y]=xy(m,c[m.cx],c[m.cy]);return{x,y,text:c.name,r:0,bold:c.id===sel}}),d,bg,ink,css("--ink2"))}
+MAPS.forEach(m=>{const cv=m.cv;
+ cv.onmousemove=e=>{const r=cv.getBoundingClientRect(),d=devicePixelRatio||1,mx=(e.clientX-r.left)*d,my=(e.clientY-r.top)*d;
+  let best=-1,bd=(9*d)**2;P.forEach((p,i)=>{const[x,y]=xy(m,p[m.xi],p[m.yi]),dd=(x-mx)**2+(y-my)**2;if(dd<bd){bd=dd;best=i}});
+  if(best!==hover){hover=best;drawAll()}if(best<0){tip.style.display="none";return}const p=P[best];
+  tip.innerHTML=`<div class="t">${esc(p[4])}</div><div class="m">${esc(p[5])}…</div>`;tip.style.display="block";
+  const tw=tip.offsetWidth,th=tip.offsetHeight;tip.style.left=Math.min(e.clientX+14,innerWidth-tw-8)+"px";tip.style.top=Math.min(e.clientY+14,innerHeight-th-8)+"px"};
+ cv.onmouseleave=()=>{hover=-1;tip.style.display="none";drawAll()};
+ cv.onclick=()=>{if(hover>=0)select(P[hover][3])}});
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
-addEventListener("resize",()=>{size();draw()});matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
-size();draw();
+addEventListener("resize",()=>{MAPS.forEach(size);drawAll()});matchMedia("(prefers-color-scheme: dark)").addEventListener("change",drawAll);
+MAPS.forEach(size);drawAll();
 </script></body></html>"""
 
 

@@ -123,24 +123,44 @@ def html(meta, a, b, rates, path, variant):
     label = {"article": "articles", "book": "book sections", "video": "video descriptions"}
     page = page.replace("__N__", f"{len(meta):,}")
     page = page.replace("__VARIANT__", variant)
-    # Does the source word in the context line matter? Compare with the other variant if it has been run.
-    other = {"withsource": "nosource", "nosource": "withsource"}.get(variant)
-    other_path = OUT / f"rates_{other}.json"
-    if other and other_path.exists():
-        o = json.loads(other_path.read_text(encoding="utf-8"))
-        ws, ns = (rates, o) if variant == "withsource" else (o, rates)
+    # How much does the context line matter? Compare all embedding variants that have been projected.
+    order = ["withsource", "nosource", "textonly"]
+    desc = {"withsource": "context line with the source word (“Kniha …”, “Článek „…“”, “Video „…“”)",
+            "nosource": "context line without the source word",
+            "textonly": "no context line, only the chunk's own text"}
+    allr = {v: json.loads((OUT / f"rates_{v}.json").read_text(encoding="utf-8"))
+            for v in order if v != variant and (OUT / f"rates_{v}.json").exists()}
+    allr[variant] = rates
+    avail = [v for v in order if v in allr]
+    if len(avail) > 1:
+        rows_html = "".join(
+            f"<tr><td>{'<strong>' if v == variant else ''}<code>{v}</code>{'</strong>' if v == variant else ''}"
+            f" – {desc.get(v, '')}</td>"
+            + "".join(f"<td>{p(allr[v]['raw_1024d'][s])}</td>" for s in SOURCES)
+            + "".join(f"<td>{p(allr[v]['centred_1024d'][s])}</td>" for s in SOURCES) + "</tr>" for v in avail)
+        found = []
+        if "withsource" in allr and "nosource" in allr:
+            d = [round((allr["withsource"]["raw_1024d"][s] - allr["nosource"]["raw_1024d"][s]) * 100) for s in SOURCES]
+            found.append(f"removing just the source word lowers the raw same-source share by {min(d)}–{max(d)} points")
+        if "nosource" in allr and "textonly" in allr:
+            d = [round((allr["nosource"]["raw_1024d"][s] - allr["textonly"]["raw_1024d"][s]) * 100) for s in SOURCES]
+            dc = [round((allr["nosource"]["centred_1024d"][s] - allr["textonly"]["centred_1024d"][s]) * 100) for s in SOURCES]
+            found.append(f"removing the rest of the context line (titles, chapter paths, years, guests) lowers it by "
+                         f"another {min(d)}–{max(d)} points raw and {min(dc)}–{max(dc)} points after centring")
         label_txt = (
-            "<strong>The source word in the context line is not the cause.</strong> The same chunks were "
-            "embedded a second time without “Kniha / Článek / Oznámení / Video” at the start (variant "
-            "<code>nosource</code>). Same-source neighbours in the raw vectors changed only from "
-            + ", ".join(f"{p(ws['raw_1024d'][s])} to {p(ns['raw_1024d'][s])} ({label[s]})" for s in SOURCES)
-            + "; after centring the two variants are practically identical ("
-            + ", ".join(f"{p(ws['centred_1024d'][s])} vs {p(ns['centred_1024d'][s])}" for s in SOURCES)
-            + "). The clustering comes from the texts themselves: their style, length and the way each "
-              "source writes about a topic.")
+            "<strong>The context line adds to the clustering, the texts do the rest.</strong> The same chunks "
+            "were embedded with different context lines (same-source share of the 10 nearest neighbours, full "
+            "vectors; chance: " + " / ".join(p(rnd[s]) for s in SOURCES) + "):"
+            "</li></ul><div class='tw'><table><thead><tr><th>Variant</th>"
+            + "".join(f"<th>Raw, {label[s]}</th>" for s in SOURCES)
+            + "".join(f"<th>Centred, {label[s]}</th>" for s in SOURCES)
+            + f"</tr></thead><tbody>{rows_html}</tbody></table></div><ul class='concl'><li style='list-style:none'>"
+            + ("; ".join(found).capitalize() + ". " if found else "")
+            + "What remains even without any context line comes from the texts themselves: their style, "
+              "length and the way each source writes about a topic.")
     else:
         label_txt = ("Part may be the context line at the start of each chunk (“Kniha …”, “Video „…“”, "
-                     "“Článek …”), which names the source; the <code>nosource</code> variant tests that.")
+                     "“Článek …”); the <code>nosource</code> and <code>textonly</code> variants test that.")
     page = page.replace("__LABEL_BULLET__", label_txt)
     page = page.replace("__TABLE_READING__", (
         f"<strong>Reading it:</strong> a book chunk's 10 nearest neighbours are {p(r['book'])} books in the raw "
@@ -152,9 +172,11 @@ def html(meta, a, b, rates, path, variant):
         + ", ".join(f"{label[s]} {p(r[s])} vs {p(rnd[s])}" for s in SOURCES)
         + f". The effect is strongest for {label[worst]}."))
     page = page.replace("__C2__", (
-        "Measured as the excess over chance, centring removes "
-        + ", ".join(f"{p(cut[s])} of it for {label[s]}" for s in SOURCES)
-        + f" (full vectors): same-source neighbours drop to {p(c['article'])} / {p(c['book'])} / "
+        "Measured as the excess over chance, centring "
+        + ", ".join((f"removes {p(cut[s])} of it for {label[s]}" if cut[s] >= 0.005 else
+                     f"slightly increases it for {label[s]} ({p(r[s])} → {p(c[s])})" if cut[s] < -0.005 else
+                     f"leaves it unchanged for {label[s]}") for s in SOURCES)
+        + f" (full vectors). Same-source neighbours after centring: {p(c['article'])} / {p(c['book'])} / "
           f"{p(c['video'])} for articles / books / videos, still well above chance. On the map the change "
           f"is larger: the source continents disappear into one map organised by subject."))
     path.write_text(page, encoding="utf-8")
@@ -206,7 +228,7 @@ from the model with a corrected version.</p>
  similar subjects should get similar vectors (measured by cosine similarity).</li>
  <li><strong>Correction (“source-centring”).</strong> For each source separately, the average of all its vectors
  was computed and subtracted from each of its vectors, which were then rescaled to length 1. Whatever all books
- have in common (style, length, the “Kniha …” context line) is removed; what makes one book chunk different from
+ have in common (style, length, any shared context line) is removed; what makes one book chunk different from
  another (its topic) stays.</li>
  <li><strong>Projection.</strong> Both versions were reduced to 2D with UMAP (cosine distance, 15 neighbours,
  min_dist 0.1, fixed random seed), which keeps nearby texts nearby. The right map was rotated to line up with the
@@ -224,14 +246,14 @@ on the other map. Use the boxes to hide sources and the search to highlight titl
 <div class="grid">
  <div class="panel"><h2>Raw embeddings</h2><canvas id="c0"></canvas>
   <p class="cap"><strong>What you see:</strong> the map splits into two large “continents” by kind of text, not
-  by subject: video descriptions (green) at the top, articles (blue) and book sections (orange) at the bottom,
-  with books mostly on one side. Chunks on the same subject from different sources end up far apart: search
-  <em>drog</em> and the drug chunks are spread over both continents.</p></div>
+  by subject: video descriptions (green) on one, articles (blue) and book sections (orange) on the other. Chunks
+  on the same subject from different sources can end up far apart; search <em>drog</em> to see where the drug
+  chunks land.</p></div>
  <div class="panel"><h2>After subtracting each source's average</h2><canvas id="c1"></canvas>
   <p class="cap"><strong>What you see:</strong> one connected map with colours mixed throughout. Small groups
-  are now organised by subject and contain several sources: the drug chunks from the book, the articles and the
-  videos sit together. Books still form small local groups, because consecutive sections of a chapter really do
-  discuss the same thing.</p></div>
+  are organised by subject and contain several sources (search <em>drog</em> again: the matching chunks from
+  books, articles and videos move much closer together). Books still form small local groups, because
+  consecutive sections of a chapter really do discuss the same thing.</p></div>
 </div>
 
 <h2 class="sec">Same-source share of the 10 nearest neighbours</h2>
