@@ -1,7 +1,0 @@
-# For Embedding/embed.py (the machine that computes the embeddings).
-# Install PyTorch first if you need a specific CUDA build (https://pytorch.org/get-started/locally/);
-# on Linux, plain `pip install torch` already includes NVIDIA GPU support.
-torch
-sentence-transformers>=3.0
-pyarrow>=14
-numpy>=1.24

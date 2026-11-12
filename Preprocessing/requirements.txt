@@ -1,3 +1,0 @@
-beautifulsoup4==4.15.0
-matplotlib==3.11.2
-pyarrow==26.0.1

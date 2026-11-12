@@ -172,8 +172,8 @@ def parse_epub(epub_path: str, output_json_path: str = None) -> list[dict]:
 
 
 if __name__ == "__main__":
-    data = parse_epub("books/ankap.epub", "jsons/ankap.json")
+    data = parse_epub("data/ankap.epub", "jsons/ankap.json")
     print(f"Extracted {len(data)} chapters.")
 
-    data = parse_epub("books/anag.epub", "jsons/anag.json")
+    data = parse_epub("data/anag.epub", "jsons/anag.json")
     print(f"Extracted {len(data)} chapters.")
