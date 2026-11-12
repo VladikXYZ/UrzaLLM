@@ -1,0 +1,23 @@
+{
+  "variant": "textonly",
+  "text_column": "embed_text_textonly",
+  "text_fingerprint": "07243100ceba8e1a42c03cd6c14eea0022c7899b2bcf27327802ba4e8e00f143",
+  "model": "BAAI/bge-m3",
+  "dim": 1024,
+  "count": 2910,
+  "normalized": true,
+  "max_length_tokens": 8192,
+  "truncated_chunks": 0,
+  "token_length_max": 1141,
+  "token_length_median": 180,
+  "device": "cuda",
+  "dry_run": false,
+  "seconds": 78.1,
+  "newly_embedded": 2889,
+  "created": "2026-11-12T14:02:33",
+  "versions": {
+    "python": "3.14.10",
+    "torch": "2.15.0+cu132"
+  },
+  "platform": "Linux-7.3.3-1-cachyos-x86_64-with-glibc2.44"
+}
