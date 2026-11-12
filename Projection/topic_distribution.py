@@ -27,7 +27,9 @@ from timeline_map import region_of  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-OUT = HERE / "output"
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+OUT = OUT_DIR
 VARIANT = "textonly"
 N_WORST = 15           # worst-fitting texts listed
 K_ALT = (50, 184)      # alternative space sizes for the robustness check
@@ -77,11 +79,11 @@ def assign(X, b, o, grp, groups, k):
 
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
-    rows = pq.read_table(ROOT / "Preprocessing" / "output" / "chunks.parquet",
+    rows = pq.read_table(CHUNKS,
                          columns=["chunk_id", "source", "kind", "year", "title", "url", "book", "chapter",
                                   "subchapter", "text"]).to_pylist()
-    E = np.load(ROOT / "Embedding" / f"results_{VARIANT}" / "embeddings.npy")
-    ids = (ROOT / "Embedding" / f"results_{VARIANT}" / "chunk_ids.txt").read_text(encoding="utf-8").split()
+    E = np.load(results_dir(VARIANT) / "embeddings.npy")
+    ids = (results_dir(VARIANT) / "chunk_ids.txt").read_text(encoding="utf-8").split()
     assert ids == [r["chunk_id"] for r in rows], "embeddings don't match chunks.parquet"
     src = np.array([r["source"] for r in rows])
     kind = np.array([r["kind"] for r in rows])

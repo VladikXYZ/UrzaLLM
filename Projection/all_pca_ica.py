@@ -23,7 +23,9 @@ from cumvar import cumvar_svg, needed  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-OUT = HERE / "output"
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+OUT = OUT_DIR
 VARIANT = "textonly"
 SOURCES = ["article", "book", "video"]
 SRC_LABEL = {"article": "Articles", "book": "Books", "video": "Videos"}
@@ -70,11 +72,11 @@ def describe(v, rows, src, alltags, nvid, top=TOP):
 
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
-    rows = pq.read_table(ROOT / "Preprocessing" / "output" / "chunks.parquet",
+    rows = pq.read_table(CHUNKS,
                          columns=["chunk_id", "doc_id", "source", "kind", "title", "year", "tags", "chapter",
                                   "subchapter", "text"]).to_pylist()
-    X = np.load(ROOT / "Embedding" / f"results_{VARIANT}" / "embeddings.npy")
-    ids = (ROOT / "Embedding" / f"results_{VARIANT}" / "chunk_ids.txt").read_text(encoding="utf-8").split()
+    X = np.load(results_dir(VARIANT) / "embeddings.npy")
+    ids = (results_dir(VARIANT) / "chunk_ids.txt").read_text(encoding="utf-8").split()
     assert ids == [r["chunk_id"] for r in rows], "embeddings don't match chunks.parquet"
     src = np.array([r["source"] for r in rows])
     alltags = Counter(t for r in rows if r["source"] == "video" for t in set(r["tags"]))

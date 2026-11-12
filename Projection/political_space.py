@@ -27,7 +27,9 @@ from book_map import esc  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-OUT = HERE / "output"
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+OUT = OUT_DIR
 VARIANT = "textonly"
 SOURCES = ["article", "book", "video"]
 STRONG, SOME = 0.60, 0.55     # depth tiers (cosine of best passage); set from the validation examples
@@ -46,11 +48,11 @@ def main():
     items = list(csv.DictReader(open(ROOT / "Questions" / "political_space.tsv", encoding="utf-8"), delimiter="\t"))
     QE = np.load(ROOT / "Questions" / "output" / "embeddings.npy")
     assert (ROOT / "Questions" / "output" / "ids.txt").read_text(encoding="utf-8").split() == [q["id"] for q in items]
-    rows = pq.read_table(ROOT / "Preprocessing" / "output" / "chunks.parquet",
+    rows = pq.read_table(CHUNKS,
                          columns=["chunk_id", "doc_id", "source", "kind", "year", "title", "url", "chapter",
                                   "text"]).to_pylist()
-    E = np.load(ROOT / "Embedding" / f"results_{VARIANT}" / "embeddings.npy")
-    assert (ROOT / "Embedding" / f"results_{VARIANT}" / "chunk_ids.txt").read_text(encoding="utf-8").split() \
+    E = np.load(results_dir(VARIANT) / "embeddings.npy")
+    assert (results_dir(VARIANT) / "chunk_ids.txt").read_text(encoding="utf-8").split() \
         == [r["chunk_id"] for r in rows]
     src = np.array([r["source"] for r in rows])
     keep = np.array([r["kind"] != "announcement" for r in rows])

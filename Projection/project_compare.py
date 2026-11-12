@@ -18,7 +18,9 @@ import pyarrow.parquet as pq
 
 HERE = Path(__file__).resolve().parent
 EMB_ROOT = HERE.parent / "Embedding"
-OUT = HERE / "output"
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+OUT = OUT_DIR
 SOURCES = ["article", "book", "video"]
 COLORS = {"article": "#2a78d6", "book": "#eb6834", "video": "#1baf7a"}  # validated slots 1–3
 UMAP_PARAMS = dict(n_neighbors=15, min_dist=0.1, metric="cosine", random_state=42)
@@ -48,7 +50,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--variant", default="withsource", help="embedding variant (see Embedding/variants.py)")
     variant = ap.parse_args().variant
-    EMB = EMB_ROOT / f"results_{variant}"
+    EMB = results_dir(variant)
     if not (EMB / "embeddings_source_centred.npy").exists():
         sys.exit(f"Run first: python Embedding/analyze.py --variant {variant}")
     sys.stdout.reconfigure(encoding="utf-8")

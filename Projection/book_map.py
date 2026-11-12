@@ -21,7 +21,9 @@ from labels import LABEL_JS, place_labels  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-OUT = HERE / "output"
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+OUT = OUT_DIR
 BOOK_COLORS = {"Anarchokapitalismus": "#2a78d6", "Anarchoagorismus": "#eb6834"}  # validated slots 1–2
 UMAP_PARAMS = dict(n_neighbors=15, min_dist=0.1, metric="cosine", random_state=42)
 K = 10
@@ -106,11 +108,11 @@ def main():
     sys.stdout.reconfigure(encoding="utf-8")
     import umap
 
-    rows = pq.read_table(ROOT / "Preprocessing" / "output" / "chunks.parquet",
+    rows = pq.read_table(CHUNKS,
                          columns=["chunk_id", "doc_id", "source", "book", "chapter", "subchapter",
                                   "title", "text"]).to_pylist()
-    E = np.load(ROOT / "Embedding" / f"results_{variant}" / "embeddings.npy")
-    ids = (ROOT / "Embedding" / f"results_{variant}" / "chunk_ids.txt").read_text(encoding="utf-8").split()
+    E = np.load(results_dir(variant) / "embeddings.npy")
+    ids = (results_dir(variant) / "chunk_ids.txt").read_text(encoding="utf-8").split()
     assert ids == [r["chunk_id"] for r in rows], "embeddings don't match chunks.parquet"
     idx = [i for i, r in enumerate(rows) if r["source"] == "book"]
     B, X = [rows[i] for i in idx], E[idx]

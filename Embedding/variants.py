@@ -6,22 +6,20 @@ textonly    only the chunk's own text, no context line at all (no chapter path, 
             so nothing outside the text can group chunks
 """
 import hashlib
+import sys
 from pathlib import Path
 
 import pyarrow.parquet as pq
 
 HERE = Path(__file__).resolve().parent
-CHUNKS = HERE.parent / "Preprocessing" / "output" / "chunks.parquet"
+sys.path.insert(0, str(HERE.parent))
+from dataset import CHUNKS, results_dir  # noqa: E402,F401  (URZA_DATASET switch)
 
 VARIANTS = {
     "withsource": "embed_text",
     "nosource": "embed_text_nosource",
     "textonly": "embed_text_textonly",
 }
-
-
-def results_dir(variant: str) -> Path:
-    return HERE / f"results_{variant}"
 
 
 def load_texts(variant: str) -> tuple[list[str], list[str], list[str]]:

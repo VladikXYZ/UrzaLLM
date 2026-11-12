@@ -23,7 +23,9 @@ from book_map import chapter_group, esc  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-OUT = HERE / "output"
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+OUT = OUT_DIR
 VARIANT = "textonly"
 SOURCES = ["article", "book", "video"]
 K_REGION = 5           # nearest book chunks that vote on a chunk's region
@@ -41,13 +43,13 @@ def region_of(r):
 
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
-    rows = pq.read_table(ROOT / "Preprocessing" / "output" / "chunks.parquet",
+    rows = pq.read_table(CHUNKS,
                          columns=["chunk_id", "source", "kind", "year", "date", "title", "book", "chapter",
                                   "subchapter", "text"]).to_pylist()
     ids = [r["chunk_id"] for r in rows]
     coords = pq.read_table(OUT / f"coords_{VARIANT}.parquet").to_pylist()
     assert [c["chunk_id"] for c in coords] == ids, "run project_compare.py --variant textonly first"
-    Cvec = np.load(ROOT / "Embedding" / f"results_{VARIANT}" / "embeddings_source_centred.npy")
+    Cvec = np.load(results_dir(VARIANT) / "embeddings_source_centred.npy")
     P = np.array([[c["x_centred"], c["y_centred"]] for c in coords])
     P = (P - P.min(0)) / (P.max(0) - P.min(0)).max()
     src = np.array([r["source"] for r in rows])

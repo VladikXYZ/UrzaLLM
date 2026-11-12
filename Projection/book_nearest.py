@@ -23,7 +23,9 @@ from book_map import UMAP_PARAMS, chapter_group, compact, esc  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-OUT = HERE / "output"
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+OUT = OUT_DIR
 VARIANT = "textonly"
 
 
@@ -47,9 +49,9 @@ def families(nn):
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     import umap
-    rows = pq.read_table(ROOT / "Preprocessing" / "output" / "chunks.parquet",
+    rows = pq.read_table(CHUNKS,
                          columns=["chunk_id", "source", "book", "chapter", "subchapter"]).to_pylist()
-    E = np.load(ROOT / "Embedding" / f"results_{VARIANT}" / "embeddings.npy")
+    E = np.load(results_dir(VARIANT) / "embeddings.npy")
     b = [i for i, r in enumerate(rows) if r["source"] == "book"]
     B, X = [rows[i] for i in b], E[b]
     grp = np.array([chapter_group(r) for r in B], dtype=object)

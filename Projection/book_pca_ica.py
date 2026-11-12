@@ -25,7 +25,9 @@ from book_map import BOOK_COLORS, chapter_group, esc  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-OUT = HERE / "output"
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from dataset import CHUNKS, OUT_DIR, results_dir  # noqa: E402
+OUT = OUT_DIR
 VARIANT = "textonly"
 N_PCA_SHOW = 20      # components in the variance chart
 N_PCA_AXES = 6       # components selectable as map axes
@@ -53,10 +55,10 @@ def ends(v, grp, k=4):
 
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
-    rows = pq.read_table(ROOT / "Preprocessing" / "output" / "chunks.parquet",
+    rows = pq.read_table(CHUNKS,
                          columns=["chunk_id", "source", "book", "chapter", "subchapter", "text"]).to_pylist()
-    E = np.load(ROOT / "Embedding" / f"results_{VARIANT}" / "embeddings.npy")
-    ids = (ROOT / "Embedding" / f"results_{VARIANT}" / "chunk_ids.txt").read_text(encoding="utf-8").split()
+    E = np.load(results_dir(VARIANT) / "embeddings.npy")
+    ids = (results_dir(VARIANT) / "chunk_ids.txt").read_text(encoding="utf-8").split()
     assert ids == [r["chunk_id"] for r in rows], "embeddings don't match chunks.parquet"
     idx = [i for i, r in enumerate(rows) if r["source"] == "book"]
     B, X = [rows[i] for i in idx], E[idx]
