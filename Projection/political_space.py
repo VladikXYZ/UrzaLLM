@@ -87,14 +87,59 @@ def main():
     # ---- map: UMAP of the political space, chunks placed among their nearest items
     import warnings
     warnings.filterwarnings("ignore")
-    P = umap.UMAP(n_neighbors=10, min_dist=0.25, metric="cosine", random_state=SEED).fit_transform(QE)
-    P = (P - P.min(0)) / (P.max(0) - P.min(0)).max()
-    SC = unit(X[K]) @ unit(QX).T                     # chunk-to-item similarity, centred
+    # the map: political items only, each item type (topic / question / concept) centred on its own average, so the
+    # layout follows what the items are about rather than how each type is worded; fixed from here on
+    QT = QE.copy()
+    for l in ("topic", "question", "concept"):
+        QT[layer == l] -= QE[layer == l].mean(0)
+    um = umap.UMAP(n_neighbors=10, min_dist=0.25, metric="cosine", random_state=SEED).fit(QT)
+    P = um.embedding_.copy()
+    nc = layer != "concept"
+
+    def nb_rate(Pm, lab):                            # share of an item's 10 nearest map neighbours with the same label
+        D = ((Pm[:, None] - Pm[None]) ** 2).sum(-1)
+        np.fill_diagonal(D, np.inf)
+        return float((lab[np.argsort(D, 1)[:, :10]] == lab[:, None]).mean())
+    Praw = umap.UMAP(n_neighbors=10, min_dist=0.25, metric="cosine", random_state=SEED).fit_transform(QE)
+    layout = {"type": nb_rate(P, layer), "area": nb_rate(P[nc], major[nc]),
+              "type_raw": nb_rate(Praw, layer), "area_raw": nb_rate(Praw[nc], major[nc]),
+              "type_ch": float(sum((layer == l).mean() ** 2 for l in set(layer))),
+              "area_ch": float(sum((major[nc] == m).mean() ** 2 for m in set(major[nc])))}
+    SC = unit(X[K]) @ unit(QT).T                     # chunk-to-item similarity, both centred
     nn = np.argsort(-SC, axis=1)[:, :K_PLACE]
     w = np.take_along_axis(SC, nn, 1)
     w = np.exp((w - w.max(1, keepdims=True)) * 20)
-    CP = (P[nn] * w[..., None]).sum(1) / w.sum(1, keepdims=True)
-    CP += np.random.default_rng(SEED).normal(0, 0.006, CP.shape)
+    CP = (P[nn] * w[..., None]).sum(1) / w.sum(1, keepdims=True)     # placement 1: among the nearest items
+    # placement 2: UMAP's own transform into the fitted map. Both sides are centred (items per type, chunks per
+    # source), so neither the wording of the items nor Urza's style decides where a chunk lands.
+    CT = um.transform(X[K])
+    # placement 3: the same transform, but with only one average removed from all of Urza's chunks (his overall
+    # "Urza-ness"); the differences between articles, books and videos stay in
+    CG = um.transform(E[K] - E[K].mean(0))
+    lo = np.minimum.reduce([P.min(0), CT.min(0), CG.min(0)])
+    span = np.maximum.reduce([P.max(0), CT.max(0), CG.max(0)]) - lo
+    norm = lambda A: (A - lo) / span.max()
+    P, CP, CT, CG = norm(P), norm(CP), norm(CT), norm(CG)
+    jit = np.random.default_rng(SEED).normal(0, 0.006, CP.shape)
+    CP += jit
+    CT += jit
+    CG += jit
+    pstats = {}
+    ilo, ihi = P.min(0), P.max(0)
+    src_i = np.array([SOURCES.index(x) for x in ksrc])
+    pstats["src_ch"] = float(sum((src_i == k).mean() ** 2 for k in range(3)))
+    for name, C in (("knn", CP), ("tr", CT), ("g", CG)):
+        g = np.floor((C - ilo) / (ihi - ilo) * 40).clip(0, 39).astype(int)
+        cnt = np.bincount(g[:, 0] * 40 + g[:, 1], minlength=1600)
+        near = np.sqrt(((C[:, None] - P[None]) ** 2).sum(-1)).argmin(1)       # nearest item on the map
+        pstats[name] = {"cells": int((cnt > 0).sum()), "dense": float(np.sort(cnt)[::-1][:80].sum() / len(C)),
+                        "outside": float(((C < ilo - 0.02) | (C > ihi + 0.02)).any(1).mean()),
+                        "faith": float(np.mean([near[k] in nn[k] for k in range(len(C))]))}
+        Dc = ((C[:, None] - C[None]) ** 2).sum(-1)              # same-source share among a chunk's 10 map neighbours
+        np.fill_diagonal(Dc, np.inf)
+        pstats[name]["same_src"] = float((src_i[np.argsort(Dc, 1)[:, :10]] == src_i[:, None]).mean())
+        del Dc
+    pstats["moved"] = float(np.median(np.sqrt(((CP - CT) ** 2).sum(1))))
 
     # ---- aggregates
     majors = list(dict.fromkeys(q["major"] for q in items if q["layer"] != "concept"))
@@ -127,7 +172,9 @@ def main():
                   items[i]["text"], items[i]["major"] if layer[i] != "concept" else items[i]["sub"], round(float(best[i]), 3),
                   docs_strong[i], passage(best_j[i])] for i in range(len(items))]
     pts_chunks = [[round(float(CP[k, 0]), 4), round(float(CP[k, 1]), 4), SOURCES.index(ksrc[k]),
-                   rows[K[k]]["title"], int(rows[K[k]]["year"] or 0)] for k in range(n)]
+                   rows[K[k]]["title"], int(rows[K[k]]["year"] or 0),
+                   round(float(CT[k, 0]), 4), round(float(CT[k, 1]), 4),
+                   round(float(CG[k, 0]), 4), round(float(CG[k, 1]), 4)] for k in range(n)]
     labels = []
     for m in majors:   # label on the area's most central item (medoid): areas are not compact on the map
         A = P[(major == m) & (layer != "concept")]
@@ -135,29 +182,35 @@ def main():
         labels.append({"name": m, "x": float(med[0]), "y": float(med[1])})
 
     OUT.mkdir(exist_ok=True)
-    png(P, layer, best, CP, ksrc, labels, OUT / f"political_space_{VARIANT}_map.png")
+    png(P, layer, best, CP, ksrc, labels, OUT / f"political_space_{VARIANT}_map.png",
+        "Urza's chunks (placed among their nearest items)")
+    png(P, layer, best, CT, ksrc, labels, OUT / f"political_space_{VARIANT}_map_transform.png",
+        "Urza's chunks (UMAP transform, each source's average removed)")
+    png(P, layer, best, CG, ksrc, labels, OUT / f"political_space_{VARIANT}_map_transform_urza.png",
+        "Urza's chunks (UMAP transform, one average of all his texts removed)")
     stats = {
         "n": n, "n_items": len(items), "n_q": int(len(q_idx)), "n_c": int(len(c_idx)), "n_t": int((layer == "topic").sum()),
         "n_major": len(majors), "used_subs": int(len(set(assign))), "n_subs": len(subs),
         "q_strong": float(np.mean(best[q_idx] >= STRONG)), "q_some": float(np.mean(best[q_idx] >= SOME)),
         "c_strong": float(np.mean(best[c_idx] >= STRONG)),
-        "src_n": {s: int((ksrc == s).sum()) for s in SOURCES},
+        "src_n": {s: int((ksrc == s).sum()) for s in SOURCES}, "place": pstats, "layout": layout,
     }
     html(stats, areas, [qrow(i) for i in rank(q_idx, True)[:15]], [qrow(i) for i in rank(q_idx, False)[:15]],
          [qrow(i) for i in rank(c_idx, True)[:10]], [qrow(i) for i in rank(c_idx, False)[:10]], checks,
          pts_items, pts_chunks, labels, OUT / f"political_space_{VARIANT}.html")
     print("areas by volume:", [(a["name"], f"{a['vol']:.1%}", f"depth {a['depth']:.2f}") for a in sorted(areas, key=lambda a: -a["vol"])])
     print(f"questions strong {stats['q_strong']:.0%}, some {stats['q_some']:.0%}; concepts strong {stats['c_strong']:.0%}")
+    print("placement:", pstats)
     print(f"Wrote {OUT / f'political_space_{VARIANT}.html'}")
 
 
-def png(P, layer, best, CP, ksrc, labels, path):
+def png(P, layer, best, CP, ksrc, labels, path, chunk_label):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots(figsize=(11, 11), facecolor="#fcfcfb")
     ax.set_facecolor("#fcfcfb")
-    ax.scatter(CP[:, 0], CP[:, 1], s=4, c="#9a9993", alpha=0.25, linewidths=0, label="Urza's chunks (placed among their nearest items)")
+    ax.scatter(CP[:, 0], CP[:, 1], s=4, c="#9a9993", alpha=0.25, linewidths=0, label=chunk_label)
     sc = ax.scatter(P[:, 0], P[:, 1], s=[60 if l == "topic" else 26 for l in layer], c=best, cmap="Blues", vmin=0.45,
                     vmax=0.72, edgecolors="#fcfcfb", linewidths=0.8, marker="o")
     cb = fig.colorbar(sc, ax=ax, fraction=0.03, pad=0.01)
@@ -193,6 +246,17 @@ def html(st, areas, q_top, q_bot, c_top, c_bot, checks, pts_items, pts_chunks, l
         "__DEPTOP__": ", ".join(f"{q(a['name'])} ({a['depth']:.2f})" for a in by_depth[:4]),
         "__DEPBOT__": ", ".join(f"{q(a['name'])} ({a['depth']:.2f})" for a in by_depth[-4:]),
         "__BLIND__": ", ".join(q(r[2]) for r in q_bot[:6]),
+        "__KCELLS__": str(st["place"]["knn"]["cells"]), "__TCELLS__": str(st["place"]["tr"]["cells"]),
+        "__KDENSE__": p(st["place"]["knn"]["dense"]), "__TDENSE__": p(st["place"]["tr"]["dense"]),
+        "__TOUT__": f"{st['place']['tr']['outside'] * 100:.0f}%",
+        "__KFAITH__": p(st["place"]["knn"]["faith"]), "__TFAITH__": p(st["place"]["tr"]["faith"]),
+        "__MOVED__": f"{st['place']['moved']:.2f}",
+        "__GCELLS__": str(st["place"]["g"]["cells"]), "__GDENSE__": p(st["place"]["g"]["dense"]),
+        "__GOUT__": f"{st['place']['g']['outside'] * 100:.0f}%", "__GFAITH__": p(st["place"]["g"]["faith"]),
+        "__SSK__": p(st["place"]["knn"]["same_src"]), "__SST__": p(st["place"]["tr"]["same_src"]),
+        "__SSG__": p(st["place"]["g"]["same_src"]), "__SSCH__": p(st["place"]["src_ch"]),
+        "__LTYPE__": p(st["layout"]["type"]), "__LTYPERAW__": p(st["layout"]["type_raw"]), "__LTYPECH__": p(st["layout"]["type_ch"]),
+        "__LAREA__": p(st["layout"]["area"]), "__LAREARAW__": p(st["layout"]["area_raw"]), "__LAREACH__": p(st["layout"]["area_ch"]),
     }
     page = TEMPLATE
     for k, v in fill.items():
@@ -236,6 +300,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .det{grid-column:1/-1;display:none}.det.on{display:block}
 .head{display:grid;grid-template-columns:240px minmax(0,1fr) 64px 64px;gap:10px;font-size:12px;color:var(--ink2);padding:0 0 4px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}.seg button{background:var(--card);color:var(--ink2);border:0;padding:4px 10px;cursor:pointer;font:inherit}.seg button.on{background:var(--line);color:var(--ink);font-weight:600}
 @media (max-width:900px){.mapwrap,.two{grid-template-columns:1fr}.row,.head{grid-template-columns:140px minmax(0,1fr) 52px 52px}}
 </style></head><body><div class="wrap">
 <h1>Urza in the political space <span style="font-weight:400;color:var(--ink2)">· which general political topics does he address? · <code>textonly</code></span></h1>
@@ -266,8 +331,17 @@ which parts of it he attends to, how deeply, and where his blind spots are.</p>
  <li><strong>Volume</strong> (per area): every chunk is assigned to the nearest subtopic, whose centre is the
  average of the subtopic and its questions. As in the earlier reports, each source's average vector is subtracted
  first, so the style of book prose or video descriptions doesn't decide the outcome. Announcements are left out.</li>
- <li><strong>Map:</strong> the political items laid out with UMAP; each of Urza's chunks is placed among the five
- items it is most similar to.</li>
+ <li><strong>Map:</strong> the political items alone are laid out with UMAP, after subtracting the average vector
+ of each item type separately (topics, questions, concepts). Each type is worded in its own way (a question versus
+ a “name: description” entry), and without this the map sorts items by type rather than by subject, the same
+ format effect as between Urza's sources. The map is then fixed, and
+ Urza's chunks are added into it without refitting, in one of three ways (switch above the map):
+ <em>among nearest items</em>, at a similarity-weighted average of the positions of the five items each chunk is most
+ similar to; <em>UMAP transform</em>, UMAP's own method for placing new points into a fitted map, with each chunk's
+ source average subtracted (as everywhere in this report: this removes both what all of Urza's texts share and
+ what is typical of articles, books or videos); or <em>UMAP transform, one Urza average</em>, the same but with a
+ single average of all his chunks subtracted, which removes his overall “Urza-ness” and keeps the differences
+ between the three sources.</li>
 </ol>
 
 <h2 class="sec">Does it find the right texts? Spot checks</h2>
@@ -283,14 +357,33 @@ subjects he treats only in passing find related but less direct texts around 0.5
 <label><input type="checkbox" data-s="1" checked><span class="sw" style="background:var(--s1)"></span>books</label>
 <label><input type="checkbox" data-s="2" checked><span class="sw" style="background:var(--s2)"></span>videos</label>
 <label><input type="checkbox" id="lab" checked>Area labels</label>
+<span>Placement</span><span class="seg" id="place"><button data-v="0" class="on">among nearest items</button><button data-v="1">UMAP transform</button><button data-v="2">UMAP transform, one Urza average</button></span>
 <span>Item depth: <span class="ramp"><span style="background:var(--q1)"></span><span style="background:var(--q2)"></span><span style="background:var(--q3)"></span><span style="background:var(--q4)"></span></span> weak → strong</span></div>
 <div class="mapwrap">
  <div class="panel"><canvas id="cv"></canvas></div>
  <div class="panel side" id="side"><h3>Hover a topic, question or concept</h3><div class="muted">Large dots: subtopics · medium: questions · squares: concepts. Colour = depth of Urza's best passage. Small dots behind: Urza's chunks.</div></div>
 </div>
-<p class="cap"><strong>How to read it:</strong> nearby items are about related things. A policy area is often spread over several parts of the map (questions about the state touch many subjects), so each area label sits on its most central item. Items also group partly by type (concepts, drawn as squares, gather on one side; questions on the other), because a question is worded differently from a “name: description” entry: the same format effect as between Urza's sources. The depth and volume numbers do not depend on the map. Dark blue items are ones Urza
+<p class="cap"><strong>How to read it:</strong> nearby items are about related things. A policy area is often spread over several parts of the map (questions about the state touch many subjects), so each area label sits on its most central item. Because each item type was centred separately, items no longer group by how they are worded: __LTYPE__ of an item's 10 nearest neighbours on the map are of the same type (chance __LTYPECH__; __LTYPERAW__ without the centring), and __LAREA__ of a topic's or question's neighbours belong to the same policy area (chance __LAREACH__; __LAREARAW__ without the centring). The depth and volume numbers do not depend on the map. Dark blue items are ones Urza
 addresses squarely, pale ones only weakly; the cloud of small dots shows where his texts gather. Hover an item for
 its best passages.</p>
+<p class="cap"><strong>Nearest items vs UMAP transform:</strong> in all three placements, the political items stay
+exactly where they are; only Urza's chunks are placed differently. <em>Among nearest items</em> spreads them over __KCELLS__ of 1,600 grid cells
+(the 5% densest cells hold __KDENSE__ of the chunks) and never puts a chunk outside the area of the political items.
+<em>UMAP transform</em> reaches more cells (__TCELLS__) but also piles more chunks onto a few spots (__TDENSE__ in the
+densest 5%), and it lets some fall away from the items (__TOUT__ land outside the items' area). A chunk moves by a median of __MOVED__ map widths between
+the two. Neither keeps a chunk next to the items it is most similar to: the item closest to a chunk on the map is one
+of its five most similar items for only __KFAITH__ (nearest items) and __TFAITH__ (transform) of chunks, because a 2D
+map cannot keep 326 items and thousands of passages in their true neighbourhoods. Read both maps for where his
+texts gather overall; for which items they are about, use the depth numbers and the hover panel, which do not depend
+on the placement.</p>
+<p class="cap"><strong>One Urza average vs one average per source:</strong> the third placement removes only what
+all of Urza's texts share. It reaches __GCELLS__ cells (densest 5%: __GDENSE__), __GOUT__ land outside the items'
+area, and the nearest item on the map is one of the five most similar for __GFAITH__ of chunks. It keeps
+the differences between sources, but they barely show: among a chunk's 10 nearest chunks on the map, __SSG__ come
+from the same source (articles, books or videos), against __SST__ with the per-source averages removed, __SSK__ for
+“among nearest items”, and __SSCH__ if sources were mixed at random. So once Urza's overall average is removed,
+the remaining differences between articles, books and videos hardly change where his texts land in the political
+space, and this map looks almost the same as the second one.</p>
 
 <h2 class="sec">Coverage by policy area</h2>
 <div class="controls"><span>Sort</span><span id="sortb"></span></div>
@@ -369,12 +462,13 @@ function renderAreas(){const a=[...AREAS].sort((x,y)=>sortBy==="name"?x.name.loc
 renderAreas();
 // map
 const cv=document.getElementById("cv"),side=document.getElementById("side");const on=[true,true,true];let showLab=true,hover=-1;
-document.querySelectorAll("input[data-s]").forEach(i=>i.onchange=()=>{on[+i.dataset.s]=i.checked;draw()});document.getElementById("lab").onchange=e=>{showLab=e.target.checked;draw()};
-const W=Math.max(...IT.map(p=>p[0]),...CH.map(p=>p[0])),H=Math.max(...IT.map(p=>p[1]),...CH.map(p=>p[1]));
+document.querySelectorAll("input[data-s]").forEach(i=>i.onchange=()=>{on[+i.dataset.s]=i.checked;draw()});
+let pl=0;document.querySelectorAll("#place button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#place button").forEach(x=>x.classList.toggle("on",x===b));pl=+b.dataset.v;draw()});document.getElementById("lab").onchange=e=>{showLab=e.target.checked;draw()};
+const W=Math.max(...IT.map(p=>p[0]),...CH.map(p=>Math.max(p[0],p[5],p[7]))),H=Math.max(...IT.map(p=>p[1]),...CH.map(p=>Math.max(p[1],p[6],p[8])));
 function size(){const r=cv.getBoundingClientRect(),d=devicePixelRatio||1,h=(r.width-2*PAD)*H/W+2*PAD;cv.style.height=h+"px";cv.width=r.width*d;cv.height=h*d}
 function xy(x,y){const d=devicePixelRatio||1,k=(cv.width-2*PAD*d)/W;return[PAD*d+x*k,cv.height-PAD*d-y*k]}
 function draw(){const g=cv.getContext("2d"),d=devicePixelRatio||1,col=[css("--s0"),css("--s1"),css("--s2")],bg=css("--card");g.clearRect(0,0,cv.width,cv.height);
- CH.forEach(p=>{if(!on[p[2]])return;const[x,y]=xy(p[0],p[1]);g.globalAlpha=.28;g.fillStyle=col[p[2]];g.beginPath();g.arc(x,y,1.8*d,0,7);g.fill()});g.globalAlpha=1;
+ CH.forEach(p=>{if(!on[p[2]])return;const[x,y]=xy(p[2*pl+(pl?3:0)],p[2*pl+(pl?4:1)]);g.globalAlpha=.28;g.fillStyle=col[p[2]];g.beginPath();g.arc(x,y,1.8*d,0,7);g.fill()});g.globalAlpha=1;
  IT.forEach((p,i)=>{const[x,y]=xy(p[0],p[1]),r=(p[2]===0?6.5:p[2]===1?4.2:4.6)*d;g.fillStyle=css(depthVar(p[5]));g.strokeStyle=bg;g.lineWidth=1.5*d;g.beginPath();
   if(p[2]===2){g.rect(x-r,y-r,2*r,2*r)}else{g.arc(x,y,r,0,7)}g.fill();g.stroke();if(i===hover){g.strokeStyle=css("--hl");g.lineWidth=2*d;g.beginPath();g.arc(x,y,r+4*d,0,7);g.stroke()}});
  if(showLab)placeLabels(g,LAB.map(l=>{const[x,y]=xy(l.x,l.y);return{x,y,text:l.name,r:6.5*d,bold:true}}),d,bg,css("--ink"),css("--ink2"))}

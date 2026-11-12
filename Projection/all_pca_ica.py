@@ -18,6 +18,9 @@ import pyarrow.parquet as pq
 from scipy.stats import kurtosis, skew
 from sklearn.decomposition import PCA, FastICA
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from cumvar import cumvar_svg, needed  # noqa: E402
+
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 OUT = HERE / "output"
@@ -82,7 +85,8 @@ def main():
     pca = PCA(N_PCA_SHOW, random_state=SEED).fit(Xc)
     S = pca.transform(Xc)
     evr = pca.explained_variance_ratio_
-    n50 = int(np.searchsorted(np.cumsum(PCA(random_state=SEED).fit(Xc).explained_variance_ratio_), 0.5) + 1)
+    cum = np.cumsum(PCA(random_state=SEED).fit(Xc).explained_variance_ratio_)
+    n50 = needed(cum, 0.5)
     pcs = []
     for k in range(N_PCA_AXES):
         pcs.append({"label": f"PC{k + 1}", "evr": float(evr[k]), "eta": eta2(S[:, k], src),
@@ -125,7 +129,7 @@ def main():
         "All chunks, PCA (textonly)", OUT / f"all_pca_ica_{VARIANT}_pca.png")
     png(Z[:, ax_i["k"]], Z[:, ax_j["k"]], src, f"{ax_i['label']}: {short(ax_i)}", f"{ax_j['label']}: {short(ax_j)}",
         "All chunks, ICA (textonly)", OUT / f"all_pca_ica_{VARIANT}_ica.png")
-    html(pts, src, evr, n50, pcs, comps, ax_i, ax_j, rp, ri, umap_rates, OUT / f"all_pca_ica_{VARIANT}.html")
+    html(pts, src, evr, n50, pcs, comps, ax_i, ax_j, rp, ri, umap_rates, cum, OUT / f"all_pca_ica_{VARIANT}.html")
     print(f"PCA: PC1 {evr[0]:.1%} (source eta2 {pcs[0]['eta']:.2f}), PC2 {evr[1]:.1%}; {n50} PCs for 50%")
     for c in comps:
         print(f"  {c['label']} theme={c['theme']} kurt={c['kurt']:.1f} mix={c['mix']} tags={c['tags'][:3]} "
@@ -202,7 +206,7 @@ def titles_html(ts):
                        for s, t in ts[:3])
 
 
-def html(pts, src, evr, n50, pcs, comps, ax_i, ax_j, rp, ri, umap_rates, path):
+def html(pts, src, evr, n50, pcs, comps, ax_i, ax_j, rp, ri, umap_rates, cum, path):
     p = lambda v: f"{round(v * 100)}%"
     rnd = {s: ((src == s).sum() - 1) / (len(src) - 1) for s in SOURCES}
     pc_rows = "".join(
@@ -224,7 +228,9 @@ def html(pts, src, evr, n50, pcs, comps, ax_i, ax_j, rp, ri, umap_rates, path):
     fill = {
         "__N__": f"{len(pts):,}", "__NA__": f"{(src == 'article').sum():,}", "__NB__": f"{(src == 'book').sum():,}",
         "__NV__": f"{(src == 'video').sum():,}", "__N_ICA__": str(N_ICA), "__VARSVG__": variance_svg(evr),
-        "__PC1__": f"{evr[0]:.1%}", "__PC2__": f"{evr[1]:.1%}", "__PC20__": f"{evr.sum():.0%}", "__N50__": str(n50),
+        "__PC1__": f"{evr[0]:.1%}", "__PC2__": f"{evr[1]:.1%}", "__PC20__": f"{evr.sum():.0%}", "__N50__": str(n50), "__UNITS__": "chunks",
+        "__CUMSVG__": cumvar_svg(cum, 'var(--s0)'), "__NPC__": str(len(cum)), "__CUM2__": f"{cum[1]:.0%}",
+        "__N80__": str(needed(cum, 0.8)), "__N90__": str(needed(cum, 0.9)), "__N95__": str(needed(cum, 0.95)),
         "__PC1ETA__": f"{pcs[0]['eta']:.2f}", "__PC_ROWS__": pc_rows, "__IC_ROWS__": ic_rows,
         "__PC1MEANS__": ", ".join(f"{SRC_LABEL[s].lower()} {pcs[0]['means'][s]:+.2f}" for s in SOURCES),
         "__NTHEME__": str(len(themes)), "__NFORMAT__": str(len(formats)),
@@ -312,6 +318,12 @@ are over-represented there, and how much of it is explained by the source.</p>
 <p class="cap"><strong>Reading it:</strong> PC1 explains __PC1__, PC2 __PC2__; the first 20 components explain
 __PC20__, and __N50__ are needed for half. PC1 stands out more than in the books alone, and the table below shows
 why: it is largely the kind of text.</p>
+<p class="cap" style="margin-top:14px"><strong>Cumulative variance:</strong></p>
+<div class="panel">__CUMSVG__</div>
+<p class="cap"><strong>Reading it:</strong> the share of all differences between __UNITS__ explained by the first k
+principal components together (out of __NPC__ components in total). Two components, the most a flat PCA map can
+show, explain __CUM2__. Half needs __N50__ components, 80% __N80__, 90% __N90__ and 95% __N95__. The curve rises
+slowly and without a clear elbow: no small set of directions captures most of the content.</p>
 <div class="tw"><table><thead><tr><th>Axis</th><th class="r">Variance</th><th class="r">Source η²</th><th>Lowest-scoring texts</th><th>Highest-scoring texts</th></tr></thead>
 <tbody>__PC_ROWS__</tbody></table></div>
 <p class="cap"><strong>Reading it:</strong> PC1 has a source η² of __PC1ETA__: it mostly separates book prose

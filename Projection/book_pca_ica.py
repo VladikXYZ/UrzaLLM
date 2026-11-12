@@ -20,6 +20,7 @@ from sklearn.decomposition import PCA, FastICA
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from labels import LABEL_JS, place_labels  # noqa: E402
+from cumvar import cumvar_svg, needed  # noqa: E402
 from book_map import BOOK_COLORS, chapter_group, esc  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
@@ -69,7 +70,8 @@ def main():
     S = pca.transform(Xc)
     evr = pca.explained_variance_ratio_
     full_pca = PCA(random_state=SEED).fit(Xc)
-    n50 = int(np.searchsorted(np.cumsum(full_pca.explained_variance_ratio_), 0.5) + 1)
+    cum = np.cumsum(full_pca.explained_variance_ratio_)
+    n50 = needed(cum, 0.5)
     pc_ends = [ends(S[:, k], grp) for k in range(N_PCA_AXES)]
 
     # ICA: with only 2 components ICA is just a rotated, rescaled PCA, so take more.
@@ -116,7 +118,7 @@ def main():
     png(Z[:, ax_i["k"]], Z[:, ax_j["k"]], book, grp, f"{ax_i['label']}: {', '.join(ax_i['top'][:2])} …",
         f"{ax_j['label']}: {', '.join(ax_j['top'][:2])} …", "Book chunks, ICA (textonly)",
         OUT / f"book_pca_ica_{VARIANT}_ica.png")
-    html(pts, chapters, evr, n50, pc_ends, comps, ax_i, ax_j, pca_tight, ica_tight, nonlin, len(B),
+    html(pts, chapters, evr, n50, pc_ends, comps, ax_i, ax_j, pca_tight, ica_tight, nonlin, len(B), cum,
          OUT / f"book_pca_ica_{VARIANT}.html")
     print(f"PCA: PC1 {evr[0]:.1%}, PC2 {evr[1]:.1%}, 2 PCs {evr[:2].sum():.1%}, {n50} PCs for 50%")
     print("PCA map median spread", round(pca_tight[0], 2), "| ICA map", round(ica_tight[0], 2))
@@ -176,7 +178,7 @@ def variance_svg(evr):
             f'<line x1="{pl}" x2="{w - 8}" y1="{h - pb}" y2="{h - pb}" class="base"/></svg>')
 
 
-def html(pts, chapters, evr, n50, pc_ends, comps, ax_i, ax_j, pca_tight, ica_tight, nonlin, n, path):
+def html(pts, chapters, evr, n50, pc_ends, comps, ax_i, ax_j, pca_tight, ica_tight, nonlin, n, cum, path):
     q = lambda s: f"“{esc(s)}”"
     lst = lambda xs: ", ".join(q(x) for x in xs)
     pc_opts = [{"label": f"PC{k + 1} ({evr[k]:.1%})", "low": pc_ends[k][0], "high": pc_ends[k][1]}
@@ -194,7 +196,9 @@ def html(pts, chapters, evr, n50, pc_ends, comps, ax_i, ax_j, pca_tight, ica_tig
     fill = {"__LABELJS__": LABEL_JS,
         "__N__": str(n), "__N_ICA__": str(N_ICA), "__VARSVG__": variance_svg(evr),
         "__PC1__": f"{evr[0]:.1%}", "__PC2__": f"{evr[1]:.1%}", "__PC12__": f"{evr[:2].sum():.1%}",
-        "__PC20__": f"{evr.sum():.0%}", "__N50__": str(n50),
+        "__PC20__": f"{evr.sum():.0%}", "__N50__": str(n50), "__UNITS__": "book chunks",
+        "__CUMSVG__": cumvar_svg(cum, 'var(--b0)'), "__NPC__": str(len(cum)), "__CUM2__": f"{cum[1]:.0%}",
+        "__N80__": str(needed(cum, 0.8)), "__N90__": str(needed(cum, 0.9)), "__N95__": str(needed(cum, 0.95)),
         "__PC1LOW__": lst(pc_ends[0][0]), "__PC1HIGH__": lst(pc_ends[0][1]),
         "__PC2LOW__": lst(pc_ends[1][0]), "__PC2HIGH__": lst(pc_ends[1][1]),
         "__PCA_TIGHT__": f"{pca_tight[0]:.2f}", "__PCA_TIGHTN__": f"{pca_tight[1]} of {pca_tight[2]}",
@@ -280,6 +284,12 @@ together __PC12__; the first 20 components explain __PC20__, and __N50__ compone
 no dominant direction: the books' content is spread over many independent dimensions. A 2-dimensional PCA map
 therefore shows only a thin slice of the structure, which is why non-linear maps (UMAP, t-SNE) are needed for a
 readable picture.</p>
+<p class="cap" style="margin-top:14px"><strong>Cumulative variance:</strong></p>
+<div class="panel">__CUMSVG__</div>
+<p class="cap"><strong>Reading it:</strong> the share of all differences between __UNITS__ explained by the first k
+principal components together (out of __NPC__ components in total). Two components, the most a flat PCA map can
+show, explain __CUM2__. Half needs __N50__ components, 80% __N80__, 90% __N90__ and 95% __N95__. The curve rises
+slowly and without a clear elbow: no small set of directions captures most of the content.</p>
 
 <h2 class="sec">PCA map</h2>
 <div class="controls"><label>X axis <select id="pcx"></select></label><label>Y axis <select id="pcy"></select></label>
