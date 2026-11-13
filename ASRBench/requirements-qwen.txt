@@ -1,0 +1,5 @@
+# run_qwen.py (Qwen3-ASR, transformers backend on CUDA). PyTorch with CUDA is installed first by setup.sh.
+qwen-asr
+soundfile
+numpy
+tqdm

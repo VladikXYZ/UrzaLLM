@@ -3,10 +3,11 @@
 # environments that are already finished are skipped, so re-running is cheap.
 #
 #   bash setup.sh                       # everything
-#   ONLY="nemo whisper" bash setup.sh   # just some environments (nemo whisper diarizen vibevoice)
+#   ONLY="nemo whisper" bash setup.sh   # just some environments (nemo whisper diarizen vibevoice qwen)
 #
-# Creates four separate Python environments in envs/ (the models need conflicting
+# Creates five separate Python environments in envs/ (the models need conflicting
 # package versions) and converts the Czech Whisper fine-tune into models/.
+# Install output goes to envs/<env>.setup.log; the terminal shows one line per environment.
 # One environment failing doesn't stop the others; the approaches needing it fail later.
 set -uo pipefail
 cd "$(dirname "$0")"
@@ -36,23 +37,34 @@ if ! command -v uv >/dev/null; then
   curl -LsSf https://astral.sh/uv/install.sh | sh || exit 1
 fi
 
-nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader
+echo "GPU: $(nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader)"
 
 # ---------------------------------------------------------------- environments
 only() { [ -z "${ONLY:-}" ] || [[ " $ONLY " == *" $1 "* ]]; }
 mkdir -p envs models
 FAILED=()
+BUILT=()
 
-# build <env>: run setup_<env> unless envs/<env>/.done exists; mark it done on success
+# build <env>: run setup_<env> unless envs/<env>/.done exists; mark it done on success.
+# Output goes to a log; the terminal shows a running timer.
 build() {
-  local e=$1
+  local e=$1 log=envs/$e.setup.log
   only "$e" || return 0
-  if [ -f "envs/$e/.done" ]; then echo "=== $e env: already set up"; return 0; fi
-  echo "=== $e env"
-  if ( set -e; "setup_$e" ); then
+  [ -f "envs/$e/.done" ] && return 0
+  ( set -e; "setup_$e" ) >"$log" 2>&1 &
+  local pid=$! t0=$SECONDS
+  while kill -0 $pid 2>/dev/null; do
+    printf "\r  installing %-10s %4ds  (log: %s)" "$e" $((SECONDS - t0)) "$log"
+    sleep 1
+  done
+  if wait $pid; then
     touch "envs/$e/.done"
+    BUILT+=("$e")
+    printf "\r  installed  %-10s %4ds%-40s\n" "$e" $((SECONDS - t0)) ""
   else
-    echo "!!! $e env failed"; FAILED+=("$e")
+    printf "\r  FAILED     %-10s %4ds  (see %s)\n" "$e" $((SECONDS - t0)) "$log"
+    tail -n 5 "$log" | sed 's/^/      /'
+    FAILED+=("$e")
   fi
 }
 
@@ -88,22 +100,26 @@ setup_vibevoice() {  # transformers >= 5.3, bitsandbytes
   uv pip install -p envs/vibevoice/bin/python -r requirements-vibevoice.txt
 }
 
+setup_qwen() {  # Qwen3-ASR (Python 3.12 as Qwen recommends)
+  uv venv --python 3.12 envs/qwen
+  uv pip install -p envs/qwen/bin/python torch torchaudio --index-url "$TORCH_INDEX"
+  uv pip install -p envs/qwen/bin/python -r requirements-qwen.txt
+}
+
 build whisper
 build nemo
 build diarizen
 build vibevoice
+build qwen
 
-echo
-echo "=== GPU check"
-for e in nemo whisper diarizen vibevoice; do
-  [ -x "envs/$e/bin/python" ] || continue
-  printf "%-10s " "$e"
-  "envs/$e/bin/python" -c "import torch; print(torch.__version__, 'cuda ok' if torch.cuda.is_available() else 'NO CUDA')"
+for e in "${BUILT[@]}"; do  # check that freshly built environments see the GPU
+  "envs/$e/bin/python" -c "import torch, sys; sys.exit(0 if torch.cuda.is_available() else 1)" \
+    || echo "  WARNING: the $e environment cannot use the GPU (CUDA not available)"
 done
 
 if [ ${#FAILED[@]} -gt 0 ]; then
-  echo "setup finished with failures: ${FAILED[*]} (re-run to retry just those)"
-  # the whisper env is needed for cutting clips and scoring
+  echo "  setup failed for: ${FAILED[*]} (the next run retries just those)"
+  # the whisper env is needed for reading the video and scoring
   [[ " ${FAILED[*]} " == *" whisper "* ]] && exit 1
 fi
-echo "setup done"
+exit 0

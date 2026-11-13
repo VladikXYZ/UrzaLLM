@@ -16,22 +16,28 @@ from pathlib import Path
 
 import torch
 
-from common import SR, load_audio, load_diar_json, words_to_segments, write_outputs
+from common import SR, load_audio, load_diar_json, progress, say, words_to_segments, write_outputs
 
 
-def transcribe(wav, model_name, lang, batch_size, beam_size, prompt):
+def transcribe(audio, duration, model_name, lang, batch_size, beam_size, prompt, desc):
     from faster_whisper import BatchedInferencePipeline, WhisperModel
     model = WhisperModel(model_name, device="cuda", compute_type="float16")
     pipe = BatchedInferencePipeline(model=model)
     t0 = time.perf_counter()
-    segments, _ = pipe.transcribe(str(wav), language=lang, batch_size=batch_size,
+    segments, _ = pipe.transcribe(audio, language=lang, batch_size=batch_size,
                                   beam_size=beam_size, word_timestamps=True,
                                   initial_prompt=prompt)
     words = []
+    bar = progress(duration, desc)
     for seg in segments:  # generator: decoding happens while iterating
         for w in seg.words or []:
             if w.word.strip():
                 words.append({"word": w.word.strip(), "start": float(w.start), "end": float(w.end)})
+        if seg.end > bar.n:
+            bar.n = min(round(seg.end), bar.total)
+            bar.refresh()
+    bar.n = bar.total
+    bar.close()
     secs = time.perf_counter() - t0
     del pipe, model
     gc.collect()
@@ -60,18 +66,16 @@ def main():
     duration = len(audio) / SR
     print(f"{wav.name}: {duration / 60:.1f} min, GPU: {torch.cuda.get_device_name(0)}")
 
-    print("transcribing with", args.model)
-    words, asr_secs = transcribe(wav, args.model, args.lang, args.batch_size, args.beam_size, args.prompt)
-    print(f"  {len(words)} words, {asr_secs:.1f} s")
-
-    print(f"  speakers from {diar_name}: {len(diar)} segments, "
-          f"{len({d['speaker'] for d in diar})} speakers, {diar_secs:.1f} s")
+    label = args.label or f"whisper-{Path(args.model).name}"
+    say(f"loading {args.model}; speaker turns from {diar_name}")
+    words, asr_secs = transcribe(audio, duration, args.model, args.lang, args.batch_size,
+                                 args.beam_size, args.prompt, f"{label} transcription")
 
     segments = words_to_segments(words, diar)
-    label = args.label or f"whisper-{Path(args.model).name}"
     name = f"{label}_{diar_name}" + ("_prompt" if args.prompt else "")
     total = asr_secs + diar_secs
-    print(f"  {name}: total {total:.1f} s = {duration / total:.0f}x realtime")
+    say(f"{name}: {len(words)} words, transcription {asr_secs:.0f} s, "
+        f"total {total:.0f} s = {duration / total:.0f}x realtime")
     write_outputs(out_dir, name, segments, {
         "audio": str(wav), "duration": duration, "asr_model": args.model,
         "diar_model": args.diar_json, "diar_name": diar_name,

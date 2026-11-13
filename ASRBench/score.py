@@ -9,6 +9,10 @@ Metrics (lower is better):
   DER    speaker timing only (miss + false alarm + confusion), 0.25 s collar.
          Approximate, since reference times are hand-corrected segment bounds.
 
+Only the time range the reference covers is scored, so for a long video it is enough
+to correct one continuous 5-10 minute part and delete the rest. Each output is cut to
+that range by word timestamps where it has them, otherwise by segment midpoints.
+
 Writes a markdown table next to the reference (scores.md).
 """
 import argparse
@@ -17,7 +21,7 @@ from pathlib import Path
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 
-from common import FRAME, normalize_words, read_segments
+from common import FRAME, fmt_ts, normalize_words, read_segments
 
 try:
     from rapidfuzz.distance import Levenshtein
@@ -96,6 +100,21 @@ def der(ref, hyp, collar=0.25):
     return (miss + fa + conf) / max(1, nr.sum())
 
 
+def crop(segs, lo, hi):
+    """Keep only the part of an output inside [lo, hi] seconds."""
+    out = []
+    for s in segs:
+        words = [w for w in s.get("words") or [] if "start" in w]
+        if words:
+            kept = [w for w in words if lo <= (w["start"] + w["end"]) / 2 <= hi]
+            if kept:
+                out.append(dict(s, start=max(lo, kept[0]["start"]), end=min(hi, kept[-1]["end"]),
+                                text=" ".join(w["word"] for w in kept), words=kept))
+        elif lo <= (s["start"] + s["end"]) / 2 <= hi:
+            out.append(dict(s, start=max(lo, s["start"]), end=min(hi, s["end"])))
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("reference", help="hand-corrected .txt")
@@ -104,8 +123,11 @@ def main():
     args = ap.parse_args()
 
     ref, _ = read_segments(args.reference)
+    if not ref:
+        raise SystemExit(f"{args.reference} has no lines")
     ref_path = Path(args.reference).resolve()
     n_ref_spk = len({s["speaker"] for s in ref})
+    lo, hi = min(s["start"] for s in ref), max(s["end"] for s in ref)
     rows = []
     for path in args.hyps:
         p = Path(path)
@@ -113,6 +135,10 @@ def main():
             continue
         hyp, meta = read_segments(p)
         if not any(s["text"] for s in hyp):
+            continue
+        hyp = crop(hyp, lo, hi)
+        if not hyp:
+            print(f"{p.name}: nothing inside the reference's time range, skipped")
             continue
         cp, mapping = cpwer(ref, hyp)
         dur = meta.get("duration")
@@ -127,7 +153,8 @@ def main():
     rows.sort(key=lambda r: r["cpwer"])
 
     lines = [
-        f"Reference: `{args.reference}`: {len(words_of(ref))} words, {n_ref_spk} speakers\n",
+        f"Reference: `{args.reference}`: {fmt_ts(lo)}-{fmt_ts(hi)}, "
+        f"{len(words_of(ref))} words, {n_ref_spk} speakers. Speed is for the whole file.\n",
         "| approach | cpWER | WER | DER | speakers | speed (realtime) | speaker mapping |",
         "|---|---|---|---|---|---|---|",
     ]

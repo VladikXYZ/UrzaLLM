@@ -24,7 +24,7 @@ from pathlib import Path
 
 import torch
 
-from common import (SR, exclusive_turns, load_audio, load_diar_json, split_long,
+from common import (SR, batches, load_audio, load_diar_json, make_chunks, progress, say,
                     words_to_segments, write_diar_only, write_outputs, write_wav)
 
 ASR_MODELS = {
@@ -35,7 +35,7 @@ ASR_MODELS = {
 # Long-form, high-accuracy streaming setting (the "very high latency" setup from the
 # Sortformer v2 model card). Larger chunks = better accuracy and throughput offline.
 SORTFORMER_STREAMING = dict(chunk_len=340, chunk_right_context=40, fifo_len=40,
-                            spkcache_update_period=300, spkcache_len=188)
+                            spkcache_update_period=340, spkcache_len=188)
 
 
 def free_gpu():
@@ -91,29 +91,35 @@ def hyp_words(h, offset):
 
 
 def transcribe(model, asr, paths, lang, batch_size):
-    kw = dict(batch_size=batch_size, timestamps=True)
+    kw = dict(batch_size=batch_size, timestamps=True, verbose=False)
     if asr == "canary":
         kw.update(source_lang=lang, target_lang=lang)  # parakeet detects language itself
     with torch.inference_mode():
-        hyps = model.transcribe(paths, **kw)
+        try:
+            hyps = model.transcribe(paths, **kw)
+        except TypeError:  # older NeMo without verbose=
+            kw.pop("verbose")
+            hyps = model.transcribe(paths, **kw)
     if isinstance(hyps, tuple):
         hyps = hyps[0]
     return hyps
 
 
-def make_chunks(audio, duration, diar, mode, pad):
-    """Return (start, end, speaker_or_None, chunk_offset, chunk_audio)."""
-    if mode == "turns":
-        spans = [(s, e, t["speaker"])
-                 for t in exclusive_turns(diar, duration)
-                 for s, e in split_long(audio, t["start"], min(t["end"], duration))]
-    else:
-        spans = [(s, e, None) for s, e in split_long(audio, 0.0, duration)]
-    chunks = []
-    for s, e, spk in spans:
-        a, b = max(0.0, s - pad), min(duration, e + pad)
-        chunks.append((s, e, spk, a, audio[int(a * SR):int(b * SR)]))
-    return chunks
+def transcribe_chunks(model, asr, chunks, lang, batch_size, desc):
+    """Transcribe all chunks in groups, moving a progress bar by seconds of audio."""
+    hyps = []
+    bar = progress(sum(e - s for s, e, *_ in chunks), desc)
+    with tempfile.TemporaryDirectory() as tmp:
+        for group in batches(list(enumerate(chunks)), batch_size * 8):
+            paths = []
+            for i, c in group:
+                p = Path(tmp) / f"{i:05d}.wav"
+                write_wav(p, c[4])
+                paths.append(str(p))
+            hyps.extend(transcribe(model, asr, paths, lang, batch_size))
+            bar.update(sum(c[1] - c[0] for _, c in group))
+    bar.close()
+    return hyps
 
 
 def main():
@@ -137,27 +143,22 @@ def main():
 
     if args.diar_json:
         diar, diar_secs, diar_name = load_diar_json(args.diar_json)
-        print(f"using {diar_name} diarization from {args.diar_json}")
+        say(f"using {diar_name} speaker turns from {args.diar_json}")
     else:
-        print("diarizing with", args.diar_model)
+        say(f"speaker detection with {args.diar_model} (no progress bar, takes ~1 min)")
         diar, diar_secs = diarize(wav, args.diar_model)
         diar_name = "sortformer"
         write_diar_only(out_dir, diar_name, diar, wav, duration, diar_secs)
-    print(f"  {len(diar)} segments, {len({d['speaker'] for d in diar})} speakers, {diar_secs:.1f} s")
+    say(f"{len(diar)} segments, {len({d['speaker'] for d in diar})} speakers, {diar_secs:.0f} s")
 
     from nemo.collections.asr.models import ASRModel
     for asr in args.asr:
-        print("loading", ASR_MODELS[asr])
+        say(f"loading {ASR_MODELS[asr]}")
         model = ASRModel.from_pretrained(ASR_MODELS[asr], map_location="cuda").eval()
         for mode in args.chunking:
             chunks = make_chunks(audio, duration, diar, mode, args.pad)
-            with tempfile.TemporaryDirectory() as tmp:
-                paths = []
-                for i, c in enumerate(chunks):
-                    p = Path(tmp) / f"{i:05d}.wav"
-                    write_wav(p, c[4])
-                    paths.append(str(p))
-                hyps, asr_secs = timed(lambda: transcribe(model, asr, paths, args.lang, args.batch_size))
+            hyps, asr_secs = timed(lambda: transcribe_chunks(
+                model, asr, chunks, args.lang, args.batch_size, f"{asr} transcription"))
 
             if mode == "turns":
                 segments = [{"start": s, "end": e, "speaker": spk, "text": h.text.strip(),
@@ -177,8 +178,8 @@ def main():
 
             name = f"{diar_name}_{asr}_{mode}"
             total = diar_secs + asr_secs
-            print(f"  {name}: {len(chunks)} chunks, ASR {asr_secs:.1f} s, "
-                  f"total {total:.1f} s = {duration / total:.0f}x realtime")
+            say(f"{name}: {len(chunks)} chunks, transcription {asr_secs:.0f} s, "
+                f"total {total:.0f} s = {duration / total:.0f}x realtime")
             write_outputs(out_dir, name, segments, {
                 "audio": str(wav), "duration": duration, "asr_model": ASR_MODELS[asr],
                 "diar_model": args.diar_json or args.diar_model, "diar_name": diar_name,

@@ -10,6 +10,7 @@ Speaker names are free-form (S0, URZA, Q1, ...); scoring is permutation-invarian
 """
 import json
 import re
+import sys
 import unicodedata
 from pathlib import Path
 
@@ -17,6 +18,43 @@ import numpy as np
 
 SR = 16000
 FRAME = 0.01  # seconds, timeline resolution for turn building and DER
+
+
+# ---------------------------------------------------------------- terminal output
+# run_all.sh sends each runner's full output (library warnings etc.) to a log file.
+# Progress bars and short status lines still go to the terminal via /dev/tty.
+
+_TERM = None
+
+
+def terminal():
+    """Stream that reaches the user's terminal, or stderr if there is none."""
+    global _TERM
+    if _TERM is None:
+        _TERM = sys.stderr
+        if not sys.stderr.isatty():
+            try:
+                _TERM = open("/dev/tty", "w")
+            except OSError:
+                pass
+    return _TERM
+
+
+def say(msg):
+    """Status line: into the log (stdout) and onto the terminal."""
+    print(msg, flush=True)
+    t = terminal()
+    if not sys.stdout.isatty() and t is not sys.stderr:
+        print(f"  {msg}", file=t, flush=True)
+
+
+def progress(total, desc, unit="s"):
+    """A tqdm bar on the terminal; total in seconds of audio by default."""
+    from tqdm import tqdm
+    return tqdm(total=round(total), desc=f"  {desc}", unit=unit, file=terminal(),
+                dynamic_ncols=True, mininterval=0.5,
+                bar_format="{desc}: {percentage:3.0f}%|{bar}| {n:.0f}/{total:.0f} {unit} "
+                           "[{elapsed}<{remaining}]")
 
 
 # ---------------------------------------------------------------- audio
@@ -98,6 +136,31 @@ def exclusive_turns(diar, duration, merge_gap=0.5, min_turn=0.3):
         else:
             out.append(dict(tr))
     return out
+
+
+def make_chunks(audio, duration, diar, mode, pad=0.2):
+    """Cut the audio for transcription. Returns (start, end, speaker_or_None, offset, audio).
+
+    turns: one chunk per speaker turn (long turns split at pauses), so each chunk has
+           one speaker; offset is where the padded chunk audio starts
+    fixed: <=30 s chunks at pauses, ignoring speakers
+    """
+    if mode == "turns":
+        spans = [(s, e, t["speaker"])
+                 for t in exclusive_turns(diar, duration)
+                 for s, e in split_long(audio, t["start"], min(t["end"], duration))]
+    else:
+        spans = [(s, e, None) for s, e in split_long(audio, 0.0, duration)]
+    chunks = []
+    for s, e, spk in spans:
+        a, b = max(0.0, s - pad), min(duration, e + pad)
+        chunks.append((s, e, spk, a, audio[int(a * SR):int(b * SR)]))
+    return chunks
+
+
+def batches(items, size):
+    for i in range(0, len(items), size):
+        yield items[i:i + size]
 
 
 def speaker_at(diar, start, end):
