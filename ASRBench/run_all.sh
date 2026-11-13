@@ -34,6 +34,12 @@ mkdir -p "$LOG"
 DZ=$OUT/diarizen_diar_only.json
 SF=$OUT/sortformer_diar_only.json
 
+# VibeVoice results from before it worked in windows can be truncated: redo them
+if [ -f "$OUT/vibevoice-4bit.json" ] && ! grep -q '"windows"' "$OUT/vibevoice-4bit.json"; then
+  echo "== old VibeVoice result (single pass, possibly truncated) will be redone"
+  rm -f "$OUT"/vibevoice-4bit.*
+fi
+
 # less GPU memory fragmentation on long files (not understood by DiariZen's old torch)
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
@@ -47,14 +53,23 @@ for m in ('nvidia.cudnn.lib', 'nvidia.cublas.lib'):
 print(':'.join(ps))" 2>/dev/null)
 WHISPER="env LD_LIBRARY_PATH=$WLIB:${LD_LIBRARY_PATH:-} envs/whisper/bin/python"
 
-STEPS=8
+STEPS=9
 STEP=0
 STATUS=()
 T_ALL=$SECONDS
 # run <step name> <output it produces> <command...>
+# SKIP="vibevoice qwen" skips every step whose name contains one of those words.
 run() {
   local name=$1 result=$OUT/$2; shift 2
   STEP=$((STEP + 1))
+  local w
+  for w in ${SKIP:-}; do
+    if [[ "${name,,}" == *"${w,,}"* ]]; then
+      echo "== [$STEP/$STEPS] $name: skipped (SKIP)"
+      STATUS+=("skip  $name")
+      return
+    fi
+  done
   if [ -f "$result" ] && [ -z "${FORCE:-}" ]; then
     echo "== [$STEP/$STEPS] $name: already done"
     STATUS+=("done  $name")
@@ -82,6 +97,8 @@ run "#3 Czech Whisper + DiariZen"   whisper-cs_diarizen.json \
     $WHISPER run_whisper.py "$WAV" --model models/whisper-cs-ct2 --label whisper-cs --diar-json "$DZ"
 run "#4 Whisper large-v3 + Sortformer" whisper-large-v3_sortformer.json \
     $WHISPER run_whisper.py "$WAV" --model large-v3 --diar-json "$SF"
+run "#8 Whisper large-v3-turbo + Sortformer" whisper-large-v3-turbo_sortformer.json \
+    $WHISPER run_whisper.py "$WAV" --model large-v3-turbo --diar-json "$SF"
 run "#6 Sortformer + Qwen3-ASR"     sortformer_qwen3asr_turns.json \
     envs/qwen/bin/python run_qwen.py "$WAV" --diar-json "$SF"
 run "#7 DiariZen + Qwen3-ASR"       diarizen_qwen3asr_turns.json \
@@ -92,6 +109,12 @@ run "#5 VibeVoice (slowest)"        vibevoice-4bit.json \
 echo
 echo "== summary ($(( (SECONDS - T_ALL) / 60 )) min)"
 printf '   %s\n' "${STATUS[@]}"
+
+# hand-corrected references shipped with the repo (references/<name>.txt)
+if [ ! -f "$OUT/reference.txt" ] && [ -f "references/$NAME.txt" ]; then
+  cp "references/$NAME.txt" "$OUT/reference.txt"
+  echo; echo "== using the hand-corrected reference references/$NAME.txt"
+fi
 
 if [ -f "$OUT/reference.txt" ]; then
   echo; echo "== scores"
@@ -105,7 +128,13 @@ else
   [ -f "$OUT/reference.txt.todo" ] || cp "$START" "$OUT/reference.txt.todo"  # never overwrite edits
   cat <<EOF
 
-Next step: the hand-corrected reference.
+Next step: the hand-corrected reference. Easiest with the review app (audio + places
+where the models disagree), for a 5-10 minute part, e.g. 25:00-35:00:
+  envs/whisper/bin/python make_review.py $OUT --start 25:00 --end 35:00
+  then open $OUT/review/index.html, fix, "Download reference.txt" into $OUT/
+  and run the same command again.
+
+Or by hand:
   1. Open $OUT/reference.txt.todo. Pick one continuous 5-10 minute part (ideally with
      audience questions), delete all lines before and after it, and correct the rest
      while listening to $WAV: words exactly as spoken, speaker names like URZA / Q1,

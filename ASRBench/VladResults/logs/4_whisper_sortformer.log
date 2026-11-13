@@ -1,7 +1,0 @@
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-1PkAoDz1DHg.wav: 124.5 min, GPU: NVIDIA GeForce RTX 3060
-transcribing with large-v3
-  17624 words, 282.8 s
-  speakers from sortformer: 945 segments, 4 speakers, 24.6 s
-  whisper-large-v3_sortformer: total 307.4 s = 24x realtime
-wrote out/1PkAoDz1DHg/whisper-large-v3_sortformer.json/.txt (412 segments)

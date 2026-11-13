@@ -13,7 +13,25 @@ from pathlib import Path
 
 from common import SR
 
-LONG = 15 * 60  # seconds; the benchmark is meant for 5-10 minute videos
+LONG = 15 * 60  # seconds; the full benchmark is meant for 5-10 minute videos
+
+
+def convert(src, out_dir="audio"):
+    """Return (wav path, seconds, reused?) for a video/audio file."""
+    src, out_dir = Path(src), Path(out_dir)
+    if not src.is_file():
+        raise FileNotFoundError(f"no such file: {src}")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    wav = out_dir / f"{src.stem}.wav"
+    reused = wav.exists() and wav.stat().st_mtime >= src.stat().st_mtime
+    if not reused:
+        subprocess.run([
+            "ffmpeg", "-nostdin", "-loglevel", "error", "-y", "-i", str(src),
+            "-vn", "-ac", "1", "-ar", str(SR), "-c:a", "pcm_s16le", str(wav),
+        ], check=True)
+    with wave.open(str(wav)) as w:
+        secs = w.getnframes() / w.getframerate()
+    return wav, secs, reused
 
 
 def main():
@@ -21,28 +39,15 @@ def main():
     ap.add_argument("source", help="local video or audio file")
     ap.add_argument("--out", default="audio", help="output folder")
     args = ap.parse_args()
-
-    src = Path(args.source)
-    if not src.is_file():
-        sys.exit(f"no such file: {src}")
-    out_dir = Path(args.out)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    wav = out_dir / f"{src.stem}.wav"
-
-    if wav.exists() and wav.stat().st_mtime >= src.stat().st_mtime:
-        print(f"already converted, reusing it\nwav: {wav}")
-        return
-
-    subprocess.run([
-        "ffmpeg", "-nostdin", "-loglevel", "error", "-y", "-i", str(src),
-        "-vn", "-ac", "1", "-ar", str(SR), "-c:a", "pcm_s16le", str(wav),
-    ], check=True)
-
-    with wave.open(str(wav)) as w:
-        secs = w.getnframes() / w.getframerate()
+    try:
+        wav, secs, reused = convert(args.source, args.out)
+    except FileNotFoundError as e:
+        sys.exit(str(e))
+    if reused:
+        print("already converted, reusing it")
     if secs > LONG:
-        print(f"note: {src.name} is {secs / 60:.0f} minutes long; the benchmark is meant for "
-              f"5-10 minutes, so this will be slow and VibeVoice may run out of GPU memory")
+        print(f"note: {Path(args.source).name} is {secs / 60:.0f} minutes long; the benchmark is meant "
+              f"for 5-10 minutes, so this will be slow and VibeVoice may run out of GPU memory")
     print(f"wav: {wav}")
 
 

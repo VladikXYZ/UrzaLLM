@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transcript review</title>
+<style>
+:root {
+  --bg: #f7f7f5; --panel: #ffffff; --text: #1d1d1f; --muted: #6b6b70; --line: #e3e3e0;
+  --dis: #ffd9a8; --dis-strong: #ffb36b; --ok: #c9ecd2; --custom: #cfe3ff; --ins: #b06a00;
+  --accent: #2f6fde; --playing: #fff8d6; --now: #2f6fde22; --warn: #c2410c;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161618; --panel: #1f1f22; --text: #ececee; --muted: #9a9aa2; --line: #333338;
+    --dis: #6b4a1e; --dis-strong: #8a4f12; --ok: #1f4d2c; --custom: #1e3a66; --ins: #f0a54a;
+    --accent: #7aa7ff; --playing: #2a2716; --now: #7aa7ff33; --warn: #fb923c;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+header { position: sticky; top: 0; z-index: 5; background: var(--panel);
+  border-bottom: 1px solid var(--line); padding: 10px 16px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+h1 { font-size: 16px; margin: 0; }
+.stat { color: var(--muted); font-size: 13px; }
+.stat b { color: var(--text); }
+audio { width: min(520px, 100%); height: 34px; }
+button, select, input[type=text] { font: inherit; font-size: 13px; color: var(--text);
+  background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 4px 9px; }
+button { cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.help { font-size: 12px; color: var(--muted); margin-top: 6px; }
+kbd { border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; font-size: 11px; }
+.legend span { font-size: 12px; margin-right: 10px; }
+.badge { display: inline-block; min-width: 22px; text-align: center; font-size: 11px; font-weight: 600;
+  border-radius: 4px; padding: 0 4px; margin-left: 3px; background: var(--line); color: var(--text); }
+.renames input { width: 110px; }
+main { max-width: 1000px; margin: 0 auto; padding: 12px 16px 120px; }
+.line { background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+  padding: 8px 12px; margin-bottom: 8px; }
+.line.playing { background: var(--playing); }
+.line.checked { opacity: .62; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 4px; }
+.time { font-variant-numeric: tabular-nums; }
+.flag { color: var(--warn); font-size: 12px; cursor: help; }
+.text { word-wrap: break-word; }
+.w { cursor: pointer; border-radius: 3px; }
+.w:hover { text-decoration: underline; }
+.w.now { background: var(--now); }
+.d { cursor: pointer; border-radius: 4px; padding: 0 2px; background: var(--dis); }
+.d.strong { background: var(--dis-strong); }
+.d.res { background: var(--ok); }
+.d.cust { background: var(--custom); }
+.d.focus { outline: 2px solid var(--accent); }
+.d.empty { color: var(--ins); font-weight: 700; padding: 0 3px; }
+.d.minor { background: none; text-decoration: underline dotted var(--muted); text-underline-offset: 3px; padding: 0; }
+.d.minor.empty { display: none; }
+body.showminor .d.minor.empty { display: inline; }
+.d.minor.focus, .d.minor.res { background: var(--ok); }
+.ov { white-space: pre-wrap; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 4px; font-size: 13px; }
+.actions label { color: var(--muted); }
+.versions { margin-top: 6px; font-size: 13px; border-top: 1px dashed var(--line); padding-top: 6px; }
+.versions div { margin: 2px 0; }
+.versions .diff { text-decoration: underline wavy var(--warn); }
+textarea { width: 100%; min-height: 80px; font: inherit; color: var(--text); background: var(--bg);
+  border: 1px solid var(--accent); border-radius: 6px; padding: 6px; }
+.times input { width: 92px; }
+#pop { position: absolute; z-index: 10; display: none; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; box-shadow: 0 6px 24px #0004; padding: 8px; min-width: 240px; max-width: 360px; }
+#pop .opt { display: flex; width: 100%; justify-content: space-between; gap: 8px; margin-bottom: 4px; text-align: left; }
+#pop .opt.sel { border-color: var(--accent); }
+#pop .k { color: var(--muted); margin-right: 6px; }
+#pop input { width: 100%; margin-top: 4px; }
+.toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--text);
+  color: var(--bg); padding: 6px 14px; border-radius: 6px; font-size: 13px; opacity: 0; transition: opacity .3s; }
+.toast.show { opacity: .92; }
+</style>
+</head>
+<body>
+<header>
+  <div class="row">
+    <h1 id="title">Transcript review</h1>
+    <span class="stat">disagreements fixed <b id="sDis">0/0</b></span>
+    <span class="stat">lines checked <b id="sChk">0/0</b></span>
+    <span class="stat" id="saved"></span>
+  </div>
+  <div class="row" style="margin-top:6px">
+    <audio id="audio" controls preload="auto"></audio>
+    <label class="stat">speed <select id="speed"><option>0.75</option><option selected>1</option><option>1.25</option><option>1.5</option></select></label>
+    <label class="stat"><input type="checkbox" id="follow" checked> follow audio</label>
+    <label class="stat"><input type="checkbox" id="cont"> keep playing past line end</label>
+    <label class="stat" title="Places where only one model differs from all the others (usually that model is wrong). Off: they are only dotted-underlined and N skips them."><input type="checkbox" id="minor"> include single-model differences</label>
+    <button id="nextBtn">Next disagreement (N)</button>
+    <button class="primary" id="dl">Download reference.txt</button>
+  </div>
+  <div class="row renames" id="renames" style="margin-top:6px"></div>
+  <div class="row legend" id="legend" style="margin-top:4px"></div>
+  <details class="help"><summary>How to use</summary>
+    Click a word to hear it (from 1 s before; ▶ plays the whole line). Highlighted = models disagree: click it (or <kbd>N</kbd> / <kbd>P</kbd> for next / previous),
+    listen, pick with <kbd>1</kbd>–<kbd>9</kbd> or type your own. <kbd>A</kbd> keeps the current choice and goes on.
+    <kbd>Space</kbd> play/pause, <kbd>R</kbd> replay the spot. ✎ edits a whole line (also split, delete, times).
+    Also listen for errors <i>all</i> models made — they aren't highlighted. Work is saved in this browser automatically.
+  </details>
+</header>
+<main id="lines"></main>
+<div id="pop"></div>
+<div class="toast" id="toast"></div>
+<script type="application/json" id="data">__DATA__</script>
+<script>
+const D = JSON.parse(document.getElementById('data').textContent);
+const KEY = `asrreview:${D.name}:__DATA_ID__`;
+const SYS = Object.fromEntries(D.systems.map(s => [s.id, s]));
+const audio = document.getElementById('audio');
+const BEFORE = 1.0, AFTER = 2.5;   // seconds played around a clicked word
+// Load the whole file into memory: jumping to a time then works everywhere (some local
+// web servers can't serve parts of a file, so the browser would always start at 0:00).
+(async () => {
+  try {
+    const r = await fetch(D.audio);
+    if (!r.ok) throw new Error(r.status);
+    audio.src = URL.createObjectURL(await r.blob());
+  } catch (e) {
+    audio.src = D.audio;  // opened as a local file: browsers can jump in those directly
+  }
+})();
+document.getElementById('title').textContent = `Review: ${D.name}  ${fmt(D.offset)} – ${fmt(D.end)}`;
+
+let S = { lines: D.lines, rename: {}, speakers: D.speakers.slice() };
+try {
+  const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+  if (saved) { S = saved; toast('Restored your saved work'); }
+} catch (e) {}
+let focus = null;        // [lineIdx, slotIdx] of the open disagreement
+let stopAt = null;       // stop playback at this original time
+let editing = null;      // line index being edited
+
+// ------------------------------------------------------------ helpers
+function fmt(t) {
+  t = Math.max(0, t);
+  const h = Math.floor(t / 3600), m = Math.floor(t % 3600 / 60), s = (t % 60).toFixed(2).padStart(5, '0');
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${s}`;
+}
+function parseT(v) {
+  const p = String(v).trim().split(':').map(Number);
+  if (p.some(isNaN)) return null;
+  return p.reduce((a, x) => a * 60 + x, 0);
+}
+function esc(s) { return s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+function name(spk) { return (S.rename[spk] || '').trim() || spk; }
+function slotText(s) { return 'w' in s ? s.w : s.c === -1 ? (s.custom || '') : s.o[s.c][0]; }
+function lineText(ln) {
+  return ln.ov != null ? ln.ov : ln.slots.map(slotText).filter(Boolean).join(' ');
+}
+function sysText(ln, sid) {
+  return ln.slots.map(s => 'w' in s ? s.w : ((s.o.find(o => o[1].includes(sid)) || [''])[0])).filter(Boolean).join(' ');
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 1800);
+}
+let saveH;
+function save() {
+  clearTimeout(saveH);
+  saveH = setTimeout(() => {
+    try { localStorage.setItem(KEY, JSON.stringify(S)); document.getElementById('saved').textContent = 'saved'; }
+    catch (e) { document.getElementById('saved').textContent = 'could not save in browser: download reference.txt regularly'; }
+  }, 300);
+}
+function isMinor(s) {  // only one model differs from all the others
+  const tot = s.o.reduce((a, o) => a + o[1].length, 0);
+  return tot >= 3 && s.o[0][1].length === tot - 1;
+}
+function showMinor() { return document.getElementById('minor').checked; }
+function disList(all) {
+  const out = [];
+  S.lines.forEach((ln, i) => {
+    if (ln.ov == null) ln.slots.forEach((s, j) => { if (s.o && (all || showMinor() || !isMinor(s))) out.push([i, j]); });
+  });
+  return out;
+}
+
+// ------------------------------------------------------------ audio
+function play(a, b) {
+  const target = Math.max(0, a - D.offset);
+  audio.currentTime = target;
+  stopAt = b;
+  audio.play();
+  if (target > 1 && audio.currentTime < 0.5) toast('This browser cannot jump in the audio: open the page through a different browser');
+}
+function playWord(t) { play(t - BEFORE, document.getElementById('cont').checked ? null : t + AFTER); }
+function slotTime(i, j) {
+  const ln = S.lines[i];
+  for (let k = j; k >= 0; k--) if (ln.slots[k].t != null) return ln.slots[k].t;
+  return ln.start;
+}
+function playSpot(i, j) { playWord(slotTime(i, j)); }
+audio.addEventListener('timeupdate', () => {
+  const now = audio.currentTime + D.offset;
+  if (stopAt != null && now >= stopAt) { audio.pause(); stopAt = null; }
+  const i = S.lines.findIndex(ln => now >= ln.start && now < ln.end + 0.05);
+  document.querySelectorAll('.line.playing').forEach(e => { if (+e.dataset.i !== i) e.classList.remove('playing'); });
+  document.querySelectorAll('.w.now, .d.now').forEach(e => e.classList.remove('now'));
+  if (i < 0) return;
+  const el = document.querySelector(`.line[data-i="${i}"]`);
+  if (!el) return;
+  el.classList.add('playing');
+  let cur = null;
+  el.querySelectorAll('[data-t]').forEach(w => { if (+w.dataset.t <= now) cur = w; });
+  if (cur) cur.classList.add('now');
+  if (document.getElementById('follow').checked && !audio.paused && editing == null) {
+    const r = el.getBoundingClientRect(), top = document.querySelector('header').offsetHeight;
+    if (r.top < top || r.bottom > innerHeight) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+});
+document.getElementById('speed').onchange = e => { audio.playbackRate = +e.target.value; };
+
+// ------------------------------------------------------------ rendering
+function renderLine(i) {
+  const ln = S.lines[i];
+  let el = document.querySelector(`.line[data-i="${i}"]`);
+  if (!el) { el = document.createElement('div'); el.className = 'line'; el.dataset.i = i; }
+  el.classList.toggle('checked', !!ln.chk);
+  const spkOpts = S.speakers.map(s => `<option value="${esc(s)}"${s === ln.speaker ? ' selected' : ''}>${esc(name(s))}</option>`).join('')
+    + '<option value="__new">+ new speaker…</option>';
+  const alt = (ln.spk_alt || []).map(([by, s]) => `${by}: ${name(s)}`).join(', ');
+  let text;
+  if (editing === i) {
+    text = `<textarea id="ed">${esc(lineText(ln))}</textarea>
+      <div class="actions times">
+        <label>start <input type="text" id="edS" value="${fmt(ln.start)}"></label><button data-act="nowS">= now</button>
+        <label>end <input type="text" id="edE" value="${fmt(ln.end)}"></label><button data-act="nowE">= now</button>
+      </div>
+      <div class="actions">
+        <button class="primary" data-act="save">Save</button><button data-act="cancel">Cancel</button>
+        <button data-act="split">Split at cursor</button>
+        ${ln.ov != null && ln.slots.length ? '<button data-act="revert">Back to model words</button>' : ''}
+        <button data-act="delete">Delete line</button>
+      </div>`;
+  } else if (ln.ov != null) {
+    text = `<div class="text ov">${esc(ln.ov) || '<i class="stat">(empty: will be left out)</i>'}</div>`;
+  } else {
+    text = '<div class="text">' + ln.slots.map((s, j) => {
+      const t = s.t != null ? ` data-t="${s.t}"` : '';
+      if ('w' in s) return `<span class="w" data-j="${j}"${t}>${esc(s.w)}</span>`;
+      const tot = s.o.reduce((a, o) => a + o[1].length, 0), top = s.o[0][1].length;
+      const cls = ['d', s.c === -1 ? 'cust' : s.r ? 'res' : top * 2 <= tot ? 'strong' : '', isMinor(s) ? 'minor' : ''];
+      const txt = slotText(s);
+      if (!txt) cls.push('empty');
+      if (focus && focus[0] === i && focus[1] === j) cls.push('focus');
+      return `<span class="${cls.join(' ')}" data-j="${j}"${t} title="${esc(s.o.map(o => `${o[0] || '∅'} (${o[1].join(' ')})`).join(' | '))}">${txt ? esc(txt) : '+'}</span>`;
+    }).join(' ') + '</div>';
+  }
+  const counted = s => s.o && (showMinor() || !isMinor(s));
+  const nd = ln.ov == null ? ln.slots.filter(counted).length : 0;
+  const nr = ln.ov == null ? ln.slots.filter(s => counted(s) && (s.r || s.c === -1)).length : 0;
+  el.innerHTML = `
+    <div class="meta">
+      <button data-act="play" class="time">▶ ${fmt(ln.start)}</button>
+      <select data-act="spk">${spkOpts}</select>
+      ${alt ? `<span class="flag" title="Other speaker detectors disagree: ${esc(alt)}">⚠ speaker? (${esc(alt)})</span>` : ''}
+      ${nd ? `<span class="stat">${nr}/${nd} fixed</span>` : ''}
+    </div>
+    ${text}
+    ${editing === i ? '' : `<div class="actions">
+      <label><input type="checkbox" data-act="chk"${ln.chk ? ' checked' : ''}> checked</label>
+      <button data-act="edit">✎ edit</button>
+      <button data-act="vers">all versions</button>
+    </div>`}
+    <div class="versions" hidden></div>`;
+  return el;
+}
+function renderAll() {
+  const box = document.getElementById('lines');
+  box.innerHTML = '';
+  S.lines.forEach((_, i) => box.appendChild(renderLine(i)));
+  stats();
+}
+function stats() {
+  const dl = disList();
+  const done = dl.filter(([i, j]) => { const s = S.lines[i].slots[j]; return s.r || s.c === -1; }).length;
+  document.getElementById('sDis').textContent = `${done}/${dl.length}`;
+  document.getElementById('sChk').textContent = `${S.lines.filter(l => l.chk).length}/${S.lines.length}`;
+}
+function renderHeader() {
+  document.getElementById('legend').innerHTML = D.systems.map(s =>
+    `<span><span class="badge">${s.id}</span> ${esc(s.label)}${s.covers_until < D.end ? ` (only until ${fmt(s.covers_until)})` : ''}</span>`).join('');
+  document.getElementById('renames').innerHTML = '<span class="stat">speaker names:</span>' + S.speakers.map(s =>
+    `<label class="stat">${esc(s)} → <input type="text" data-spk="${esc(s)}" value="${esc(S.rename[s] || '')}" placeholder="e.g. URZA"></label>`).join('');
+  document.querySelectorAll('#renames input').forEach(inp => inp.oninput = () => {
+    S.rename[inp.dataset.spk] = inp.value; save();
+    document.querySelectorAll('select[data-act=spk]').forEach(sel =>
+      [...sel.options].forEach(o => { if (o.value !== '__new') o.textContent = name(o.value); }));
+  });
+}
+
+// ------------------------------------------------------------ disagreement popover
+const pop = document.getElementById('pop');
+function openPop(i, j) {
+  const prev = focus;
+  focus = [i, j];
+  if (prev) renderLine(prev[0]);
+  renderLine(i);
+  const s = S.lines[i].slots[j];
+  const span = document.querySelector(`.line[data-i="${i}"] [data-j="${j}"]`);
+  pop.innerHTML = s.o.map((o, k) =>
+    `<button class="opt${s.c === k ? ' sel' : ''}" data-k="${k}"><span><span class="k">${k + 1}</span>${o[0] ? esc(o[0]) : '<i>∅ nothing</i>'}</span>
+      <span>${o[1].map(id => `<span class="badge" title="${esc(SYS[id].label)}">${id}</span>`).join('')}</span></button>`).join('')
+    + `<input type="text" id="custom" placeholder="type your own, Enter (empty = nothing)" value="${s.c === -1 ? esc(s.custom || '') : ''}">
+       <div class="actions"><button data-k="hear">▶ hear again (R)</button><button data-k="close">close (Esc)</button></div>`;
+  pop.style.display = 'block';
+  const r = span.getBoundingClientRect();
+  pop.style.left = Math.min(scrollX + r.left, scrollX + innerWidth - pop.offsetWidth - 10) + 'px';
+  pop.style.top = (scrollY + r.bottom + 6) + 'px';
+  const pr = pop.getBoundingClientRect();
+  if (pr.bottom > innerHeight) window.scrollBy({ top: pr.bottom - innerHeight + 20, behavior: 'smooth' });
+  if (r.top < document.querySelector('header').offsetHeight) span.scrollIntoView({ block: 'center' });
+}
+function closePop() {
+  pop.style.display = 'none';
+  const f = focus; focus = null;
+  if (f) renderLine(f[0]);
+}
+function choose(k, custom) {
+  if (!focus) return;
+  const [i, j] = focus, s = S.lines[i].slots[j];
+  if (k === -1) { s.c = -1; s.custom = custom.trim(); } else { s.c = k; delete s.custom; }
+  s.r = 1;
+  save(); renderLine(i); stats();
+  openPop(i, j);
+}
+pop.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.k === 'hear') return playSpot(...focus);
+  if (b.dataset.k === 'close') return closePop();
+  choose(+b.dataset.k);
+});
+pop.addEventListener('keydown', e => {
+  if (e.target.id === 'custom' && e.key === 'Enter') { choose(-1, e.target.value); e.target.blur(); }
+});
+function step(dir, onlyOpen) {
+  const dl = disList();
+  if (!dl.length) return;
+  let pos = focus ? dl.findIndex(([i, j]) => i === focus[0] && j === focus[1]) : -1;
+  for (let n = 0; n < dl.length; n++) {
+    pos = (pos + dir + dl.length) % dl.length;
+    const [i, j] = dl[pos], s = S.lines[i].slots[j];
+    if (!onlyOpen || !(s.r || s.c === -1)) { openPop(i, j); playSpot(i, j); return; }
+  }
+  toast('All disagreements are fixed');
+}
+document.getElementById('nextBtn').onclick = () => step(1, true);
+document.getElementById('minor').onchange = e => {
+  document.body.classList.toggle('showminor', e.target.checked); renderAll();
+};
+
+// ------------------------------------------------------------ line actions
+document.getElementById('lines').addEventListener('click', e => {
+  const lineEl = e.target.closest('.line'); if (!lineEl) return;
+  const i = +lineEl.dataset.i, ln = S.lines[i];
+  const t = e.target.closest('[data-j]');
+  if (t && editing !== i) {
+    const j = +t.dataset.j, s = ln.slots[j];
+    if (s.o) openPop(i, j);
+    playSpot(i, j);
+    return;
+  }
+  const act = e.target.dataset.act;
+  if (!act) return;
+  if (act === 'play') play(ln.start - 0.2, document.getElementById('cont').checked ? null : ln.end + 0.3);
+  if (act === 'chk') { ln.chk = e.target.checked; save(); renderLine(i); stats(); }
+  if (act === 'vers') {
+    const v = lineEl.querySelector('.versions');
+    const mine = new Set(lineText(ln).toLowerCase().split(/\s+/));
+    v.innerHTML = D.systems.map(s => {
+      if (ln.start > s.covers_until) return `<div><span class="badge">${s.id}</span> <i class="stat">not covered</i></div>`;
+      const words = sysText(ln, s.id).split(/\s+/).filter(Boolean);
+      return `<div><span class="badge">${s.id}</span> ${words.map(w => mine.has(w.toLowerCase()) ? esc(w) : `<span class="diff">${esc(w)}</span>`).join(' ')}</div>`;
+    }).join('');
+    v.hidden = !v.hidden;
+  }
+  if (act === 'edit') { closePop(); editing = i; renderLine(i); document.getElementById('ed').focus(); }
+  if (act === 'cancel') { editing = null; renderLine(i); }
+  if (act === 'nowS') document.getElementById('edS').value = fmt(audio.currentTime + D.offset);
+  if (act === 'nowE') document.getElementById('edE').value = fmt(audio.currentTime + D.offset);
+  if (act === 'save' || act === 'split') {
+    const ta = document.getElementById('ed'), st = parseT(document.getElementById('edS').value),
+          en = parseT(document.getElementById('edE').value);
+    if (st == null || en == null || en <= st) return toast('Check the start and end times');
+    const txt = ta.value.replace(/\s+/g, ' ').trim();
+    if (act === 'save') {
+      if (txt !== lineText(ln)) ln.ov = txt;
+      ln.start = st; ln.end = en;
+    } else {
+      const cut = ta.selectionStart, a = ta.value.slice(0, cut).trim(), b = ta.value.slice(cut).trim();
+      const now = audio.currentTime + D.offset;
+      const mid = now > st && now < en ? now : st + (en - st) * (cut / Math.max(1, ta.value.length));
+      ln.ov = a; ln.start = st; ln.end = mid;
+      S.lines.splice(i + 1, 0, { start: +mid.toFixed(2), end: en, speaker: ln.speaker, slots: [], ov: b });
+      toast('Split: change the speaker of the new line if needed');
+    }
+    editing = null; save(); renderAll();
+  }
+  if (act === 'revert') { delete ln.ov; editing = null; save(); renderLine(i); stats(); }
+  if (act === 'delete' && confirm('Delete this line from the reference?')) {
+    S.lines.splice(i, 1); editing = null; save(); renderAll();
+  }
+});
+document.getElementById('lines').addEventListener('change', e => {
+  if (e.target.dataset.act !== 'spk') return;
+  const i = +e.target.closest('.line').dataset.i;
+  let v = e.target.value;
+  if (v === '__new') {
+    v = (prompt('Name of the new speaker (e.g. Q1)') || '').trim();
+    if (!v) return renderLine(i);
+    if (!S.speakers.includes(v)) { S.speakers.push(v); renderHeader(); }
+  }
+  S.lines[i].speaker = v; delete S.lines[i].spk_alt; save(); renderAll();
+});
+
+// ------------------------------------------------------------ keyboard
+document.addEventListener('keydown', e => {
+  if (e.target.matches('textarea, input[type=text]')) { if (e.key === 'Escape') e.target.blur(); return; }
+  if (e.target.matches('select')) return;
+  const k = e.key.toLowerCase();
+  if (k === ' ') { e.preventDefault(); audio.paused ? (stopAt = null, audio.play()) : audio.pause(); }
+  else if (k === 'n') step(1, true);
+  else if (k === 'p') step(-1, false);
+  else if (k === 'r' && focus) playSpot(...focus);
+  else if (k === 'a' && focus) { const s = S.lines[focus[0]].slots[focus[1]]; s.r = 1; save(); stats(); step(1, true); }
+  else if (k === 'escape') closePop();
+  else if (focus && /^[1-9]$/.test(k)) { const s = S.lines[focus[0]].slots[focus[1]]; if (+k <= s.o.length) choose(+k - 1); }
+});
+document.addEventListener('click', e => {
+  if (pop.style.display === 'block' && !pop.contains(e.target) && !e.target.closest('.d, #nextBtn')) closePop();
+});
+
+// ------------------------------------------------------------ export
+document.getElementById('dl').onclick = () => {
+  const dl = disList(false), open = dl.filter(([i, j]) => { const s = S.lines[i].slots[j]; return !(s.r || s.c === -1); }).length;
+  const unchecked = S.lines.filter(l => !l.chk).length;
+  if ((open || unchecked) && !confirm(`${open} disagreements not fixed yet and ${unchecked} lines not checked. Download anyway?`)) return;
+  const rows = S.lines.slice().sort((a, b) => a.start - b.start)
+    .map(ln => [ln, lineText(ln).trim()]).filter(([, t]) => t)
+    .map(([ln, t]) => `[${fmt(ln.start)} --> ${fmt(ln.end)}] ${name(ln.speaker).replace(/:/g, '')}: ${t}`);
+  const blob = new Blob([rows.join('\n') + '\n'], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'reference.txt'; a.click();
+  toast('reference.txt downloaded: put it in out/' + D.name + '/');
+};
+
+renderHeader();
+renderAll();
+</script>
+</body>
+</html>

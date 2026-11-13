@@ -1,589 +1,0 @@
-OneLogger: Setting error_handling_strategy to DISABLE_QUIETLY_AND_REPORT_METRIC_ERROR for rank (rank=0) with OneLogger disabled. To override: explicitly set error_handling_strategy parameter.
-No exporters were provided. This means that no telemetry data will be collected.
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-[NeMo W 2026-11-13 20:48:59 modelPT:175] If you intend to do training or fine-tuning, please call the ModelPT.setup_training_data() method and provide a valid configuration file to setup the train data loader.
-    Train config : 
-    manifest_filepath: null
-    sample_rate: 16000
-    num_spks: 4
-    session_len_sec: 90
-    soft_label_thres: 0.5
-    soft_targets: false
-    labels: null
-    batch_size: 4
-    shuffle: true
-    num_workers: 18
-    validation_mode: false
-    use_lhotse: false
-    use_bucketing: false
-    pin_memory: true
-    window_stride: 0.01
-    subsampling_factor: 8
-    
-[NeMo W 2026-11-13 20:48:59 modelPT:182] If you intend to do validation, please call the ModelPT.setup_validation_data() or ModelPT.setup_multiple_validation_data() method and provide a valid configuration file to setup the validation data loader(s). 
-    Validation config : 
-    manifest_filepath: null
-    is_tarred: false
-    tarred_audio_filepaths: null
-    sample_rate: 16000
-    num_spks: 4
-    session_len_sec: 90
-    soft_label_thres: 0.5
-    soft_targets: false
-    labels: null
-    batch_size: 4
-    shuffle: false
-    num_workers: 18
-    validation_mode: true
-    use_lhotse: false
-    use_bucketing: false
-    drop_last: false
-    pin_memory: true
-    window_stride: 0.01
-    subsampling_factor: 8
-    
-[NeMo W 2026-11-13 20:48:59 modelPT:189] Please call the ModelPT.setup_test_data() or ModelPT.setup_multiple_test_data() method and provide a valid configuration file to setup the test data loader(s).
-    Test config : 
-    manifest_filepath: null
-    is_tarred: false
-    tarred_audio_filepaths: null
-    sample_rate: 16000
-    num_spks: 4
-    session_len_sec: 90
-    soft_label_thres: 0.5
-    soft_targets: false
-    labels: null
-    batch_size: 4
-    shuffle: false
-    seq_eval_mode: true
-    num_workers: 18
-    validation_mode: true
-    use_lhotse: false
-    use_bucketing: false
-    drop_last: false
-    pin_memory: true
-    window_stride: 0.01
-    subsampling_factor: 8
-    
-1PkAoDz1DHg.wav: 124.5 min, GPU: NVIDIA GeForce RTX 3060
-diarizing with nvidia/diar_streaming_sortformer_4spk-v2
-[NeMo I 2026-11-13 20:49:00 save_restore_connector:287] Model SortformerEncLabelModel was successfully restored from /home/vladikxyz/.cache/huggingface/hub/models--nvidia--diar_streaming_sortformer_4spk-v2/snapshots/84edd514b8ef68004c10086918cd62f2148cbd59/diar_streaming_sortformer_4spk-v2.nemo.
-[NeMo W 2026-11-13 20:49:00 sortformer_modules:179] spkcache_update_period (300) is less than chunk_len (340). The effective update period will be 340.
-[NeMo I 2026-11-13 20:49:00 vad_utils:89] No postprocessing YAML file has been provided. Default postprocessing configurations will be applied.
-[NeMo W 2026-11-13 20:49:00 dataloader:881] The following configuration keys are ignored by Lhotse dataloader: num_spks,session_len_sec,soft_label_thres
-Diarizing: 0it [00:00, ?it/s]
-Streaming Steps:   0%|          | 0/275 [00:00<?, ?it/s][A
-Streaming Steps:   0%|          | 1/275 [00:00<01:04,  4.22it/s][A
-Streaming Steps:   1%|          | 3/275 [00:00<00:29,  9.25it/s][A
-Streaming Steps:   2%|▏         | 5/275 [00:00<00:22, 11.82it/s][A
-Streaming Steps:   3%|▎         | 7/275 [00:00<00:20, 13.29it/s][A
-Streaming Steps:   3%|▎         | 9/275 [00:00<00:18, 14.17it/s][A
-Streaming Steps:   4%|▍         | 11/275 [00:00<00:17, 14.74it/s][A
-Streaming Steps:   5%|▍         | 13/275 [00:00<00:17, 15.12it/s][A
-Streaming Steps:   5%|▌         | 15/275 [00:01<00:16, 15.35it/s][A
-Streaming Steps:   6%|▌         | 17/275 [00:01<00:16, 15.47it/s][A
-Streaming Steps:   7%|▋         | 19/275 [00:01<00:16, 15.55it/s][A
-Streaming Steps:   8%|▊         | 21/275 [00:01<00:16, 15.61it/s][A
-Streaming Steps:   8%|▊         | 23/275 [00:01<00:16, 15.66it/s][A
-Streaming Steps:   9%|▉         | 25/275 [00:01<00:15, 15.68it/s][A
-Streaming Steps:  10%|▉         | 27/275 [00:01<00:15, 15.70it/s][A
-Streaming Steps:  11%|█         | 29/275 [00:02<00:15, 15.75it/s][A
-Streaming Steps:  11%|█▏        | 31/275 [00:02<00:15, 15.81it/s][A
-Streaming Steps:  12%|█▏        | 33/275 [00:02<00:15, 15.86it/s][A
-Streaming Steps:  13%|█▎        | 35/275 [00:02<00:15, 15.90it/s][A
-Streaming Steps:  13%|█▎        | 37/275 [00:02<00:14, 15.93it/s][A
-Streaming Steps:  14%|█▍        | 39/275 [00:02<00:14, 15.95it/s][A
-Streaming Steps:  15%|█▍        | 41/275 [00:02<00:14, 15.97it/s][A
-Streaming Steps:  16%|█▌        | 43/275 [00:02<00:14, 15.98it/s][A
-Streaming Steps:  16%|█▋        | 45/275 [00:03<00:14, 15.98it/s][A
-Streaming Steps:  17%|█▋        | 47/275 [00:03<00:14, 15.99it/s][A
-Streaming Steps:  18%|█▊        | 49/275 [00:03<00:14, 15.98it/s][A
-Streaming Steps:  19%|█▊        | 51/275 [00:03<00:14, 16.00it/s][A
-Streaming Steps:  19%|█▉        | 53/275 [00:03<00:13, 16.00it/s][A
-Streaming Steps:  20%|██        | 55/275 [00:03<00:13, 15.99it/s][A
-Streaming Steps:  21%|██        | 57/275 [00:03<00:13, 16.00it/s][A
-Streaming Steps:  21%|██▏       | 59/275 [00:03<00:13, 16.01it/s][A
-Streaming Steps:  22%|██▏       | 61/275 [00:04<00:13, 16.02it/s][A
-Streaming Steps:  23%|██▎       | 63/275 [00:04<00:13, 16.01it/s][A
-Streaming Steps:  24%|██▎       | 65/275 [00:04<00:13, 16.01it/s][A
-Streaming Steps:  24%|██▍       | 67/275 [00:04<00:12, 16.01it/s][A
-Streaming Steps:  25%|██▌       | 69/275 [00:04<00:12, 16.00it/s][A
-Streaming Steps:  26%|██▌       | 71/275 [00:04<00:12, 15.99it/s][A
-Streaming Steps:  27%|██▋       | 73/275 [00:04<00:12, 15.99it/s][A
-Streaming Steps:  27%|██▋       | 75/275 [00:04<00:12, 16.01it/s][A
-Streaming Steps:  28%|██▊       | 77/275 [00:05<00:12, 16.01it/s][A
-Streaming Steps:  29%|██▊       | 79/275 [00:05<00:12, 16.01it/s][A
-Streaming Steps:  29%|██▉       | 81/275 [00:05<00:12, 16.01it/s][A
-Streaming Steps:  30%|███       | 83/275 [00:05<00:11, 16.03it/s][A
-Streaming Steps:  31%|███       | 85/275 [00:05<00:11, 16.05it/s][A
-Streaming Steps:  32%|███▏      | 87/275 [00:05<00:11, 16.06it/s][A
-Streaming Steps:  32%|███▏      | 89/275 [00:05<00:11, 16.06it/s][A
-Streaming Steps:  33%|███▎      | 91/275 [00:05<00:11, 16.07it/s][A
-Streaming Steps:  34%|███▍      | 93/275 [00:05<00:11, 16.07it/s][A
-Streaming Steps:  35%|███▍      | 95/275 [00:06<00:11, 16.06it/s][A
-Streaming Steps:  35%|███▌      | 97/275 [00:06<00:11, 16.06it/s][A
-Streaming Steps:  36%|███▌      | 99/275 [00:06<00:10, 16.07it/s][A
-Streaming Steps:  37%|███▋      | 101/275 [00:06<00:10, 16.05it/s][A
-Streaming Steps:  37%|███▋      | 103/275 [00:06<00:10, 16.06it/s][A
-Streaming Steps:  38%|███▊      | 105/275 [00:06<00:10, 16.05it/s][A
-Streaming Steps:  39%|███▉      | 107/275 [00:06<00:10, 16.06it/s][A
-Streaming Steps:  40%|███▉      | 109/275 [00:06<00:10, 16.04it/s][A
-Streaming Steps:  40%|████      | 111/275 [00:07<00:10, 16.02it/s][A
-Streaming Steps:  41%|████      | 113/275 [00:07<00:10, 16.04it/s][A
-Streaming Steps:  42%|████▏     | 115/275 [00:07<00:09, 16.04it/s][A
-Streaming Steps:  43%|████▎     | 117/275 [00:07<00:09, 16.05it/s][A
-Streaming Steps:  43%|████▎     | 119/275 [00:07<00:09, 16.05it/s][A
-Streaming Steps:  44%|████▍     | 121/275 [00:07<00:09, 16.04it/s][A
-Streaming Steps:  45%|████▍     | 123/275 [00:07<00:09, 16.05it/s][A
-Streaming Steps:  45%|████▌     | 125/275 [00:07<00:09, 16.06it/s][A
-Streaming Steps:  46%|████▌     | 127/275 [00:08<00:09, 16.06it/s][A
-Streaming Steps:  47%|████▋     | 129/275 [00:08<00:09, 16.06it/s][A
-Streaming Steps:  48%|████▊     | 131/275 [00:08<00:08, 16.05it/s][A
-Streaming Steps:  48%|████▊     | 133/275 [00:08<00:08, 16.05it/s][A
-Streaming Steps:  49%|████▉     | 135/275 [00:08<00:08, 16.06it/s][A
-Streaming Steps:  50%|████▉     | 137/275 [00:08<00:08, 16.07it/s][A
-Streaming Steps:  51%|█████     | 139/275 [00:08<00:08, 16.07it/s][A
-Streaming Steps:  51%|█████▏    | 141/275 [00:08<00:08, 16.07it/s][A
-Streaming Steps:  52%|█████▏    | 143/275 [00:09<00:08, 16.06it/s][A
-Streaming Steps:  53%|█████▎    | 145/275 [00:09<00:08, 16.06it/s][A
-Streaming Steps:  53%|█████▎    | 147/275 [00:09<00:07, 16.06it/s][A
-Streaming Steps:  54%|█████▍    | 149/275 [00:09<00:07, 16.05it/s][A
-Streaming Steps:  55%|█████▍    | 151/275 [00:09<00:07, 16.05it/s][A
-Streaming Steps:  56%|█████▌    | 153/275 [00:09<00:07, 16.04it/s][A
-Streaming Steps:  56%|█████▋    | 155/275 [00:09<00:07, 16.05it/s][A
-Streaming Steps:  57%|█████▋    | 157/275 [00:09<00:07, 16.06it/s][A
-Streaming Steps:  58%|█████▊    | 159/275 [00:10<00:07, 16.06it/s][A
-Streaming Steps:  59%|█████▊    | 161/275 [00:10<00:07, 16.06it/s][A
-Streaming Steps:  59%|█████▉    | 163/275 [00:10<00:06, 16.06it/s][A
-Streaming Steps:  60%|██████    | 165/275 [00:10<00:06, 16.06it/s][A
-Streaming Steps:  61%|██████    | 167/275 [00:10<00:06, 16.06it/s][A
-Streaming Steps:  61%|██████▏   | 169/275 [00:10<00:06, 16.06it/s][A
-Streaming Steps:  62%|██████▏   | 171/275 [00:10<00:06, 16.04it/s][A
-Streaming Steps:  63%|██████▎   | 173/275 [00:10<00:06, 16.05it/s][A
-Streaming Steps:  64%|██████▎   | 175/275 [00:11<00:06, 16.04it/s][A
-Streaming Steps:  64%|██████▍   | 177/275 [00:11<00:06, 16.05it/s][A
-Streaming Steps:  65%|██████▌   | 179/275 [00:11<00:05, 16.05it/s][A
-Streaming Steps:  66%|██████▌   | 181/275 [00:11<00:05, 16.05it/s][A
-Streaming Steps:  67%|██████▋   | 183/275 [00:11<00:05, 16.03it/s][A
-Streaming Steps:  67%|██████▋   | 185/275 [00:11<00:05, 16.04it/s][A
-Streaming Steps:  68%|██████▊   | 187/275 [00:11<00:05, 16.05it/s][A
-Streaming Steps:  69%|██████▊   | 189/275 [00:11<00:05, 16.05it/s][A
-Streaming Steps:  69%|██████▉   | 191/275 [00:12<00:05, 16.04it/s][A
-Streaming Steps:  70%|███████   | 193/275 [00:12<00:05, 16.05it/s][A
-Streaming Steps:  71%|███████   | 195/275 [00:12<00:04, 16.05it/s][A
-Streaming Steps:  72%|███████▏  | 197/275 [00:12<00:04, 16.05it/s][A
-Streaming Steps:  72%|███████▏  | 199/275 [00:12<00:04, 16.06it/s][A
-Streaming Steps:  73%|███████▎  | 201/275 [00:12<00:04, 16.04it/s][A
-Streaming Steps:  74%|███████▍  | 203/275 [00:12<00:04, 16.04it/s][A
-Streaming Steps:  75%|███████▍  | 205/275 [00:12<00:04, 16.05it/s][A
-Streaming Steps:  75%|███████▌  | 207/275 [00:13<00:04, 16.04it/s][A
-Streaming Steps:  76%|███████▌  | 209/275 [00:13<00:04, 16.04it/s][A
-Streaming Steps:  77%|███████▋  | 211/275 [00:13<00:03, 16.05it/s][A
-Streaming Steps:  77%|███████▋  | 213/275 [00:13<00:03, 16.06it/s][A
-Streaming Steps:  78%|███████▊  | 215/275 [00:13<00:03, 16.07it/s][A
-Streaming Steps:  79%|███████▉  | 217/275 [00:13<00:03, 16.06it/s][A
-Streaming Steps:  80%|███████▉  | 219/275 [00:13<00:03, 16.05it/s][A
-Streaming Steps:  80%|████████  | 221/275 [00:13<00:03, 16.05it/s][A
-Streaming Steps:  81%|████████  | 223/275 [00:14<00:03, 16.06it/s][A
-Streaming Steps:  82%|████████▏ | 225/275 [00:14<00:03, 16.06it/s][A
-Streaming Steps:  83%|████████▎ | 227/275 [00:14<00:02, 16.06it/s][A
-Streaming Steps:  83%|████████▎ | 229/275 [00:14<00:02, 16.05it/s][A
-Streaming Steps:  84%|████████▍ | 231/275 [00:14<00:02, 16.04it/s][A
-Streaming Steps:  85%|████████▍ | 233/275 [00:14<00:02, 16.03it/s][A
-Streaming Steps:  85%|████████▌ | 235/275 [00:14<00:02, 16.03it/s][A
-Streaming Steps:  86%|████████▌ | 237/275 [00:14<00:02, 16.04it/s][A
-Streaming Steps:  87%|████████▋ | 239/275 [00:15<00:02, 16.02it/s][A
-Streaming Steps:  88%|████████▊ | 241/275 [00:15<00:02, 16.00it/s][A
-Streaming Steps:  88%|████████▊ | 243/275 [00:15<00:01, 16.00it/s][A
-Streaming Steps:  89%|████████▉ | 245/275 [00:15<00:01, 16.01it/s][A
-Streaming Steps:  90%|████████▉ | 247/275 [00:15<00:01, 16.01it/s][A
-Streaming Steps:  91%|█████████ | 249/275 [00:15<00:01, 16.00it/s][A
-Streaming Steps:  91%|█████████▏| 251/275 [00:15<00:01, 15.98it/s][A
-Streaming Steps:  92%|█████████▏| 253/275 [00:15<00:01, 15.97it/s][A
-Streaming Steps:  93%|█████████▎| 255/275 [00:16<00:01, 15.95it/s][A
-Streaming Steps:  93%|█████████▎| 257/275 [00:16<00:01, 15.87it/s][A
-Streaming Steps:  94%|█████████▍| 259/275 [00:16<00:01, 15.89it/s][A
-Streaming Steps:  95%|█████████▍| 261/275 [00:16<00:00, 15.92it/s][A
-Streaming Steps:  96%|█████████▌| 263/275 [00:16<00:00, 15.94it/s][A
-Streaming Steps:  96%|█████████▋| 265/275 [00:16<00:00, 15.95it/s][A
-Streaming Steps:  97%|█████████▋| 267/275 [00:16<00:00, 15.98it/s][A
-Streaming Steps:  98%|█████████▊| 269/275 [00:16<00:00, 15.99it/s][A
-Streaming Steps:  99%|█████████▊| 271/275 [00:17<00:00, 15.99it/s][A
-Streaming Steps:  99%|█████████▉| 273/275 [00:17<00:00, 15.99it/s][A
-Streaming Steps: 100%|██████████| 275/275 [00:17<00:00, 16.60it/s][AStreaming Steps: 100%|██████████| 275/275 [00:17<00:00, 15.86it/s]
-Diarizing: 1it [00:24, 24.62s/it]Diarizing: 1it [00:24, 24.62s/it]
-wrote out/1PkAoDz1DHg/sortformer_diar_only.json/.txt (945 segments)
-  945 segments, 4 speakers, 24.6 s
-loading nvidia/canary-1b-v2
-[NeMo I 2026-11-13 20:51:26 mixins:194] Tokenizer CanaryBPETokenizer initialized with 16384 tokens
-[NeMo W 2026-11-13 20:51:26 modelPT:175] If you intend to do training or fine-tuning, please call the ModelPT.setup_training_data() method and provide a valid configuration file to setup the train data loader.
-    Train config : 
-    use_lhotse: true
-    skip_missing_manifest_entries: true
-    input_cfg: null
-    tarred_audio_filepaths: null
-    manifest_filepath: null
-    sample_rate: 16000
-    shuffle: true
-    num_workers: 4
-    pin_memory: true
-    prompt_format: canary2
-    max_duration: 40.0
-    min_duration: 0.01
-    text_field: answer
-    lang_field: target_lang
-    use_bucketing: true
-    max_tps: null
-    bucket_duration_bins: null
-    bucket_batch_size: null
-    num_buckets: null
-    bucket_buffer_size: 20000
-    shuffle_buffer_size: 10000
-    
-[NeMo W 2026-11-13 20:51:26 modelPT:182] If you intend to do validation, please call the ModelPT.setup_validation_data() or ModelPT.setup_multiple_validation_data() method and provide a valid configuration file to setup the validation data loader(s). 
-    Validation config : 
-    use_lhotse: true
-    prompt_format: canary2
-    manifest_filepath: null
-    sample_rate: 16000
-    batch_size: 4
-    shuffle: true
-    max_duration: 40.0
-    min_duration: 0.1
-    num_workers: 2
-    pin_memory: true
-    text_field: answer
-    lang_field: target_lang
-    
-Error getting class at nemo.collections.asr.modules.transformer.get_nemo_transformer: Located non-class of type 'function' while loading 'nemo.collections.asr.modules.transformer.get_nemo_transformer'
-[NeMo I 2026-11-13 20:51:29 save_restore_connector:147] Restoration will occur within pre-extracted directory : `/tmp/tmpdlktnabu`.
-[NeMo I 2026-11-13 20:51:31 mixins:194] Tokenizer SentencePieceTokenizer initialized with 16384 tokens
-[NeMo W 2026-11-13 20:51:32 modelPT:175] If you intend to do training or fine-tuning, please call the ModelPT.setup_training_data() method and provide a valid configuration file to setup the train data loader.
-    Train config : 
-    use_lhotse: true
-    skip_missing_manifest_entries: true
-    input_cfg: null
-    tarred_audio_filepaths: null
-    manifest_filepath: null
-    sample_rate: 16000
-    shuffle: true
-    num_workers: 2
-    pin_memory: true
-    max_duration: 40.0
-    min_duration: 0.1
-    text_field: answer
-    batch_duration: null
-    max_tps: null
-    use_bucketing: true
-    bucket_duration_bins: null
-    bucket_batch_size: null
-    num_buckets: null
-    bucket_buffer_size: 20000
-    shuffle_buffer_size: 10000
-    
-[NeMo W 2026-11-13 20:51:32 modelPT:182] If you intend to do validation, please call the ModelPT.setup_validation_data() or ModelPT.setup_multiple_validation_data() method and provide a valid configuration file to setup the validation data loader(s). 
-    Validation config : 
-    use_lhotse: true
-    manifest_filepath: null
-    sample_rate: 16000
-    batch_size: 16
-    shuffle: false
-    max_duration: 40.0
-    min_duration: 0.1
-    num_workers: 2
-    pin_memory: true
-    text_field: answer
-    
-[NeMo I 2026-11-13 20:51:41 save_restore_connector:287] Model EncDecCTCModelBPE was successfully restored from /tmp/tmpdlktnabu.
-[NeMo I 2026-11-13 20:51:45 save_restore_connector:287] Model EncDecMultiTaskModel was successfully restored from /home/vladikxyz/.cache/huggingface/hub/models--nvidia--canary-1b-v2/snapshots/d455706339a6b32e1aa40f82c713a482a0c938e2/canary-1b-v2.nemo.
-[NeMo W 2026-11-13 20:51:46 aed_multitask_models:607] Chunking is disabled. Please pass a single audio file or set batch_size to 1
-[NeMo W 2026-11-13 20:51:46 dataloader:881] The following configuration keys are ignored by Lhotse dataloader: enable_chunking,trim_silence
-[NeMo W 2026-11-13 20:51:46 dataloader:533] You are using a non-tarred dataset and requested tokenization during data sampling (pretokenize=True). This will cause the tokenization to happen in the main (GPU) process,possibly impacting the training speed if your tokenizer is very large.If the impact is noticable, set pretokenize=False in dataloader config.(note: that will disable token-per-second filtering and 2D bucketing features)
-Transcribing: 0it [00:00, ?it/s]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  3.89it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  3.89it/s]
-Transcribing: 1it [00:01,  1.36s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  4.14it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  4.14it/s]
-Transcribing: 2it [00:02,  1.21s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.31it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.31it/s]
-Transcribing: 3it [00:07,  2.96s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.51it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.51it/s]
-Transcribing: 4it [00:11,  3.48s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.55it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.55it/s]
-Transcribing: 5it [00:15,  3.49s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.74it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.74it/s]
-Transcribing: 6it [00:17,  2.97s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  7.01it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  7.00it/s]
-Transcribing: 7it [00:18,  2.25s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  3.40it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  3.40it/s]
-Transcribing: 8it [00:19,  1.96s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  3.48it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  3.48it/s]
-Transcribing: 9it [00:20,  1.75s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.41it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.41it/s]
-Transcribing: 10it [00:24,  2.55s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.53it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.53it/s]
-Transcribing: 11it [00:27,  2.45s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.39it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.39it/s]
-Transcribing: 12it [00:32,  3.22s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  3.36it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  3.36it/s]
-Transcribing: 13it [00:33,  2.66s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  4.77it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  4.76it/s]
-Transcribing: 14it [00:34,  2.14s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.79it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.79it/s]
-Transcribing: 15it [00:36,  2.18s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  3.68it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  3.68it/s]
-Transcribing: 16it [00:38,  1.93s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  5.42it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  5.41it/s]
-Transcribing: 17it [00:39,  1.62s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.37it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.37it/s]
-Transcribing: 18it [00:41,  2.00s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.62it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.62it/s]
-Transcribing: 19it [00:45,  2.59s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.69it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.69it/s]
-Transcribing: 20it [00:48,  2.55s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.76it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.76it/s]
-Transcribing: 21it [00:50,  2.52s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  5.04it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  5.04it/s]
-Transcribing: 22it [00:51,  2.08s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.81it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.81it/s]
-Transcribing: 23it [00:55,  2.52s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.50it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.50it/s]
-Transcribing: 24it [01:00,  3.31s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.49it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.49it/s]
-Transcribing: 25it [01:04,  3.65s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.34it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.34it/s]
-Transcribing: 26it [01:10,  4.24s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.33it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.33it/s]
-Transcribing: 27it [01:16,  4.73s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  8.58it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  8.57it/s]
-Transcribing: 28it [01:16,  3.47s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.40it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.40it/s]
-Transcribing: 29it [01:22,  3.99s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.43it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.43it/s]
-Transcribing: 30it [01:27,  4.51s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  3.69it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  3.69it/s]
-Transcribing: 31it [01:29,  3.54s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.11it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.11it/s]
-Transcribing: 32it [01:32,  3.44s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.30it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.30it/s]
-Transcribing: 33it [01:38,  4.38s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.49it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.49it/s]
-Transcribing: 34it [01:44,  4.63s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.49it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.49it/s]
-Transcribing: 35it [01:49,  4.96s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.56it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.56it/s]
-Transcribing: 36it [01:52,  4.24s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  3.03it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  3.03it/s]
-Transcribing: 37it [01:54,  3.55s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  4.94it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  4.93it/s]
-Transcribing: 38it [01:55,  2.80s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.45it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.45it/s]
-Transcribing: 39it [02:00,  3.55s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.48it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.48it/s]
-Transcribing: 40it [02:06,  4.26s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.25it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.25it/s]
-Transcribing: 41it [02:09,  3.84s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  3.04it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  3.04it/s]
-Transcribing: 42it [02:11,  3.34s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.36it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.36it/s]
-Transcribing: 43it [02:14,  3.32s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.60it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.60it/s]
-Transcribing: 44it [02:20,  3.98s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.10it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.10it/s]
-Transcribing: 45it [02:24,  3.88s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.12it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.12it/s]
-Transcribing: 46it [02:27,  3.66s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.56it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.56it/s]
-Transcribing: 47it [02:31,  3.98s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.38it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.38it/s]
-Transcribing: 48it [02:39,  4.99s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.01it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.01it/s]
-Transcribing: 49it [02:42,  4.54s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.30it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.30it/s]
-Transcribing: 50it [02:48,  4.94s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.43it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.43it/s]
-Transcribing: 51it [02:55,  5.36s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.31it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.30it/s]
-Transcribing: 52it [03:02,  5.84s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.40it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.40it/s]
-Transcribing: 53it [03:07,  5.64s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.31it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.31it/s]
-Transcribing: 54it [03:12,  5.51s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  8.25it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  8.24it/s]
-Transcribing: 55it [03:12,  4.02s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.48it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.48it/s]
-Transcribing: 56it [03:17,  4.10s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  3.46it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  3.46it/s]
-Transcribing: 57it [03:18,  3.30s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.36it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.36it/s]
-Transcribing: 58it [03:24,  4.15s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.58it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.58it/s]
-Transcribing: 59it [03:28,  4.15s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.03it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.02it/s]
-Transcribing: 60it [03:32,  3.89s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.81it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.81it/s]
-Transcribing: 61it [03:36,  3.89s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.38it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.38it/s]
-Transcribing: 62it [03:41,  4.36s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.39it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.39it/s]
-Transcribing: 63it [03:46,  4.47s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.49it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.49it/s]
-Transcribing: 64it [03:50,  4.41s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.29it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.29it/s]
-Transcribing: 65it [03:55,  4.61s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.30it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.30it/s]
-Transcribing: 66it [04:01,  5.07s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.30it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.30it/s]
-Transcribing: 67it [04:07,  5.27s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.48it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.48it/s]
-Transcribing: 68it [04:12,  5.17s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.48it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.48it/s]
-Transcribing: 69it [04:14,  4.27s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.33it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.33it/s]
-Transcribing: 70it [04:21,  5.12s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.29it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.29it/s]
-Transcribing: 71it [04:29,  5.85s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  3.14it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  3.14it/s]
-Transcribing: 72it [04:30,  4.50s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.30it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.30it/s]
-Transcribing: 73it [04:37,  5.25s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.31it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.31it/s]
-Transcribing: 74it [04:43,  5.30s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.30it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.30it/s]
-Transcribing: 75it [04:49,  5.63s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.59it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.59it/s]
-Transcribing: 76it [04:53,  5.14s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  3.08it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  3.07it/s]
-Transcribing: 77it [04:55,  4.09s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.50it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.50it/s]
-Transcribing: 78it [04:59,  4.15s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.64it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.64it/s]
-Transcribing: 79it [05:03,  4.21s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.39it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.39it/s]
-Transcribing: 80it [05:08,  4.50s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.54it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.54it/s]
-Transcribing: 81it [05:14,  4.68s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.11it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.11it/s]
-Transcribing: 82it [05:17,  4.18s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.57it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.57it/s]
-Transcribing: 83it [05:19,  3.52s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  4.19it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  4.19it/s]
-Transcribing: 84it [05:20,  2.86s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.42it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.42it/s]
-Transcribing: 85it [05:26,  3.72s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.37it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.37it/s]
-Transcribing: 86it [05:32,  4.65s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.70it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.70it/s]
-Transcribing: 87it [05:36,  4.45s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.29it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.29it/s]
-Transcribing: 88it [05:44,  5.26s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.56it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.56it/s]
-Transcribing: 89it [05:48,  4.95s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.10it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.10it/s]
-Transcribing: 90it [05:51,  4.44s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.04it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.04it/s]
-Transcribing: 91it [05:54,  3.96s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.09it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.09it/s]
-Transcribing: 92it [05:57,  3.64s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  1.29it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  1.29it/s]
-Transcribing: 93it [06:02,  4.24s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.74it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.74it/s]
-Transcribing: 94it [06:05,  3.67s/it]
-Transcribing:   0%|          | 0/1 [00:00<?, ?it/s][A
-Transcribing: 100%|██████████| 1/1 [00:00<00:00,  2.55it/s][ATranscribing: 100%|██████████| 1/1 [00:00<00:00,  2.55it/s]
-Transcribing: 95it [06:07,  3.27s/it]Transcribing: 95it [06:07,  3.87s/it]
-  sortformer_canary_turns: 760 chunks, ASR 367.6 s, total 392.2 s = 19x realtime
-wrote out/1PkAoDz1DHg/sortformer_canary_turns.json/.txt (760 segments)

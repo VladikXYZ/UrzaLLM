@@ -15,6 +15,11 @@ one output by hand, and every approach is scored against it.
 | 5 | `vibevoice-4bit` | VibeVoice-ASR, one model for both | same model, 4-bit to fit 12 GB |
 | 6 | `sortformer_qwen3asr_turns` | Sortformer (reused) | Qwen3-ASR-1.7B on CUDA, audio cut per speaker turn |
 | 7 | `diarizen_qwen3asr_turns` | DiariZen (reused) | Qwen3-ASR-1.7B on CUDA, audio cut per speaker turn |
+| 8 | `whisper-large-v3-turbo_sortformer` | Sortformer (reused) | Whisper large-v3-turbo (faster, smaller decoder), same setup as #4 |
+
+`SKIP="vibevoice qwen" ./run_all.sh ...` skips every step whose name contains one of those words.
+Hand-corrected references in `references/<name>.txt` are used automatically for scoring
+(`references/JSlba8Iif1s.txt`: 25:00–35:08 of that video).
 
 Notes:
 - **VibeVoice** has ~8B parameters, so on 12 GB it runs 4-bit quantized. Czech is not
@@ -65,7 +70,52 @@ others; it prints its last log lines and the summary at the end shows what worke
 If the NVIDIA driver is older than 570, put `TORCH_INDEX=https://download.pytorch.org/whl/cu124`
 in front of the command the first time.
 
-## Make the reference by hand, then run the same command again
+## Whisper large-v3 vs. turbo only (automatic, no hand work)
+
+```bash
+bash ASRBench/compare_whisper.sh lecture1.webm lecture2.mp4     # or a folder of videos
+```
+
+Installs only the Whisper environment, transcribes every file with both models (same
+settings, each model loaded once), and writes `out/whisper_compare/report.md` plus
+`disagreements.csv` (every place they differ, with time and context). The report shows:
+
+- **speed** per file and in total, and how much faster turbo is
+- **words that differ**: how much is at stake (not an error rate)
+- **failures found automatically**: repetition loops, junk tokens like `[Music]`, and
+  30-second stretches where one model wrote far less than the other
+- **closeness to independent models**, when `run_all.sh` already produced e.g. Canary or
+  VibeVoice output for that video: the Whisper closer to them is likely the more accurate one
+  (on JSlba8Iif1s this ranking matched the hand-corrected reference)
+- **real error rate** when `references/<name>.txt` exists (it does for `JSlba8Iif1s`)
+
+Outputs are reused on later runs; `FORCE=1` transcribes again.
+
+## Make the reference with the review app (recommended)
+
+```bash
+envs/whisper/bin/python make_review.py out/NAME --start 25:00 --end 35:00
+```
+
+This aligns all models word by word and writes `out/NAME/review/index.html` + `audio.mp3`.
+Open `index.html` in a browser (double-click; works offline):
+
+- the text starts as **what most models wrote**; highlighted words are where models disagree
+  (dark = no clear majority). A faint dotted underline means only one model differs; the
+  majority is then usually right
+- `N` jumps to the next disagreement and plays that spot; pick the right version with `1`–`9`,
+  type your own, or `A` to keep the current choice; click any word to hear it
+- ✎ edits a whole line: free text, start/end times ("= now" takes the current audio position),
+  split at cursor, delete. Set speaker names (e.g. `URZA`) once at the top; ⚠ marks lines where
+  another speaker detector disagrees
+- also listen through once for errors **all** models made: those aren't highlighted
+- work is saved in the browser automatically; **Download reference.txt**, put it in
+  `out/NAME/`, and run `./run_all.sh` again to get the scores
+
+Since the starting text is a majority vote, mistakes you overlook favour the models that
+agree with the majority, so do listen to the highlighted spots rather than accepting them.
+
+## Or make the reference by hand
 
 After the first run there is `out/<name>/reference.txt.todo`, a copy of one approach's output.
 
@@ -105,6 +155,8 @@ The scores:
 | `run_qwen.py` | qwen | Qwen3-ASR + speaker turns from one or more `--diar-json` files |
 | `run_vibevoice.py` | vibevoice | VibeVoice-ASR, `--quant 4bit|8bit|offload`, `--window-min`, `--prompt` |
 | `convert_whisper.py` | whisper | convert another Whisper fine-tune, e.g. `--model BuzzASR/czech` |
+| `whisper_compare.py` | whisper | large-v3 vs. turbo on files/folders, automatic report (run via `compare_whisper.sh`) |
+| `make_review.py` | whisper | review app (audio + model disagreements) for making `reference.txt`, `--start`, `--end` |
 | `score.py` | any | score outputs against `reference.txt` |
 
 Run them as e.g. `envs/nemo/bin/python run_nemo.py audio/NAME.wav --asr parakeet canary --chunking turns fixed`.
