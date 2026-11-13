@@ -48,7 +48,8 @@ BUILT=()
 # build <env>: run setup_<env> unless envs/<env>/.done exists; mark it done on success.
 # Output goes to a log; the terminal shows a running timer.
 build() {
-  local e=$1 log=envs/$e.setup.log
+  local e=$1
+  local log=envs/$e.setup.log
   only "$e" || return 0
   [ -f "envs/$e/.done" ] && return 0
   ( set -e; "setup_$e" ) >"$log" 2>&1 &
