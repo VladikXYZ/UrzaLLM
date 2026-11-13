@@ -5,7 +5,7 @@ import yt_dlp
 # --- CONFIGURATION ---
 CHANNEL_URL = "https://www.youtube.com/@KanalSvobodnehoPristavu"
 DOWNLOAD_AUDIO = False  # <-- Toggle True/False
-OUTPUT_JSON = Path("jsons/channel_metadata.json")
+OUTPUT_JSON = Path("jsons/yt_data.json")
 AUDIO_DIR = Path("audio")
 ARCHIVE_FILE = "downloaded_audio_archive.txt"
 SAVE_EVERY = 10

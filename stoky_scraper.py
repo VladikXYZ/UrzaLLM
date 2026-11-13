@@ -1,18 +1,11 @@
 import json
 import re
+import requests
 import time
 import unicodedata
-import requests
 from bs4 import BeautifulSoup
 
 BASE_URL = "https://stoky.urza.cz/autori/urza-2"
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0"
-}
-
-import time
-import unicodedata
-from bs4 import BeautifulSoup
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0"
@@ -148,7 +141,7 @@ def get_total_pages(session):
 
 
 
-def scrape_urza(fetch_full_text=False, output_file="urza_articles.json"):
+def scrape_urza(fetch_full_text=False, output_file="arts.json"):
     session = requests.Session()
     total_pages = get_total_pages(session)
     print(f"Found {total_pages} pages to scrape.")
@@ -207,4 +200,4 @@ if __name__ == "__main__":
 
     # Set fetch_full_text=True if you also want to open every article link and save its body
     # (and its video link, in the "video" field). Optional argument: output file path.
-    scrape_urza(fetch_full_text=True, output_file=sys.argv[1] if len(sys.argv) > 1 else "urza_articles.json")
+    scrape_urza(fetch_full_text=True, output_file=sys.argv[1] if len(sys.argv) > 1 else "arts.json")

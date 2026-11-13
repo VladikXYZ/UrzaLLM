@@ -2,7 +2,7 @@ import json
 from pydoc import text
 
 """Filtering relevant metada"""
-# with open("jsons/channel_metadata.json", "r") as f:
+# with open("jsons/yt_data.json", "r") as f:
 #     yt = json.load(f)
 #
 # yt_td = [{"title": x["title"], "desc": x["description"], "url": x["webpage_url"]} for x in yt]
@@ -11,7 +11,7 @@ from pydoc import text
 #     json.dump(yt_td, f, indent=1, ensure_ascii=False)
 
 """Filtering relevant articles"""
-# with open("jsons/urza_articles.json", "r") as f:
+# with open("jsons/arts.json", "r") as f:
 #     arts = json.load(f)
 #
 # with open("preprocessed/yt.json", "r") as f:
