@@ -1,0 +1,9 @@
+# run_whisper.py (faster-whisper), convert_whisper.py, clip.py, score.py.
+# PyTorch with CUDA is installed first by setup.sh.
+faster-whisper>=1.1
+transformers
+huggingface_hub
+soundfile
+numpy
+scipy
+rapidfuzz

@@ -17,3 +17,9 @@ Chunks/output/_embed_cs_input.parquet
 Chunks/output/results_*/chunks_embedded.parquet
 Chunks/output/results_*/embeddings_source_centred.npy
 Chunks/output/projection/
+
+# ASRBench: converted audio and approach outputs
+ASRBench/audio/
+ASRBench/out/
+ASRBench/envs/
+ASRBench/models/

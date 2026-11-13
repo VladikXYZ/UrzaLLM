@@ -1,0 +1,6 @@
+# run_nemo.py (Sortformer + Canary / Parakeet). PyTorch with CUDA is installed first by setup.sh.
+nemo_toolkit[asr]>=2.5
+soundfile
+numpy
+scipy
+rapidfuzz
