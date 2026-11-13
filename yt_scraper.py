@@ -9,7 +9,6 @@ CHANNEL_URL = "https://www.youtube.com/@KanalSvobodnehoPristavu"
 DOWNLOAD_AUDIO = True  # <-- Toggle True/False
 OUTPUT_JSON = Path("mat_czech/yt_metada.json")
 AUDIO_DIR = Path("audio")
-ARCHIVE_FILE = "downloaded_audio_archive.txt"
 SAVE_EVERY = 10
 MAX_WORKERS = 2  # Number of concurrent threads
 
@@ -78,13 +77,13 @@ def process_video(vid_id, vid_url, tab):
       "no_warnings": True,
       "ignoreerrors": True,
       "skip_download": not DOWNLOAD_AUDIO,
+      "overwrites": False,  # Prevents re-downloading if file already exists in AUDIO_DIR
   }
 
   if DOWNLOAD_AUDIO:
     ydl_opts.update({
         "format": "bestaudio/best",
         "outtmpl": str(AUDIO_DIR / "%(id)s.%(ext)s"),
-        "download_archive": ARCHIVE_FILE,
         "match_filter": yt_dlp.utils.match_filter_func(
             "!is_upcoming & !is_live"
         ),
