@@ -2,19 +2,19 @@ import json
 from pydoc import text
 
 """Filtering relevant metada"""
-# with open("czech/yt.json", "r") as f:
+# with open("mat_czech/yt.json", "r") as f:
 #     yt = json.load(f)
 #
 # yt_td = [{"title": x["title"], "desc": x["description"], "url": x["webpage_url"]} for x in yt]
 # print(yt_td)
-# with open("english/yt.json", "w") as f:
+# with open("mat_translated/yt.json", "w") as f:
 #     json.dump(yt_td, f, indent=1, ensure_ascii=False)
 
 """Filtering relevant articles"""
-# with open("czech/arts.json", "r") as f:
+# with open("mat_czech/arts.json", "r") as f:
 #     arts = json.load(f)
 #
-# with open("english/yt.json", "r") as f:
+# with open("mat_translated/yt.json", "r") as f:
 #     yt = json.load(f)
 #
 # # print(art)
@@ -35,27 +35,27 @@ from pydoc import text
 #
 # print(len(arts))
 # print(len(filtered_arts))
-# with open("english/arts.json", "w") as f:
+# with open("mat_translated/arts.json", "w") as f:
 #     json.dump(filtered_arts, f, indent=1, ensure_ascii=False)
 
 
 """Preparing for translation"""
-# with open("english/yt.json", "r") as f:
+# with open("mat_translated/yt.json", "r") as f:
 #     yt = json.load(f)
-# with open("english/arts.json", "r") as f:
+# with open("mat_translated/arts.json", "r") as f:
 #     arts = json.load(f)
 #
 # yt_tr = [(x["title"], x["desc"]) for x in yt]
 # arts_tr = [(x["title"], x["text"]) for x in arts]
 #
-# with open("english/arts_tr.json", "w") as f:
+# with open("mat_translated/arts_tr.json", "w") as f:
 #     json.dump(arts_tr, f, indent=1, ensure_ascii=False)
-# with open("english/yt_tr.json", "w") as f:
+# with open("mat_translated/yt_tr.json", "w") as f:
 #     json.dump(yt_tr, f, indent=1, ensure_ascii=False)
 
 
 """Chapter filtering"""
-# with open("czech/ankap.json", "r") as f:
+# with open("mat_czech/ankap.json", "r") as f:
 #     ancap = json.load(f)
 #
 # print(ancap[34])
@@ -64,10 +64,10 @@ from pydoc import text
 #     x["chapter"] = splitted[0]
 #     # x["text"] = "\n\n".join(splitted[1:])
 #
-# with open("czech/ankap.json", "w") as f:
+# with open("mat_czech/ankap.json", "w") as f:
 #     json.dump(ancap, f, indent=1, ensure_ascii=False)
 
-with open("english/ancap_en.json", "r") as f:
+with open("mat_translated/ancap_en.json", "r") as f:
     ancap = json.load(f)
 
 print(ancap[34])
@@ -76,6 +76,6 @@ for x in ancap[34:]:
     x["chapter"] = splitted[0]
     # x["text"] = "\n\n".join(splitted[1:])
 
-with open("english/ancap_en.json", "w") as f:
+with open("mat_translated/ancap_en.json", "w") as f:
     json.dump(ancap, f, indent=1, ensure_ascii=False)
 

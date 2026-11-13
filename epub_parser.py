@@ -18,7 +18,7 @@ dropped: content starts at the first file with <body class="body"> and stops at 
 first heading listed in BACK_MATTER_HEADINGS or with a supporter-* class.
 
 Usage:
-    python epub_parser.py                 # parses data/*.epub -> czech/<book>.json
+    python epub_parser.py                 # parses data/*.epub -> mat_czech/<book>.json
     python epub_parser.py --max-depth 1   # one entry per top-level chapter instead
 """
 
@@ -225,7 +225,7 @@ def parse_epub(epub_path: str, output_json_path: str | None = None, max_depth: i
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("epubs", nargs="*", help="EPUB files (default: data/*.epub)")
-    ap.add_argument("--out-dir", default="czech")
+    ap.add_argument("--out-dir", default="mat_czech")
     ap.add_argument("--max-depth", type=int, default=None,
                     help="split only on headings up to this level (1 = chapters); default: all levels")
     args = ap.parse_args()
