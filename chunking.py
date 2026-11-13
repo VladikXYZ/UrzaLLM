@@ -1,14 +1,14 @@
 import json
 
-with open("preprocessed/anag_tr.json") as f:
+with open("english/anag_tr.json") as f:
     anag = json.load(f)
-with open("preprocessed/ancap_tr.json") as f:
+with open("english/ancap_tr.json") as f:
     ancap = json.load(f)
 
 
-with open("preprocessed/anag_en.json") as f:
+with open("english/anag_en.json") as f:
     anagen = json.load(f)
-with open("preprocessed/ancap_en.json") as f:
+with open("english/ancap_en.json") as f:
     ancapen = json.load(f)
 
 chunks = []
@@ -72,13 +72,13 @@ for chapter in ancapen:
             subtitle = chapter["name"]
         en_chunks.append({"type": "book", "title": title, "subtitle": subtitle, "text": chunk, "source": "AC"})
 
-with open("preprocessed/arts.json") as f:
+with open("english/arts.json") as f:
     arts = json.load(f)
 
 for art in arts:
     chunks.append({"type": "article", "title": art["title"], "subtitle": "", "text": art["text"], "source": art["url"]})
 
-# with open("preprocessed/arts_en.json") as f:
+# with open("english/arts_en.json") as f:
 #     trarts = json.load(f)
 #
 # enarts = []
@@ -88,18 +88,18 @@ for art in arts:
 #     tempart["text"] = tr[1]
 #     enarts.append(tempart)
 #
-# with open("preprocessed/arts_en_full.json", "w") as f:
+# with open("english/arts_en_full.json", "w") as f:
 #     json.dump(enarts, f, indent=1, ensure_ascii=False)
 
-with open("preprocessed/arts_en_full.json") as f:
+with open("english/arts_en_full.json") as f:
     enarts = json.load(f)
 for art in enarts:
     en_chunks.append({"type": "article", "title": art["title"], "subtitle": "", "text": art["text"], "source": art["url"]})
 
 
-with open("preprocessed/yt.json") as f:
+with open("english/yt.json") as f:
     yt = json.load(f)
-with open("preprocessed/yt_en_full.json") as f:
+with open("english/yt_en_full.json") as f:
     enyt = json.load(f)
 
 # enyts_corr = []
@@ -109,7 +109,7 @@ with open("preprocessed/yt_en_full.json") as f:
 #     en["desc"] = e[1]
 #     enyts_corr.append(en)
 #
-# with open("preprocessed/yt_en_full.json", "w") as f:
+# with open("english/yt_en_full.json", "w") as f:
 #     json.dump(enyts_corr, f, indent=1, ensure_ascii=False)
 
 
