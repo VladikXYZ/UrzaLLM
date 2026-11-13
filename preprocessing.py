@@ -55,17 +55,27 @@ from pydoc import text
 
 
 """Chapter filtering"""
-with open("jsons/ankap.json", "r") as f:
+# with open("jsons/ankap.json", "r") as f:
+#     ancap = json.load(f)
+#
+# print(ancap[34])
+# for x in ancap[34:]:
+#     splitted = x["chapter"].split(" › ")
+#     x["chapter"] = splitted[0]
+#     # x["text"] = "\n\n".join(splitted[1:])
+#
+# with open("jsons/ankap.json", "w") as f:
+#     json.dump(ancap, f, indent=1, ensure_ascii=False)
+
+with open("preprocessed/ancap_en.json", "r") as f:
     ancap = json.load(f)
 
 print(ancap[34])
 for x in ancap[34:]:
-    splitted = x["text"].split("\n\n")
-    x["name"] = splitted[0]
-    x["text"] = "\n\n".join(splitted[1:])
+    splitted = x["chapter"].split(" › ")
+    x["chapter"] = splitted[0]
+    # x["text"] = "\n\n".join(splitted[1:])
 
-with open("preprocessed/ancap_tr.json", "w") as f:
+with open("preprocessed/ancap_en.json", "w") as f:
     json.dump(ancap, f, indent=1, ensure_ascii=False)
-
-
 
