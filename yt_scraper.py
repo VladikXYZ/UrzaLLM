@@ -11,7 +11,7 @@ OUTPUT_JSON = Path("mat_czech/yt_metada.json")
 AUDIO_DIR = Path("audio")
 ARCHIVE_FILE = "downloaded_audio_archive.txt"
 SAVE_EVERY = 10
-MAX_WORKERS = 1  # Number of concurrent threads
+MAX_WORKERS = 2  # Number of concurrent threads
 
 OUTPUT_JSON.parent.mkdir(parents=True, exist_ok=True)
 if DOWNLOAD_AUDIO:
