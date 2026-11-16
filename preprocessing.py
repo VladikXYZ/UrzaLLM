@@ -14,7 +14,7 @@ from pydoc import text
 # with open("mat_czech/arts.json", "r") as f:
 #     arts = json.load(f)
 #
-# with open("mat_translated/yt.json", "r") as f:
+# with open("mat_translated/yt_en_full.json", "r") as f:
 #     yt = json.load(f)
 #
 # # print(art)
@@ -35,23 +35,23 @@ from pydoc import text
 #
 # print(len(arts))
 # print(len(filtered_arts))
-# with open("mat_translated/arts.json", "w") as f:
+# with open("mat_czech/arts_filtered.json", "w") as f:
 #     json.dump(filtered_arts, f, indent=1, ensure_ascii=False)
 
 
 """Preparing for translation"""
-# with open("mat_translated/yt.json", "r") as f:
-#     yt = json.load(f)
+with open("mat_czech/yt_metadata_nice.json", "r") as f:
+    yt = json.load(f)
 # with open("mat_translated/arts.json", "r") as f:
 #     arts = json.load(f)
-#
-# yt_tr = [(x["title"], x["desc"]) for x in yt]
+
+yt_tr = [(x["title"], x["description"]) for x in yt]
 # arts_tr = [(x["title"], x["text"]) for x in arts]
-#
+
 # with open("mat_translated/arts_tr.json", "w") as f:
 #     json.dump(arts_tr, f, indent=1, ensure_ascii=False)
-# with open("mat_translated/yt_tr.json", "w") as f:
-#     json.dump(yt_tr, f, indent=1, ensure_ascii=False)
+with open("mat_czech/yt_tr.json", "w") as f:
+    json.dump(yt_tr, f, indent=1, ensure_ascii=False)
 
 
 """Chapter filtering"""
@@ -67,15 +67,15 @@ from pydoc import text
 # with open("mat_czech/ankap.json", "w") as f:
 #     json.dump(ancap, f, indent=1, ensure_ascii=False)
 
-with open("mat_translated/ancap_en.json", "r") as f:
-    ancap = json.load(f)
-
-print(ancap[34])
-for x in ancap[34:]:
-    splitted = x["chapter"].split(" › ")
-    x["chapter"] = splitted[0]
-    # x["text"] = "\n\n".join(splitted[1:])
-
-with open("mat_translated/ancap_en.json", "w") as f:
-    json.dump(ancap, f, indent=1, ensure_ascii=False)
+# with open("mat_translated/ancap_en.json", "r") as f:
+#     ancap = json.load(f)
+#
+# print(ancap[34])
+# for x in ancap[34:]:
+#     splitted = x["chapter"].split(" › ")
+#     x["chapter"] = splitted[0]
+#     # x["text"] = "\n\n".join(splitted[1:])
+#
+# with open("mat_translated/ancap_en.json", "w") as f:
+#     json.dump(ancap, f, indent=1, ensure_ascii=False)
 
