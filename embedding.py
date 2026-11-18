@@ -6,8 +6,8 @@ import torch
 from sentence_transformers import SentenceTransformer
 
 # 1. Configuration
-INPUT_JSON = Path("real_data/trans_chunks.json")
-OUTPUT_DIR = Path("real_data/embeddings_out_trans_cs")
+INPUT_JSON = Path("real_data/transcripts_urza_clanker/transcripts_urza.json")
+OUTPUT_DIR = Path("real_data/embeddings_out_rollo_cs")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 # Define the models to benchmark
@@ -24,7 +24,7 @@ MODELS = {
 with open(INPUT_JSON, "r", encoding="utf-8") as f:
     raw_data = json.load(f)
 
-texts_to_embed = [item["text_cs"] for item in raw_data]
+texts_to_embed = [item["context_cs"]+item["text_cs"] for item in raw_data]
 
 print(f"Loaded {len(texts_to_embed)} text chunks for embedding (ignoring titles/subtitles).")
 
