@@ -7,7 +7,7 @@ from sentence_transformers import SentenceTransformer
 
 # 1. Configuration
 INPUT_JSON = Path("chunked/chunked.json")
-OUTPUT_DIR = Path("embeddings_out_en")
+OUTPUT_DIR = Path("real_data/embeddings_out_en")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 # Define the models to benchmark

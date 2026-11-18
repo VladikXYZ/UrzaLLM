@@ -1,33 +1,27 @@
 import json
-from pathlib import Path
+import os
 
-src_dir = Path("better_translation/urza_translation_package")
-dst_dir = Path("better_translation/transcriptions")
-
-dst_dir.mkdir(parents=True, exist_ok=True)
-
-processed_files = []
-
-# Iterate over all subfolders, copy and transform sentences.json -> <parent_directory>.json
-for folder in sorted(src_dir.iterdir()):
-    if folder.is_dir():
-        sentences_file = folder / "sentences.json"
-        if sentences_file.exists():
-            with open(sentences_file, "r", encoding="utf-8") as f:
-                data = json.load(f)
-
-            # Update sentence keys: 'text' -> 'text_cs', and replace 'translate' with 'text_en': ""
-            for s in data.get("sentences", []):
-                text_val = s.pop("text", "")
-                if "translate" in s:
-                    del s["translate"]
-                s["text_cs"] = text_val
-                s["text_en"] = ""
-
-            target_file = dst_dir / f"{folder.name}.json"
-            with open(target_file, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=1, ensure_ascii=False)
-
-            processed_files.append(target_file.name)
-
-print(f"Successfully processed {len(processed_files)} files in {dst_dir}")
+dirr = "real_data/urza_translation_package2/"
+trans = os.listdir(dirr)
+print(trans)
+for tr in trans:
+    if tr in ["index.json", "README.md"]:
+        continue
+    with open(f"{dirr}/{tr}","r") as f:
+        data = json.load(f)
+    speech = data["sentences"]
+    print(tr)
+    print(len(speech))
+    urza = {"id":data["video_id"], "src": data["url"], "title": data["title"]}
+    merged = [speech[0]]
+    for s in speech[1:]:
+        last = merged[-1]
+        if last["speaker"] == s["speaker"] and len(last["text"]) + len(s["text"]) <= 400:
+            last["text"] += s["text"]
+            last["end"] = s["end"]
+        else:
+            merged.append(s)
+    print(len(merged))
+    urza["text"] = merged
+    with open(f"real_data/merged_speakers/{tr}", "w") as f:
+        json.dump(urza, f, indent=1, ensure_ascii=False)
