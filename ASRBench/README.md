@@ -70,6 +70,20 @@ others; it prints its last log lines and the summary at the end shows what worke
 If the NVIDIA driver is older than 570, put `TORCH_INDEX=https://download.pytorch.org/whl/cu124`
 in front of the command the first time.
 
+## Production run: Sortformer + Canary + Whisper large-v3 + turbo
+
+```python
+%pip install "nemo_toolkit[asr]>=2.5" "faster-whisper>=1.1" soundfile
+!python ASRBench/transcribe_pipeline.py audio/
+```
+
+For every video in `audio/` it writes `out/<name>/diarization.json`, `canary.json`,
+`whisper-large-v3.json` and `whisper-large-v3-turbo.json`. Three processes share the GPU
+(Sortformer then Canary, Whisper v3, Whisper turbo), each model loads once, and all
+models run batched. WAVs are made one video at a time and deleted when done, at most
+16 GB at once (`WAV_LIMIT_GB`). Finished videos are skipped; a video stopped mid-way
+keeps an `out/<name>/<model>.unfinished` flag and is redone on the next run.
+
 ## Whisper large-v3 vs. turbo only (automatic, no hand work)
 
 ```bash
