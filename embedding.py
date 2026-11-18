@@ -6,16 +6,16 @@ import torch
 from sentence_transformers import SentenceTransformer
 
 # 1. Configuration
-INPUT_JSON = Path("chunked/chunked.json")
-OUTPUT_DIR = Path("real_data/embeddings_out_en")
+INPUT_JSON = Path("real_data/trans_chunks.json")
+OUTPUT_DIR = Path("real_data/embeddings_out_trans_cs")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 # Define the models to benchmark
 # Note: Verify the exact HF repo ID if using a local path or specific 0.6B/2B variant
 MODELS = {
     "embeddinggemma_2": "google/embeddinggemma-2",
-    "qwen3_0.6b": "Qwen/Qwen3-Embedding-0.6B",
-    "qwen3_4b": "Qwen/Qwen3-Embedding-4B",
+    # "qwen3_0.6b": "Qwen/Qwen3-Embedding-0.6B",
+    # "qwen3_4b": "Qwen/Qwen3-Embedding-4B",
     "bge_m3": "BAAI/bge-m3",
     # "qwen3_8b": "Qwen/Qwen3-Embedding-8B",
 }
@@ -24,7 +24,7 @@ MODELS = {
 with open(INPUT_JSON, "r", encoding="utf-8") as f:
     raw_data = json.load(f)
 
-texts_to_embed = [item["text_en"] for item in raw_data]
+texts_to_embed = [item["text_cs"] for item in raw_data]
 
 print(f"Loaded {len(texts_to_embed)} text chunks for embedding (ignoring titles/subtitles).")
 

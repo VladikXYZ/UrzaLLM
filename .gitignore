@@ -9,6 +9,10 @@ better_translation
 real_data/merged_speakers
 real_data/urza_speech
 real_data/urza_translation_package2
+real_data/urza_merged
+real_data/urza_video_data
+real_data/trans_chunks.json
+real_data/embeddings_out_trans_cs
 
 # Embedding: resumable partial batches, dry runs, and files analyze.py rebuilds
 Embedding/.partial/
