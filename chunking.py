@@ -3,7 +3,7 @@ import json
 
 def chunk_book(name):
     chunked = []
-    with open(f"materials/{name}_full.json") as f:
+    with open(f"real_data/{name}_full.json") as f:
         book = json.load(f)
     for chap in book:
         # print(chap)
@@ -15,7 +15,7 @@ def chunk_book(name):
             print(len(spen))
             print(f"bad count {chap["title_cs"]}: {chap["subtitle_cs"]}")
         for c,e in zip(spcs, spen):
-            chunked.append({"title_cs": chap["title_cs"], "subtitle_cs": chap["subtitle_cs"], "text_cs": c, "title_en": chap["title_en"], "subtitle_en": chap["subtitle_en"], "text_en": e, "src": "", "type": name})
+            chunked.append({"title_cs": chap["title_cs"], "subtitle_cs": chap["subtitle_cs"], "text_cs": c, "title_en": chap["title_en"], "subtitle_en": chap["subtitle_en"], "text_en": e, "src": name, "type": "book"})
     return chunked
 
 
@@ -34,21 +34,21 @@ chunks.extend(chunk_book("anag"))
 
 # print(f"Books: {len(all_cs)} vs {len(old_books)}")
 
-with open("materials/yt_full.json") as f:
+with open("real_data/yt_full.json") as f:
     yt = json.load(f)
 
-with open("materials/arts_full.json") as f:
+with open("real_data/arts_full.json") as f:
     arts = json.load(f)
 
 
 for y in yt:
-    chunks.append({"title_cs": y["title_cs"],"subtitle_cs": "", "text_cs": y["desc_cs"], "title_en": y["title_en"], "subtitle_en": "", "text_en": y["desc_en"], "src": y["url"], "type": "article"})
+    chunks.append({"title_cs": y["title_cs"],"subtitle_cs": "", "text_cs": y["desc_cs"], "title_en": y["title_en"], "subtitle_en": "", "text_en": y["desc_en"], "src": y["url"], "type": "video"})
 
 for a in arts:
-    chunks.append({"title_cs": a["title_cs"],"subtitle_cs": "", "text_cs": a["text_cs"], "title_en": a["title_en"], "subtitle_en": "", "text_en": a["text_en"], "src": a["url"], "type": "video"})
+    chunks.append({"title_cs": a["title_cs"],"subtitle_cs": "", "text_cs": a["text_cs"], "title_en": a["title_en"], "subtitle_en": "", "text_en": a["text_en"], "src": a["url"], "type": "article"})
 
 
-with open("chunked/chunked.json", "w") as f:
+with open("real_data/chunked.json", "w") as f:
     json.dump(chunks, f, indent=1, ensure_ascii=False)
 
 
