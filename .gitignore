@@ -6,6 +6,9 @@
 __pycache__/
 audio
 better_translation
+real_data/merged_speakers
+real_data/urza_speech
+real_data/urza_translation_package2
 
 # Embedding: resumable partial batches, dry runs, and files analyze.py rebuilds
 Embedding/.partial/
