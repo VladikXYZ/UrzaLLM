@@ -19,7 +19,7 @@ import pyarrow.parquet as pq
 HERE = Path(__file__).resolve().parent
 EMB_ROOT = HERE.parent / "Embedding"
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from dataset import CHUNKS, ENGLISH, FINAL, OUT_DIR, nm, read_chunks, results_dir  # noqa: E402
+from dataset import CHUNKS, ENGLISH, FINAL, OUT_DIR, REAL, nm, read_chunks, results_dir  # noqa: E402
 DRUG, SCHOOL = ("drug", "school") if ENGLISH else ("drog", "školství")   # example searches (titles)
 OUT = OUT_DIR
 SOURCES = ["article", "book", "video"]
@@ -142,6 +142,8 @@ def html(meta, a, b, rates, path, variant):
     label = {"article": "articles", "book": "book passages", "video": "video descriptions"}
     page = page.replace("__N__", f"{len(meta):,}")
     page = page.replace("__VARIANT__", variant).replace("__DRUG__", DRUG).replace("__SCHOOL__", SCHOOL)
+    if REAL:     # real_data chunks come with no chunking report of their own
+        page = page.replace("; see the\n __PREP_REPORT__)", ")")
     page = page.replace("__PREP_REPORT__", "chunking report" if FINAL else "preprocessing report")
     page = page.replace("__BOOK_SHARE__", (
         f"books are {p(rnd['book'])} of the corpus, so a book chunk would have about "
@@ -225,6 +227,9 @@ def html(meta, a, b, rates, path, variant):
             + (("; ".join(found))[:1].upper() + ("; ".join(found))[1:] + ". " if found else "")
             + "What remains even without any context line comes from the texts themselves: their style, "
               "length and the way each source writes about a topic.")
+    elif variant == "textonly":
+        label_txt = ("Nothing is put in front of the chunks (no title, chapter or source name), so this grouping "
+                     "comes from the texts themselves: their style, length and the way each source writes about a topic.")
     else:
         label_txt = ("Part may be the context line at the start of each chunk (“Kniha …”, “Video „…“”, "
                      "“Článek …” or “Oznámení …”); the <code>nosource</code> and <code>textonly</code> variants "

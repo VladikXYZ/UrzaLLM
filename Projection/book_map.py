@@ -376,6 +376,9 @@ def html(pts, chapters, rates, cross, variant, n, path, nearest, isolated, moved
             f"{p((ref['rates']['chapter'][0] - t['rates']['chapter'][0]) / (ref['rates']['chapter'][0] - rates['chapter'][1]))}"
             " of the above-chance same-chapter neighbours came from the shared label; the rest comes from what the "
             "chapters actually say.")
+    elif variant == "textonly":
+        caveat = ("<strong>No labels in the text.</strong> Each paragraph was embedded from its own text alone, "
+                  "without book, chapter or section names, so the chapter regions come from what the paragraphs say.")
     else:
         caveat = ("<strong>Caveat: the chapter name is in the text.</strong> Every chunk starts with its chapter "
                   "path, which helps chunks of one chapter find each other. The <code>textonly</code> variant "

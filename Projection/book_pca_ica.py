@@ -26,7 +26,8 @@ from book_map import BOOK_COLORS, chapter_group, esc  # noqa: E402
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from dataset import CHUNKS, ENGLISH, OUT_DIR, nm, read_chunks, results_dir  # noqa: E402
+from dataset import CHUNKS, ENGLISH, MODEL_LABEL, OUT_DIR, REAL, nm, read_chunks, results_dir  # noqa: E402
+TAG = MODEL_LABEL if REAL else "textonly"
 OUT = OUT_DIR
 VARIANT = "textonly"
 N_PCA_SHOW = 20      # components in the variance chart
@@ -133,9 +134,9 @@ def main():
 
     OUT.mkdir(exist_ok=True)
     png(S[:, 0], S[:, 1], book, grp, f"PC1 ({evr[0]:.1%} of variance)", f"PC2 ({evr[1]:.1%})",
-        "Book chunks, PCA (textonly)", OUT / f"book_pca_ica_{VARIANT}_pca.png")
+        f"Book chunks, PCA ({TAG})", OUT / f"book_pca_ica_{VARIANT}_pca.png")
     png(Z[:, ax_i["k"]], Z[:, ax_j["k"]], book, grp, f"{ax_i['label']}: {', '.join(ax_i['top'][:2])} …",
-        f"{ax_j['label']}: {', '.join(ax_j['top'][:2])} …", "Book chunks, ICA (textonly)",
+        f"{ax_j['label']}: {', '.join(ax_j['top'][:2])} …", f"Book chunks, ICA ({TAG})",
         OUT / f"book_pca_ica_{VARIANT}_ica.png")
     html(pts, chapters, evr, n50, pc_ends, comps, ax_i, ax_j, pca_tight, ica_tight, nonlin, len(B), cum,
          bsplit, focused, OUT / f"book_pca_ica_{VARIANT}.html")

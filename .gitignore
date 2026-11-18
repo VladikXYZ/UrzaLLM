@@ -22,3 +22,13 @@ Chunks/output/projection/
 ASRBench/out/
 ASRBench/envs/
 ASRBench/models/
+
+# real_data transcripts: too big for GitHub (100 MB file limit)
+real_data/trans_chunks.json
+real_data/embeddings_out_trans_cs/
+real_data.zip
+embeddings_out_trans_cs.tar.gz
+
+# real_data working files: rebuilt by Chunks/real_data.py and the build scripts (vectors, chunk tables, UMAP caches,
+# report intermediates); the finished reports are in RealReports/
+Chunks/output_real/

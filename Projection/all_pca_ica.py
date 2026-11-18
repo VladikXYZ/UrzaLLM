@@ -24,7 +24,8 @@ from cumvar import cumvar_svg, needed  # noqa: E402
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from dataset import CHUNKS, ENGLISH, OUT_DIR, nm, read_chunks, results_dir  # noqa: E402
+from dataset import CHUNKS, ENGLISH, MODEL_LABEL, OUT_DIR, REAL, nm, read_chunks, results_dir  # noqa: E402
+TAG = MODEL_LABEL if REAL else "textonly"
 OUT = OUT_DIR
 VARIANT = "textonly"
 SOURCES = ["article", "book", "video"]
@@ -151,9 +152,9 @@ def main():
 
     OUT.mkdir(exist_ok=True)
     png(S[:, 0], S[:, 1], src, f"PC1 ({evr[0]:.1%} of variance)", f"PC2 ({evr[1]:.1%})",
-        "All chunks, PCA (textonly)", OUT / f"all_pca_ica_{VARIANT}_pca.png")
+        f"All chunks, PCA ({TAG})", OUT / f"all_pca_ica_{VARIANT}_pca.png")
     png(Z[:, ax_i["k"]], Z[:, ax_j["k"]], src, f"{ax_i['label']}: {short(ax_i)}", f"{ax_j['label']}: {short(ax_j)}",
-        "All chunks, ICA (textonly)", OUT / f"all_pca_ica_{VARIANT}_ica.png")
+        f"All chunks, ICA ({TAG})", OUT / f"all_pca_ica_{VARIANT}_ica.png")
     html(pts, src, evr, n50, pcs, comps, ax_i, ax_j, rp, ri, umap_rates, cum, OUT / f"all_pca_ica_{VARIANT}.html")
     print(f"PCA: PC1 {evr[0]:.1%} (source eta2 {pcs[0]['eta']:.2f}), PC2 {evr[1]:.1%}; {n50} PCs for 50%")
     for c in comps:

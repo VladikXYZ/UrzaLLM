@@ -1,0 +1,211 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Embedder comparison</title>
+<style>
+:root{--bg:#f9f9f7;--card:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--line:#e4e3df;
+ --s0:#2a78d6;--s1:#eb6834;--s2:#1baf7a;--hl:#0b0b0b;--m0:#6a5acd;--m1:#c2410c;--lo:#cfc9ee;--hi:#3b2f8f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0d0d;--card:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--line:#383835;
+ --s0:#3987e5;--s1:#d95926;--s2:#199e70;--hl:#f0efec;--m0:#9d8ff0;--m1:#f08a4b;--lo:#5b5384;--hi:#e2dcff}}
+:root[data-theme="dark"]{--bg:#0d0d0d;--card:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--line:#383835;
+ --s0:#3987e5;--s1:#d95926;--s2:#199e70;--hl:#f0efec;--m0:#9d8ff0;--m1:#f08a4b;--lo:#5b5384;--hi:#e2dcff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1400px;margin:0 auto;padding:24px 16px}
+h1{font-size:22px;margin:0 0 4px} p.sub{color:var(--ink2);margin:0 0 16px;max-width:900px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:16px 0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}
+.kpi .v{font-size:24px;font-weight:650;font-variant-numeric:tabular-nums}.kpi .l{color:var(--ink2);font-size:12.5px}
+.controls{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:0 0 12px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{background:var(--card);color:var(--ink);border:0;padding:6px 12px;cursor:pointer;font:inherit}
+.seg button+button{border-left:1px solid var(--line)}.seg button.on{background:var(--ink);color:var(--bg)}
+.lg{display:inline-flex;gap:12px;flex-wrap:wrap;color:var(--ink2);font-size:13px;align-items:center}
+.sw{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:-1px}
+.ramp{display:inline-block;width:90px;height:10px;border-radius:5px;vertical-align:-1px;margin:0 4px}
+input[type=search]{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 10px;min-width:220px;font:inherit}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}
+.panel h2{font-size:15px;margin:0 0 2px}.panel .note{color:var(--ink2);font-size:12.5px;margin:0 0 8px}
+canvas{width:100%;aspect-ratio:1/1;display:block;cursor:crosshair;touch-action:none}
+#tip{position:fixed;pointer-events:none;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;
+ padding:8px 10px;font-size:12.5px;max-width:360px;box-shadow:0 4px 16px rgba(0,0,0,.12);display:none;z-index:9}
+#tip .t{font-weight:600;margin-bottom:2px}#tip .m{color:var(--ink2)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;font-variant-numeric:tabular-nums;margin-top:8px;background:var(--card);border:1px solid var(--line);border-radius:8px}
+th,td{padding:6px 12px;border-bottom:1px solid var(--line);text-align:right}th:first-child,td:first-child{text-align:left}
+th{color:var(--ink2);font-weight:600}tr:last-child td{border-bottom:0}td:first-child{white-space:nowrap}
+h2.sec{font-size:17px;margin:28px 0 6px;padding-top:12px;border-top:1px solid var(--line)}
+.steps,.concl{max-width:900px;padding-left:20px}.steps li,.concl li{margin:6px 0}
+p.cap{color:var(--ink2);font-size:13px;margin:8px 2px 0;max-width:900px}
+code{background:var(--line);padding:1px 5px;border-radius:4px;font-size:12.5px}
+svg text{fill:var(--ink2);font-size:11px}
+@media (max-width:820px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<h1>bge-m3 vs EmbeddingGemma <span style="font-weight:400;color:var(--ink2)">· the same 2,911 chunks in two embedding spaces</span></h1>
+<p class="sub">Urza's articles, video descriptions and book paragraphs (<code>real_data/</code>), embedded by both models from
+the same Czech text. How differently do the two models arrange them?</p>
+<div class="kpis" id="kpis"></div>
+
+<h2 class="sec">What was done</h2>
+<ul class="steps">
+ <li><strong>Data:</strong> <code>real_data/chunked.json</code>: <span id="nch"></span> One chunk per article text,
+  per video description (cleaned of donation boilerplate) and per book paragraph.</li>
+ <li><strong>Vectors:</strong> <code>real_data/embeddings_out_cs/</code>, embedded on the GPU from the Czech text alone:
+  <code>BAAI/bge-m3</code> (1,024 numbers per chunk) and EmbeddingGemma (<code>embeddinggemma_2</code>, 768 numbers).
+  Checked: same row order as the chunks, no missing values, all re-normalised to length 1.</li>
+ <li><strong>Maps:</strong> UMAP (cosine distance, 15 neighbours, min_dist 0.1, seed 42) of each model, of the raw vectors and of the
+  <em>source-centred</em> vectors (each source's average vector subtracted, so a shared “this is a video description” direction
+  cannot pull chunks together). EmbeddingGemma's map is rotated, mirrored and scaled to fit bge-m3's as closely as possible
+  (Procrustes), so the same regions sit in the same place; this does not change its shape.</li>
+ <li><strong>Measurements</strong> use the full vectors, not the maps: each chunk's 10 nearest neighbours by cosine similarity;
+  how many are from the same source (or book chapter); how many neighbours the two models share; and the rank correlation of
+  cosine similarities over 200,000 random pairs of chunks.</li>
+</ul>
+
+<h2 class="sec">The two maps</h2>
+<div class="controls">
+ <div class="seg" id="view"><button data-v="raw" class="on">Raw vectors</button><button data-v="cen">Source-centred</button></div>
+ <div class="seg" id="col"><button data-c="src" class="on">Colour: source</button><button data-c="ov">Colour: shared neighbours</button></div>
+ <input type="search" id="q" placeholder="Highlight text, e.g. bitcoin, school, war">
+ <span class="lg" id="legend"></span>
+</div>
+<div class="grid">
+ <div class="panel"><h2 id="h0"></h2><p class="note" id="n0"></p><canvas id="c0"></canvas></div>
+ <div class="panel"><h2 id="h1"></h2><p class="note" id="n1"></p><canvas id="c1"></canvas></div>
+</div>
+<p class="cap" id="capmap"></p>
+
+<h2 class="sec">Neighbourhoods: what each model puts together</h2>
+<div class="tw"><table id="tsame"></table></div>
+<p class="cap" id="capsame"></p>
+
+<h2 class="sec">Agreement between the models</h2>
+<div class="tw"><table id="tagree"></table></div>
+<p class="cap" id="capagree"></p>
+
+<h2 class="sec">Similarity scale and shape of the space</h2>
+<div class="panel" style="max-width:900px"><svg id="hist" viewBox="0 0 860 240" width="100%" role="img" aria-label="Distribution of cosine similarity between random pairs of chunks, both models"></svg></div>
+<p class="cap" id="caphist"></p>
+<div class="tw"><table id="tgeo"></table></div>
+<p class="cap" id="capgeo"></p>
+
+<h2 class="sec">Conclusions</h2>
+<ul class="concl" id="concl"></ul>
+</div>
+<div id="tip"></div>
+<script>
+const ST=__ST__, CROSS=__CROSS__, RND=__RND__, P=__PTS__;
+const M=Object.keys(ST), SRC=["article","book","video"], SL={article:"Articles",video:"Videos",book:"Books"};
+const N=P.src.length, pct=x=>Math.round(x*100)+"%", f2=x=>x.toFixed(2);
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const A=ST[M[0]], B=ST[M[1]];
+let view="raw", col="src", hover=-1, query="";
+const nsrc=SRC.map(s=>P.src.filter(x=>x===SRC.indexOf(s)).length);
+document.getElementById("nch").textContent=`${N.toLocaleString("en")} chunks (${SRC.map((s,i)=>nsrc[i].toLocaleString("en")+" "+SL[s].toLowerCase()).join(", ")}).`;
+
+// ---- KPIs
+document.getElementById("kpis").innerHTML=[
+ [pct(CROSS.overlap),"of each chunk's 10 nearest neighbours are the same in both models (chance: "+(CROSS.random*100).toFixed(1)+"%)"],
+ [f2(CROSS.rho),"rank correlation of the two models' similarities over 200,000 random chunk pairs"],
+ [pct(B.same_raw.video)+" vs "+pct(A.same_raw.video),"video neighbours that are also videos: "+B.label+" vs "+A.label],
+ [f2(B.cos_mean)+" vs "+f2(A.cos_mean),"average cosine similarity of two random chunks: "+B.label+" vs "+A.label],
+].map(([v,l])=>`<div class="kpi"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
+
+// ---- maps
+const cv=[0,1].map(i=>document.getElementById("c"+i));
+M.forEach((m,i)=>{document.getElementById("h"+i).textContent=ST[m].label;
+ document.getElementById("n"+i).innerHTML=`<code>${ST[m].hf}</code>, ${ST[m].dim.toLocaleString("en")} dimensions`+(i?" · turned to match the left map":"");});
+function mix(a,b,t){const h=s=>[1,3,5].map(k=>parseInt(s.slice(k,k+2),16));const x=h(a),y=h(b);return`rgb(${x.map((v,k)=>Math.round(v+(y[k]-v)*t)).join(",")})`}
+function legend(){const L=document.getElementById("legend");
+ L.innerHTML=col==="src"?SRC.map((s,i)=>`<span><span class="sw" style="background:var(--s${i})"></span>${SL[s]}</span>`).join("")
+ :`<span>0 of 10<span class="ramp" style="background:linear-gradient(90deg,${css("--lo")},${css("--hi")})"></span>10 of 10 neighbours shared</span>`;}
+function matches(){if(!query)return null;const q=query.toLowerCase();const s=new Set();
+ for(let i=0;i<N;i++)if((P.title[i]+" "+P.sub[i]+" "+P.text[i]).toLowerCase().includes(q))s.add(i);return s;}
+let MATCH=null;
+const BOUND={};
+for(const m of M)for(const v of ["raw","cen"]){const xy=P.xy[m][v],q=(a,p)=>a[Math.floor(p*(a.length-1))];
+ const xs=xy.map(p=>p[0]).sort((a,b)=>a-b),ys=xy.map(p=>p[1]).sort((a,b)=>a-b);
+ const b=[q(xs,.0015),q(xs,.9985),q(ys,.0015),q(ys,.9985)];
+ b.pinned=xy.filter(p=>p[0]<b[0]||p[0]>b[1]||p[1]<b[2]||p[1]>b[3]).length;BOUND[m+v]=b;}
+function proj(m,w){const b=BOUND[m+view],pad=10,s=Math.min((w-2*pad)/(b[1]-b[0]),(w-2*pad)/(b[3]-b[2])),
+ ox=(w-(b[1]-b[0])*s)/2,oy=(w-(b[3]-b[2])*s)/2,xy=P.xy[m][view],cl=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
+ return [i=>ox+(cl(xy[i][0],b[0],b[1])-b[0])*s, i=>w-oy-(cl(xy[i][1],b[2],b[3])-b[2])*s];}
+function draw(){
+ const sc=[css("--s0"),css("--s1"),css("--s2")],lo=css("--lo"),hi=css("--hi"),ink=css("--hl"),bg=css("--card");
+ cv.forEach((c,ci)=>{const dpr=window.devicePixelRatio||1,w=c.clientWidth;c.width=w*dpr;c.height=w*dpr;
+  const g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,w,w);
+  const [X,Y]=proj(M[ci],w);
+  const nb=hover>=0?new Set(P.nn[M[ci]][hover]):null, dim=MATCH||nb;
+  for(let i=0;i<N;i++){g.globalAlpha=dim&&!(MATCH?MATCH.has(i):false)?0.13:0.75;
+   g.fillStyle=col==="src"?sc[P.src[i]]:mix(lo,hi,P.ov[i]);g.beginPath();g.arc(X(i),Y(i),2.1,0,7);g.fill();}
+  g.globalAlpha=1;
+  if(MATCH)for(const i of MATCH){g.fillStyle=col==="src"?sc[P.src[i]]:mix(lo,hi,P.ov[i]);g.beginPath();g.arc(X(i),Y(i),3,0,7);g.fill();}
+  if(nb){g.strokeStyle=ink;g.lineWidth=1;for(const j of nb){g.beginPath();g.moveTo(X(hover),Y(hover));g.lineTo(X(j),Y(j));g.stroke();
+    g.fillStyle=sc[P.src[j]];g.beginPath();g.arc(X(j),Y(j),4,0,7);g.fill();g.stroke();}
+   g.fillStyle=bg;g.lineWidth=2.5;g.beginPath();g.arc(X(hover),Y(hover),6,0,7);g.fill();g.stroke();
+   g.fillStyle=sc[P.src[hover]];g.beginPath();g.arc(X(hover),Y(hover),3.5,0,7);g.fill();}
+ });
+ document.getElementById("capmap").innerHTML=(view==="raw"
+  ?`Each dot is one chunk, placed by UMAP from its raw vector. Hover a dot to find the same chunk in the other model, joined to its 5 nearest neighbours <em>in that model</em> (full vectors). With raw vectors ${B.label} draws the sources further apart: ${pct(B.same_raw.video)} of a video's 10 neighbours are videos, against ${pct(A.same_raw.video)} for ${A.label}.`
+  :`Source-centred: each source's average vector is removed before mapping, so what is left is topic. The sources mix more in both maps, and the two models' same-source shares get closer (videos ${pct(B.same_cen.video)} vs ${pct(A.same_cen.video)}).`)
+  +(col==="ov"?` Colour shows how many of a chunk's 10 nearest neighbours (raw vectors) both models agree on; ${pct(CROSS.overlap_half)} of chunks share at least half, ${pct(CROSS.overlap_zero)} share none.`:"")
+  +` The separate island in both maps, raw and centred, is the books' opening “Three stories”: 166 short dialogue paragraphs that resemble nothing else (type “three stories” above to see it). A few stray chunks beyond the frame (${M.map(m=>BOUND[m+view].pinned).join(" and ")}) are pinned to its edge.`
+  +(MATCH?` Highlighted: ${MATCH.size} chunks whose English text contains “${query}”.`:"");
+}
+const tip=document.getElementById("tip");
+cv.forEach((c,ci)=>{c.addEventListener("pointermove",e=>{const r=c.getBoundingClientRect(),w=r.width,[X,Y]=proj(M[ci],w);
+  const mx=e.clientX-r.left,my=e.clientY-r.top;let best=-1,bd=64;
+  for(let i=0;i<N;i++){const dx=X(i)-mx,dy=Y(i)-my,d=dx*dx+dy*dy;if(d<bd){bd=d;best=i;}}
+  if(best!==hover){hover=best;draw();}
+  if(best<0){tip.style.display="none";return;}
+  const s=SRC[P.src[best]];tip.innerHTML=`<div class="t">${P.title[best]}${P.sub[best]?" · "+P.sub[best]:""}</div><div class="m">${SL[s].slice(0,-1)}${P.book[best]?" ("+(P.book[best]==="ancap"?"Anarchokapitalismus":"Anarchoagorismus")+")":""} · neighbours shared by both models: ${Math.round(P.ov[best]*10)} of 10</div><div>${P.text[best]}${P.text[best].length>=260?"…":""}</div>`;
+  tip.style.display="block";const tx=Math.min(e.clientX+14,innerWidth-370);tip.style.left=Math.max(4,tx)+"px";tip.style.top=Math.min(e.clientY+14,innerHeight-tip.offsetHeight-8)+"px";});
+ c.addEventListener("pointerleave",()=>{hover=-1;tip.style.display="none";draw();});});
+document.querySelectorAll("#view button").forEach(b=>b.onclick=()=>{view=b.dataset.v;document.querySelectorAll("#view button").forEach(x=>x.classList.toggle("on",x===b));draw();});
+document.querySelectorAll("#col button").forEach(b=>b.onclick=()=>{col=b.dataset.c;document.querySelectorAll("#col button").forEach(x=>x.classList.toggle("on",x===b));legend();draw();});
+document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim();MATCH=query.length>1?matches():null;draw();});
+addEventListener("resize",draw);
+matchMedia("(prefers-color-scheme:dark)").addEventListener("change",()=>{legend();draw();});
+
+// ---- tables
+const th=c=>"<tr>"+c.map(x=>`<th>${x}</th>`).join("")+"</tr>";
+document.getElementById("tsame").innerHTML="<thead>"+th(["Same-source share of the 10 nearest neighbours",...M.map(m=>ST[m].label+" raw"),...M.map(m=>ST[m].label+" centred"),"Random"])+"</thead><tbody>"
+ +SRC.map((s,i)=>`<tr><td><span class="sw" style="background:var(--s${i})"></span>${SL[s]}</td>${M.map(m=>`<td>${pct(ST[m].same_raw[s])}</td>`).join("")}${M.map(m=>`<td>${pct(ST[m].same_cen[s])}</td>`).join("")}<td>${pct(RND[s])}</td></tr>`).join("")
+ +`<tr><td>Books: same book (book paragraphs only)</td>${M.map(m=>`<td>${pct(ST[m].book_same)}</td>`).join("")}<td colspan="2"></td><td>${pct(RND.book_same)}</td></tr>`
+ +`<tr><td>Books: same chapter (book paragraphs only)</td>${M.map(m=>`<td>${pct(ST[m].chapter_same)}</td>`).join("")}<td colspan="2"></td><td>${pct(RND.chapter_same)}</td></tr></tbody>`;
+const dv=SRC.map(s=>Math.round((B.same_raw[s]-A.same_raw[s])*100));
+document.getElementById("capsame").innerHTML=`For every chunk, its 10 most similar chunks by cosine similarity of the full vectors; the table gives the share from the same source, averaged per source (Random: that source's share of all chunks). Raw vectors: ${B.label} is ${dv.map((d,i)=>`${d>0?"+":""}${d} points for ${SL[SRC[i]].toLowerCase()}`).join(", ")} against ${A.label}, so it puts more weight on <em>what kind of text</em> a chunk is, most of all for video descriptions. After source-centring the gap shrinks to ${SRC.map(s=>`${Math.round((B.same_cen[s]-A.same_cen[s])*100)>0?"+":""}${Math.round((B.same_cen[s]-A.same_cen[s])*100)}`).join(" / ")} points. Inside the books the two models are equal: ${pct(A.chapter_same)} vs ${pct(B.chapter_same)} of a paragraph's neighbours come from its own chapter, and ${pct(A.book_same)} vs ${pct(B.book_same)} from its own book.`;
+document.getElementById("tagree").innerHTML="<thead>"+th(["",...SRC.map(s=>SL[s]),"All"])+"</thead><tbody>"
+ +`<tr><td>Nearest neighbours shared (of 10, full vectors)</td>${SRC.map(s=>`<td>${pct(CROSS.overlap_src[s])}</td>`).join("")}<td>${pct(CROSS.overlap)}</td></tr>`
+ +`<tr><td>Chunks sharing at least 5 of 10</td><td colspan="3"></td><td>${pct(CROSS.overlap_half)}</td></tr>`
+ +`<tr><td>Chunks sharing none</td><td colspan="3"></td><td>${pct(CROSS.overlap_zero)}</td></tr>`
+ +`<tr><td>Rank correlation of pair similarities</td><td colspan="3"></td><td>${f2(CROSS.rho)}</td></tr></tbody>`;
+document.getElementById("capagree").innerHTML=`Neighbours shared: for each chunk, how many of its 10 nearest neighbours in ${A.label} are also among its 10 nearest in ${B.label}. At random it would be ${(CROSS.random*100).toFixed(1)}%; the models share ${pct(CROSS.overlap)}, about the same for every source, so they agree far beyond chance but swap about half of each neighbourhood. The rank correlation compares the two models' cosine similarities for the same 200,000 random pairs (1 = same order): ${f2(CROSS.rho)}, so they broadly agree on which chunks are close, while the order differs in the details.`;
+
+// ---- histogram
+(function(){const svg=document.getElementById("hist"),W=860,H=240,l=40,r=12,t=26,b=34,bins=40,lo=-0.1,hi=0.9;
+ const mx=Math.max(...M.flatMap(m=>ST[m].hist)),x=v=>l+(v-lo)/(hi-lo)*(W-l-r),y=v=>H-b-v/mx*(H-t-b);
+ let s=`<line x1="${l}" x2="${W-r}" y1="${H-b}" y2="${H-b}" stroke="var(--line)"/>`;
+ for(let v=0;v<=0.9;v+=0.1){const vv=Math.round(v*10)/10;s+=`<line x1="${x(vv)}" x2="${x(vv)}" y1="${H-b}" y2="${H-b+4}" stroke="var(--ink2)"/><text x="${x(vv)}" y="${H-b+17}" text-anchor="middle">${vv.toFixed(1)}</text>`;}
+ s+=`<text x="${(l+W-r)/2}" y="${H-2}" text-anchor="middle">cosine similarity of two random chunks</text>`;
+ M.forEach((m,k)=>{const h=ST[m].hist,w=(hi-lo)/bins;let d=`M${x(lo)},${y(0)}`;h.forEach((c,i)=>{d+=`L${x(lo+i*w)},${y(c)}L${x(lo+(i+1)*w)},${y(c)}`;});d+=`L${x(hi)},${y(0)}Z`;
+  s+=`<path d="${d}" fill="var(--m${k})" fill-opacity=".28" stroke="var(--m${k})" stroke-width="1.5"/>`;
+  const pk=h.indexOf(Math.max(...h));s+=`<text x="${x(lo+(pk+.5)*w)}" y="${y(h[pk])-6}" text-anchor="middle" style="fill:var(--m${k});font-weight:600">${ST[m].label}</text>`;});
+ svg.innerHTML=s;})();
+document.getElementById("caphist").innerHTML=`Cosine similarity of the same 200,000 random chunk pairs in each model. ${A.label}'s values centre on ${f2(A.cos_mean)} (90% between ${f2(A.cos_p5)} and ${f2(A.cos_p95)}); ${B.label}'s on ${f2(B.cos_mean)} (${f2(B.cos_p5)} to ${f2(B.cos_p95)}): all its vectors lean in one common direction, so even unrelated texts look similar. The <em>order</em> of similarities is what matters for neighbours and maps, but a fixed threshold (say “similar above 0.6”) means something completely different in each model and cannot be carried over.`;
+document.getElementById("tgeo").innerHTML="<thead>"+th(["",...M.map(m=>ST[m].label)])+"</thead><tbody>"
+ +[["Dimensions",m=>ST[m].dim.toLocaleString("en")],["Average cosine of two random chunks",m=>f2(ST[m].cos_mean)],
+   ["Variance on the first principal component",m=>(ST[m].pc1*100).toFixed(1)+"%"],["Principal components for 50% / 80% of variance",m=>ST[m].pcs50+" / "+ST[m].pcs80],
+   ["Variance between the three sources",m=>(ST[m].between*100).toFixed(1)+"%"]]
+ .map(([n,f])=>`<tr><td>${n}</td>${M.map(m=>`<td>${f(m)}</td>`).join("")}</tr>`).join("")+"</tbody>";
+document.getElementById("capgeo").innerHTML=`Shape of each space, after removing the overall average vector (PCA). Both spread their variation over many directions (${A.label} needs ${A.pcs50}, ${B.label} ${B.pcs50} components for half of it), with no single dominant axis (first component ${(A.pc1*100).toFixed(1)}% vs ${(B.pc1*100).toFixed(1)}%). The share of variance that lies <em>between</em> the three sources' averages is ${(A.between*100).toFixed(1)}% vs ${(B.between*100).toFixed(1)}%: small in both, a little larger in ${B.label}, matching its stronger grouping by source.`;
+
+// ---- conclusions
+document.getElementById("concl").innerHTML=[
+ `<strong>Same big picture, different details.</strong> Both models see the corpus the same way at large: ${pct(CROSS.overlap)} of neighbours shared (chance ${(CROSS.random*100).toFixed(1)}%), similarity ranks correlated at ${f2(CROSS.rho)}, and the maps show the same regions once turned to match. But about half of each chunk's closest neighbours differ, so any single “most similar chunk” result depends on the model.`,
+ `<strong>${B.label} groups more by kind of text.</strong> With raw vectors its video descriptions keep to themselves more (${pct(B.same_raw.video)} vs ${pct(A.same_raw.video)} same-source neighbours), and the between-source variance is larger (${(B.between*100).toFixed(1)}% vs ${(A.between*100).toFixed(1)}%). For comparing topics across articles, videos and books, ${A.label} mixes the sources a little more readily; source-centring narrows the gap for both.`,
+ `<strong>Inside the books they are equal.</strong> Chapter cohesion (${pct(A.chapter_same)} vs ${pct(B.chapter_same)}) and the separation of the two books (${pct(A.book_same)} vs ${pct(B.book_same)}) are practically the same, so the book-topic analyses should hold with either model.`,
+ `<strong>Similarity values are not interchangeable.</strong> ${B.label} puts random pairs at ${f2(B.cos_mean)} on average, ${A.label} at ${f2(A.cos_mean)}. Use ranks, neighbours or per-model thresholds, never a cosine cut-off taken from the other model.`,
+ `<strong>Caveat.</strong> ${B.label} is designed to be used with task prompts (e.g. “title: none | text: …”); whether the vectors were made with one is not recorded in <code>real_data</code>. Queries or question sets compared against these vectors must be embedded in exactly the same way.`,
+].map(x=>`<li>${x}</li>`).join("");
+legend();draw();
+</script></body></html>

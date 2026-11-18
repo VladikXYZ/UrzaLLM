@@ -28,7 +28,7 @@ from book_map import esc  # noqa: E402
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from dataset import CHUNKS, ENGLISH, OUT_DIR, nm, read_chunks, results_dir  # noqa: E402
+from dataset import CHUNKS, ENGLISH, OUT_DIR, QUESTIONS_DIR, nm, read_chunks, results_dir  # noqa: E402
 OUT = OUT_DIR
 VARIANT = "textonly"
 SOURCES = ["article", "book", "video"]
@@ -56,8 +56,8 @@ def main():
         assert [q["id"] for q in en] == [q["id"] for q in items], "political_space_en.tsv does not match the Czech list"
         items = [{**q, "description": q.get("description") or ""} for q in en]
     QTEXT.update({q["id"]: q["text"] for q in items})
-    QE = np.load(ROOT / "Questions" / "output" / "embeddings.npy")
-    assert (ROOT / "Questions" / "output" / "ids.txt").read_text(encoding="utf-8").split() == [q["id"] for q in items]
+    QE = np.load(QUESTIONS_DIR / "embeddings.npy")
+    assert (QUESTIONS_DIR / "ids.txt").read_text(encoding="utf-8").split() == [q["id"] for q in items]
     rows = read_chunks(CHUNKS, ["chunk_id", "doc_id", "source", "kind", "year", "title", "url", "chapter",
                                   "text"])
     E = np.load(results_dir(VARIANT) / "embeddings.npy")
