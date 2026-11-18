@@ -5,6 +5,7 @@
 .venv-*/
 __pycache__/
 audio
+better_translation
 
 # Embedding: resumable partial batches, dry runs, and files analyze.py rebuilds
 Embedding/.partial/
