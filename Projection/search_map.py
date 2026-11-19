@@ -3,14 +3,16 @@
     python Projection/search_map.py              # from the repo root, then open http://127.0.0.1:8765
     python Projection/search_map.py --port 9000 --device cpu
     python Projection/search_map.py --corpus cs  # without the video transcripts
+    python Projection/search_map.py --corpus new --port 8767   # with Vladimir's 91,499 transcript chunks instead
 
 Corpus (default `all`): Vladimir's real_data (real_data/chunked.json, 2,911 chunks: the two books,
 stoky.urza.cz articles and YouTube video descriptions, Czech + English; bge-m3 vectors of the Czech text in
 real_data/embeddings_out_cs/) plus the 57,693 chunks of Urza's speech from the video transcripts
 (real_data/transcripts_urza.json from Transcription/; bge-m3 vectors in embeddings_out_rollo_cs/). Shown on
 two UMAP maps: raw vectors and source-centred vectors (each source's average subtracted). Passages are
-shown in English where a translation exists (the transcripts are Czech until translated); a transcript
-hit also shows the question it answers. bge-m3 is multilingual, so a query can be in Czech or English.
+shown in English where a translation exists; a transcript hit also shows the question it answers.
+bge-m3 is multilingual, so a query can be in Czech or English. --corpus new swaps our transcript chunks for
+Vladimir's 91,499 (embeddings_out_new_cs/trans_chunks.json and its vectors; no preceding question).
 
 A query is embedded with the same model as the chunks (BAAI/bge-m3), scored against the raw vectors by
 cosine similarity, and the top k passages are highlighted.
@@ -41,7 +43,8 @@ import pyarrow.parquet as pq
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from real_data_coords import TRANSCRIPTS, chunk_ids, coords_path, emb_paths, source_of  # noqa: E402
+from real_data_coords import (CORPORA, TRANSCRIPT_SETS, chunk_ids, coords_path, emb_paths,  # noqa: E402
+                              source_of, transcripts_path)
 
 DATA = ROOT / "real_data"
 BOOKS_EN = {"ancap": "Anarcho-capitalism", "anag": "Anarchoagorism"}
@@ -72,8 +75,8 @@ def load_maps(corpus, model="bge_m3"):
                                          norm01(np.array([[r["x_centred"], r["y_centred"]] for r in c]))])
 
 
-def load_rows(with_transcripts=True):
-    """real_data/chunked.json (+ the transcript chunks) as rows for the page, in English where translated."""
+def load_rows(corpus="all"):
+    """real_data/chunked.json (+ the corpus' transcript chunks) as rows for the page, in English where translated."""
     chunks = json.loads((DATA / "chunked.json").read_text(encoding="utf-8"))
     dates = {}
     for y in json.loads((DATA / "yt_full.json").read_text(encoding="utf-8")):      # date: 20221231
@@ -92,8 +95,8 @@ def load_rows(with_transcripts=True):
                      "subchapter": c["subtitle_en"] if book else "",
                      "date": dates.get(c["src"], ""), "url": c["src"] if c["src"].startswith("http") else None,
                      "text": c["text_en"], "text_cs": c["text_cs"], "guests": [], "words": len(c["text_cs"].split())})
-    if with_transcripts:
-        tr = json.loads(TRANSCRIPTS.read_text(encoding="utf-8"))
+    if corpus in TRANSCRIPT_SETS:
+        tr = json.loads(transcripts_path(corpus).read_text(encoding="utf-8"))
         ids = chunk_ids(chunks + tr)[len(chunks):]          # the same ids as real_data_coords.py
         for cid, c in zip(ids, tr):
             # two formats exist: Transcription/to_chunked_format.py (id, part, url with &t=, ...) and the later
@@ -117,15 +120,15 @@ def load_rows(with_transcripts=True):
 
 class Index:
     def __init__(self, device, corpus="all", online=False, model="bge_m3", query_prompt=True):
-        rows = load_rows(corpus == "all")
+        rows = load_rows(corpus)
         self.english = True
         map_ids, self.maps = load_maps(corpus, model)
         if map_ids != [r["chunk_id"] for r in rows]:
             sys.exit("The chunks and the map coordinates don't hold the same chunks in the same order: "
                      f"rerun Projection/real_data_coords.py --model {model}.")
         self.rows = rows
-        emb_cs, emb_tr = emb_paths(model)
-        embs = [np.load(emb_cs)] + ([np.load(emb_tr)] if corpus == "all" else [])
+        emb_cs, emb_tr = emb_paths(model, corpus)
+        embs = [np.load(emb_cs)] + ([np.load(emb_tr)] if emb_tr else [])
         self.emb = np.concatenate(embs).astype(np.float32)
         if len(self.emb) != len(rows):
             sys.exit(f"{len(self.emb)} vectors for {len(rows)} chunks.")
@@ -253,8 +256,9 @@ def main():
     ap.add_argument("--device", default="auto", help="auto | cuda | cpu")
     ap.add_argument("--online", action="store_true",
                     help="allow Hugging Face downloads (first run on a machine without the model cached)")
-    ap.add_argument("--corpus", choices=["all", "cs"], default="all",
-                    help="all: Vladimir's chunks + the video transcript chunks (default); cs: Vladimir's chunks only")
+    ap.add_argument("--corpus", choices=CORPORA, default="all",
+                    help="all: Vladimir's chunks + our video transcript chunks (default); cs: Vladimir's chunks only; "
+                         "new: Vladimir's chunks + his transcript chunks (embeddings_out_new_cs/)")
     ap.add_argument("--model", choices=MODELS, default="bge_m3",
                     help="which embeddings to search and map: bge_m3 (default) or embeddinggemma_2")
     ap.add_argument("--no-query-prompt", action="store_true", help="embed the query without the model's query prompt")
@@ -263,9 +267,12 @@ def main():
         sys.stdout.reconfigure(encoding="utf-8")
     index = Index(args.device, args.corpus, args.online, args.model, not args.no_query_prompt)
     data = json.dumps(index.points(), ensure_ascii=False).replace("</", "<\\/")
-    lang = ("Books, articles and video descriptions are shown in English (Czech original one click away); the "
-            "video transcripts are Czech until translated, and each shows the question it answers. The search "
-            "runs on the embeddings of the Czech texts, and a query can be in English or Czech.")
+    tr = [r for r in index.rows if r["source"] == "transcript"]
+    n_cs = sum(1 for r in tr if r.get("lang_note"))
+    lang = ("Passages are shown in English (Czech original one click away)"
+            + (f"; {n_cs:,} video transcript chunks are still Czech" if n_cs else "")
+            + ("; a video transcript chunk also shows the question it answers" if any(r.get("context") for r in tr) else "")
+            + ". The search runs on the embeddings of the Czech texts, and a query can be in English or Czech.")
     report = str(coords_path(args.model, args.corpus).relative_to(ROOT)).replace("\\", "/")
     page = (TEMPLATE.replace("__DATA__", data).replace("__N__", f"{len(index.rows):,}")
             .replace("__MODEL__", index.model_name + (" + query prompt" if index.prompt else ""))

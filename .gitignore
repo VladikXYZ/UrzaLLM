@@ -36,6 +36,7 @@ ASRBench/models/
 real_data/transcripts_urza.json
 real_data/transcripts_other.json
 embeddings_out_rollo_*/
+embeddings_out_new_*/
 real_data/*.zip
 Transcription/*.zip
 Viewpoints/.cache/

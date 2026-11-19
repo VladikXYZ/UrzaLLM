@@ -1,13 +1,16 @@
 """2D map coordinates for search_map.py: Vladimir's corpus, and the same plus the video transcript chunks.
 
     uv run --no-project --with umap-learn --with pyarrow python Projection/real_data_coords.py [--model embeddinggemma_2]
+    ... real_data_coords.py --corpus new           # only the variant with Vladimir's transcript chunks
 
 Reads   real_data/chunked.json                               2,911 chunks (books, articles, video descriptions)
         real_data/embeddings_out_cs/bge_m3_vectors.npy       their bge-m3 vectors (of text_cs)
         real_data/transcripts_urza.json                      57,693 chunks of Urza's speech (Transcription/)
         embeddings_out_rollo_cs/bge_m3_vectors.npy           their bge-m3 vectors (of text_cs, same order)
+        embeddings_out_new_cs/trans_chunks.json + <model>_vectors.npy   variant: Vladimir's 91,499 transcript chunks
 Writes  real_data/projection/coords_<model>_cs.parquet       the 2,911 chunks only
         real_data/projection/coords_<model>_all.parquet      all 60,604 together
+        real_data/projection/coords_<model>_new.parquet      the 2,911 + Vladimir's 91,499 transcript chunks (--corpus new)
         (chunk_id, source, x/y raw, x/y centred); <model> = bge_m3 (default) or embeddinggemma_2 (--model), the
         other vector file in the same folders
 
@@ -32,9 +35,19 @@ TRANSCRIPTS = DATA / "transcripts_urza.json"
 MODELS = {"bge_m3": "bge_m3_vectors.npy", "embeddinggemma_2": "embeddinggemma_2_vectors.npy"}
 
 
-def emb_paths(model="bge_m3"):
+# the transcript chunks of each corpus and the folder with their vectors ("cs" has none)
+TRANSCRIPT_SETS = {"all": (TRANSCRIPTS, ROOT / "embeddings_out_rollo_cs"),
+                   "new": (ROOT / "embeddings_out_new_cs" / "trans_chunks.json", ROOT / "embeddings_out_new_cs")}
+CORPORA = ["cs", *TRANSCRIPT_SETS]
+
+
+def emb_paths(model="bge_m3", corpus="all"):
     f = MODELS[model]
-    return DATA / "embeddings_out_cs" / f, ROOT / "embeddings_out_rollo_cs" / f
+    return DATA / "embeddings_out_cs" / f, (TRANSCRIPT_SETS[corpus][1] / f if corpus in TRANSCRIPT_SETS else None)
+
+
+def transcripts_path(corpus):
+    return TRANSCRIPT_SETS[corpus][0]
 
 
 EMB_CS, EMB_TRANSCRIPTS = emb_paths("bge_m3")
@@ -61,15 +74,15 @@ def chunk_ids(chunks) -> list[str]:
             for i, c in enumerate(chunks)]
 
 
-def load(with_transcripts: bool, model="bge_m3"):
-    """(chunks, unit vectors), Vladimir's chunks first, then the transcript chunks."""
-    emb_cs, emb_tr = emb_paths(model)
+def load(corpus: str, model="bge_m3"):
+    """(chunks, unit vectors), Vladimir's chunks first, then the corpus' transcript chunks (none for "cs")."""
+    emb_cs, emb_tr = emb_paths(model, corpus)
     chunks = json.loads((DATA / "chunked.json").read_text(encoding="utf-8"))
     vec = [np.load(emb_cs).astype(np.float32)]
     if len(vec[0]) != len(chunks):
         raise SystemExit(f"{emb_cs}: {len(vec[0])} vectors for {len(chunks)} chunks")
-    if with_transcripts:
-        tr = json.loads(TRANSCRIPTS.read_text(encoding="utf-8"))
+    if corpus in TRANSCRIPT_SETS:
+        tr = json.loads(transcripts_path(corpus).read_text(encoding="utf-8"))
         tv = np.load(emb_tr).astype(np.float32)
         if len(tv) != len(tr):
             raise SystemExit(f"{emb_tr}: {len(tv)} vectors for {len(tr)} transcript chunks")
@@ -92,10 +105,11 @@ def main():
     import umap
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", choices=MODELS, default="bge_m3")
+    ap.add_argument("--corpus", nargs="+", choices=CORPORA, default=["cs", "all"])
     args = ap.parse_args()
     OUT.mkdir(exist_ok=True)
-    for name, with_tr in (("cs", False), ("all", True)):
-        chunks, raw = load(with_tr, args.model)
+    for name in args.corpus:
+        chunks, raw = load(name, args.model)
         src = np.array([source_of(c) for c in chunks])
         cen = raw.copy()
         for s in SOURCES:
