@@ -27,7 +27,7 @@ REAL = _DS == "real"
 MODEL = os.environ.get("URZA_MODEL", "bge_m3").strip() if REAL else "bge_m3"
 MODELS = {  # real_data model folder name -> (label shown in reports, Hugging Face id, dimension)
     "bge_m3": ("bge-m3", "BAAI/bge-m3", 1024),
-    "embeddinggemma_2": ("EmbeddingGemma", "google/embeddinggemma-300m", 768),
+    "embeddinggemma_2": ("EmbeddingGemma", "google/embeddinggemma-2", 768),
 }
 MODEL_LABEL, MODEL_ID, DIM = MODELS[MODEL]
 REAL_DIR = ROOT / "Chunks" / "output_real"

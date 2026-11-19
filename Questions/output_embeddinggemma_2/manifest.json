@@ -1,0 +1,14 @@
+{
+  "model": "google/embeddinggemma-2",
+  "prompt_name": null,
+  "count": 326,
+  "dim": 768,
+  "device": "cuda",
+  "text_fingerprint": "9bc1d38bf3001f2b6d8e6a23c23d04f81863af0782966b664502859d28cb6e11",
+  "seconds": 8.6,
+  "created": "2026-11-19T13:58:31",
+  "versions": {
+    "python": "3.12.11",
+    "torch": "2.15.0+cu132"
+  }
+}

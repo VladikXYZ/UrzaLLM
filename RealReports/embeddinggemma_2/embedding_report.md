@@ -1,6 +1,6 @@
 # Embedding report: EmbeddingGemma
 
-Model **google/embeddinggemma-300m** on **GPU (friend's machine)** (real_data/embeddings_out_cs), 2,911 chunks × 768 dimensions. Created 2026-11-18T20:30:47.
+Model **google/embeddinggemma-300m** on **GPU (friend's machine)** (real_data/embeddings_out_cs), 2,911 chunks × 768 dimensions. Created 2026-11-19T12:42:51.
 
 ## Checks
 
@@ -51,6 +51,8 @@ Nearest neighbour is another chunk of the same document for 16% of chunks. Only 
 | Similarity | Chunk A | Chunk B |
 |---:|---|---|
 | 1.000 | Urza and Tim want to legalize all drugs (even for children) (video) | Urza with Tim on the mushrooms (video) |
+| 1.000 | Free Port Conference 2024: Technology Yesterday, Today, and Tomorrow Takes Place... the Day After Tomorrow! (article) | Free Port Conference 2023: Drugs and Weapons Yesterday, Today, and Tomorrow Is Happening... Tomorrow! (article) |
+| 1.000 | Christmas Party for Supporters of the Free Port 2023! (article) | Christmas Party for Free Port Supporters! (article) |
 | 1.000 | Freeport Studio: Streamarathon 2024 (1pm to 4pm) (video) | Freeport Studio: Streamarathon 2024 (Hour 1 to 12) (video) |
 | 1.000 | Urza with Tim the President (video) | Urza with Tim about bans on (not only) abortions (video) |
 | 1.000 | Urza with Tim the President (video) | Urza and Tim want to legalize cannibalism (video) |
@@ -62,9 +64,7 @@ Nearest neighbour is another chunk of the same document for 16% of chunks. Only 
 | 1.000 | Urza and Tim want to legalize cannibalism (video) | Urza with Tim and sex with animals (video) |
 | 1.000 | Urza and Tim want to legalize cannibalism (video) | Urza and Tim want to legalize incest (video) |
 | 1.000 | Urza with Tim and sex with animals (video) | Urza and Tim want to legalize incest (video) |
-| 1.000 | Christmas Party for Supporters of the Free Port 2023! (article) | Christmas Party for Free Port Supporters! (article) |
 | 1.000 | Freeport Studio: Streamarathon 2025 (1pm to 5pm) (video) | Freeport Studio: Streamarathon 2025 (Hour 1 to 12) (video) |
-| 1.000 | Synergeticum: The Different Faces of Anarchy III (video) | Synergeticum: The Different Faces of Anarchy II (video) |
 
 ## Example neighbourhoods
 

@@ -525,7 +525,8 @@ embeddings (no source-centring, which is unnecessary when all chunks come from o
 
 <h2 class="sec">The map</h2>
 <p class="sub">Each dot is a book chunk, coloured by book. Hover a dot to read the start of the chunk. Click a
-chapter in the list (or in the table below) to highlight its chunks; click again to clear.</p>
+chapter in the list (or in the table below) to highlight its chunks; click again to clear. Scroll to zoom, drag to
+move, double-click for the whole map.</p>
 <div class="controls"><label><input type="checkbox" id="labels" checked> Chapter labels</label>
 <span><span class="sw" style="background:var(--b0)"></span> Anarchokapitalismus</span>
 <span><span class="sw" style="background:var(--b1)"></span> Anarchoagorismus</span></div>
@@ -589,6 +590,7 @@ __LABELJS__
 const P=__DATA__, CH=__CHAPTERS__, TOP=18, PAD=14;
 const MAPS=[{cv:document.getElementById("cv"),xi:0,yi:1,cx:"cx",cy:"cy",isl:__ISLANDS__,W:__W__,H:__H__},
             {cv:document.getElementById("cv2"),xi:6,yi:7,cx:"tx",cy:"ty",isl:__ISLANDS2__,W:__W2__,H:__H2__}];
+MAPS.forEach(m=>m.z={k:1,x:0,y:0});        // zoom (device px): scroll to zoom at the cursor, drag to move, double-click to reset
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const tip=document.getElementById("tip");
 let sel=-1, hover=-1, showLabels=true;
@@ -601,7 +603,7 @@ document.getElementById("labels").onchange=e=>{showLabels=e.target.checked;drawA
 function select(g){sel=sel===g?-1:g;document.querySelectorAll(".side div.c").forEach(d=>d.classList.toggle("on",+d.dataset.g===sel));drawAll()}
 function size(m){const cv=m.cv,r=cv.getBoundingClientRect(),d=devicePixelRatio||1,h=(r.width-2*PAD)*m.H/m.W+2*PAD+TOP;
  cv.style.height=h+"px";cv.width=r.width*d;cv.height=h*d}
-function xy(m,x,y){const d=devicePixelRatio||1,k=(m.cv.width-2*PAD*d)/m.W;return[PAD*d+x*k,m.cv.height-PAD*d-y*k]}
+function xy(m,x,y){const d=devicePixelRatio||1,k=(m.cv.width-2*PAD*d)/m.W,z=m.z;return[(PAD*d+x*k)*z.k+z.x,(m.cv.height-PAD*d-y*k)*z.k+z.y]}
 function drawAll(){MAPS.forEach(draw)}
 function draw(m){const cv=m.cv,g=cv.getContext("2d"),d=devicePixelRatio||1,col=[css("--b0"),css("--b1")],bg=css("--card"),ink=css("--ink");
  g.clearRect(0,0,cv.width,cv.height);
@@ -625,7 +627,15 @@ MAPS.forEach(m=>{const cv=m.cv;
   tip.innerHTML=`<div class="t">${esc(p[4])}</div><div class="m">${esc(p[5])}…</div>`;tip.style.display="block";
   const tw=tip.offsetWidth,th=tip.offsetHeight;tip.style.left=Math.min(e.clientX+14,innerWidth-tw-8)+"px";tip.style.top=Math.min(e.clientY+14,innerHeight-th-8)+"px"};
  cv.onmouseleave=()=>{hover=-1;tip.style.display="none";drawAll()};
- cv.onclick=()=>{if(hover>=0)select(P[hover][3])}});
+ cv.onclick=()=>{if(m.dragged){m.dragged=false;return}if(hover>=0)select(P[hover][3])};
+ cv.addEventListener("wheel",e=>{e.preventDefault();const r=cv.getBoundingClientRect(),d=devicePixelRatio||1,z=m.z,
+  px=(e.clientX-r.left)*d,py=(e.clientY-r.top)*d,k=Math.max(1,Math.min(30,z.k*Math.exp(-e.deltaY*0.0015)));
+  z.x=k===1?0:px-(px-z.x)*(k/z.k);z.y=k===1?0:py-(py-z.y)*(k/z.k);z.k=k;draw(m)},{passive:false});
+ cv.addEventListener("mousedown",e=>{m.drag={x:e.clientX,y:e.clientY,zx:m.z.x,zy:m.z.y}});
+ addEventListener("mousemove",e=>{if(!m.drag||m.z.k<=1)return;const d=devicePixelRatio||1,dx=e.clientX-m.drag.x,dy=e.clientY-m.drag.y;
+  if(Math.abs(dx)+Math.abs(dy)>3){m.dragged=true;m.z.x=m.drag.zx+dx*d;m.z.y=m.drag.zy+dy*d;cv.style.cursor="grabbing";draw(m)}});
+ addEventListener("mouseup",()=>{if(m.drag){m.drag=null;cv.style.cursor=""}});
+ cv.ondblclick=()=>{m.z.k=1;m.z.x=0;m.z.y=0;draw(m)}});
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 addEventListener("resize",()=>{MAPS.forEach(size);drawAll()});matchMedia("(prefers-color-scheme: dark)").addEventListener("change",drawAll);
 MAPS.forEach(size);drawAll();

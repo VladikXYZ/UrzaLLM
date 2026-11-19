@@ -39,7 +39,7 @@ from the model with a corrected version.</p>
 
 <h2 class="sec">What was done</h2>
 <ol class="steps">
- <li><strong>Embedding.</strong> Each of the 2,911 chunks (articles, book passages, video descriptions) was turned into a 768-number vector with the model <code>google/embeddinggemma-300m</code>. Texts on
+ <li><strong>Embedding.</strong> Each of the 2,911 chunks (articles, book passages, video descriptions) was turned into a 768-number vector with the model <code>google/embeddinggemma-2</code>. Texts on
  similar subjects should get similar vectors (measured by cosine similarity).</li>
  <li><strong>Correction (“source-centring”).</strong> For each source separately, the average of all its vectors
  was computed and subtracted from each of its vectors, which were then rescaled to length 1. Whatever all books

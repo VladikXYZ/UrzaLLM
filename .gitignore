@@ -32,3 +32,15 @@ embeddings_out_trans_cs.tar.gz
 # real_data working files: rebuilt by Chunks/real_data.py and the build scripts (vectors, chunk tables, UMAP caches,
 # report intermediates); the finished reports are in RealReports/
 Chunks/output_real/
+
+# Transcription pipeline (branch map-real-data): large or derived data shared outside git, local tool settings
+real_data/transcripts_urza.json
+real_data/transcripts_other.json
+real_data/*.zip
+embeddings_out_rollo_*/
+embeddings_out_new_*/
+Transcription/translation_package/
+Transcription/*.zip
+Viewpoints/.cache/
+materials/*.local-backup.json
+.claude/

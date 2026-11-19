@@ -1,6 +1,6 @@
 # Embedding report: bge-m3
 
-Model **BAAI/bge-m3** on **GPU (friend's machine)** (real_data/embeddings_out_cs), 2,911 chunks × 1024 dimensions. Created 2026-11-18T20:30:47.
+Model **BAAI/bge-m3** on **GPU (friend's machine)** (real_data/embeddings_out_cs), 2,911 chunks × 1024 dimensions. Created 2026-11-19T12:42:51.
 
 ## Checks
 

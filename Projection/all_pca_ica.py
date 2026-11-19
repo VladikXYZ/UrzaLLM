@@ -235,9 +235,12 @@ def titles_html(ts):
 def html(pts, src, evr, n50, pcs, comps, ax_i, ax_j, rp, ri, umap_rates, cum, path):
     p = lambda v: f"{round(v * 100)}%"
     rnd = {s: ((src == s).sum() - 1) / (len(src) - 1) for s in SOURCES}
-    pc_rows = "".join(
-        f"<tr><td><strong>{c['label']}</strong></td><td>{c['evr']:.1%}</td><td>{c['eta']:.2f}</td>"
-        f"<td>{titles_html(c['low']['titles'])}</td><td>{titles_html(c['high']['titles'])}</td></tr>" for c in pcs)
+    pc_rows = "".join(   # each axis read like an ICA component, at both ends (30 lowest / 30 highest chunks)
+        "".join(f"<tr><td><strong>{c['label']} {end}</strong>"
+                + (f"<br><span class='m'>{c['evr']:.1%} of variance · source η² {c['eta']:.2f}</span>" if end == "low" else "")
+                + f"</td><td>{mixbar(c[end]['mix'])}</td><td>{esc(', '.join(c[end]['tags'])) or '–'}</td>"
+                f"<td>{esc(', '.join(c[end]['chapters'])) or '–'}</td><td>{titles_html(c[end]['titles'])}</td></tr>"
+                for end in ("low", "high")) for c in pcs)
     ic_rows = "".join(
         f"<tr><td><strong>{c['label']}</strong><br><span class='tag {'th' if c['theme'] else 'fo'}'>"
         f"{'theme' if c['theme'] else 'format / series'}</span></td><td>{mixbar(c['mix'])}</td>"
@@ -388,7 +391,7 @@ it is partly the kind of text: the source alone explains __PC1ETAP__ of its vari
 principal components together (out of __NPC__ components in total). Two components, the most a flat PCA map can
 show, explain __CUM2__. Half needs __N50__ components, 80% __N80__, 90% __N90__ and 95% __N95__. The curve rises
 gradually: no small set of directions captures most of the content.</p>
-<div class="tw"><table><thead><tr><th>Axis</th><th class="r">Variance</th><th class="r">Source η²</th><th>Lowest-scoring texts</th><th>Highest-scoring texts</th></tr></thead>
+<div class="tw"><table><thead><tr><th>Axis end</th><th>Sources of top 30</th><th>Over-represented video tags</th><th>Book chapters</th><th>Top texts</th></tr></thead>
 <tbody>__PC_ROWS__</tbody></table></div>
 <p class="cap"><strong>Reading it:</strong> PC1 has a source η² of __PC1ETA__: on average it separates __PC1LO__
 (low end) from __PC1HI__ (high end); average PC1 scores: __PC1MEANS__. __PC1STRONG__ The further components
