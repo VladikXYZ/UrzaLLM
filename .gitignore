@@ -35,6 +35,7 @@ ASRBench/models/
 # Transcription pipeline: large or derived data (shared outside git), local tool settings and caches
 real_data/transcripts_urza.json
 real_data/transcripts_other.json
+embeddings_out_rollo_*/
 real_data/*.zip
 Transcription/*.zip
 Viewpoints/.cache/

@@ -1,12 +1,17 @@
 """Build video transcript chunks in Vladimir's transcription format.
 
     python Transcription/chunk_videos.py
+    python Transcription/chunk_videos.py --package urza_bilingual_prechunking.zip --out-dir bilingual_chunks
 
 Inputs under --work (default ~/urza_diar):
   transcripts/<video>__faster-whisper-large-v3/transcript.json   timed words
   channel/<video>.json                                        Sortformer segments
   channel/urza_videos.json                                    segments attributed to Urza
 Titles and dates come from --meta (default real_data/yt_full.json).
+With --package, transcripts, speakers, metadata and sentence translations come
+from the ZIP. Whole sentences retain their translations; clipped fragments are
+translated locally with OPUS-MT. An available matching --work corpus supplies
+the existing video order.
 
 1. Assign speakers by word midpoint and smooth small errors at speaker changes.
 2. Group consecutive words into turns, dropping interjections between parts of a turn.
@@ -29,7 +34,8 @@ import sys
 from collections import Counter
 from itertools import groupby
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from tempfile import TemporaryDirectory, TemporaryFile
+from zipfile import ZipFile
 
 import numpy as np
 
@@ -250,14 +256,19 @@ def question_excerpt(words, indices):
     return tail[start:]
 
 
-def chunk_video(transcript, segments, urza_indices, metadata):
-    """Yield corpus records for one video in timeline order."""
+def spoken_words(transcript):
     words, languages = [], []
     for segment in transcript["segments"]:
         for word in segment["words"]:
             if word["word"].strip():
                 words.append(word)
                 languages.append(segment.get("language", "cs"))
+    return words, languages
+
+
+def chunk_video(transcript, segments, urza_indices, metadata, *, include_word_indices=False):
+    """Yield corpus records in timeline order, optionally with their source word indices."""
+    words, languages = spoken_words(transcript)
     if not words:
         return
     speakers = speakers_of_words(words, segments, urza_indices)
@@ -297,7 +308,7 @@ def chunk_video(transcript, segments, urza_indices, metadata):
             part_label = f"{part_number}/{len(parts)}" if len(parts) > 1 else ""
             has_context = is_urza and question_speaker is not None
             keep_context = has_context and not is_housekeeping
-            yield {
+            chunk = {
                 "title_cs": title_cs,
                 "subtitle_cs": f"část {part_label}" if part_label else "",
                 "text_cs": text,
@@ -326,6 +337,10 @@ def chunk_video(transcript, segments, urza_indices, metadata):
                 "housekeeping": is_housekeeping,
                 "housekeeping_signals": signals,
             }
+            if include_word_indices:
+                chunk["word_indices"] = part
+                chunk["context_word_indices"] = excerpt if keep_context else []
+            yield chunk
 
 
 def corpus_chunks(transcript_paths, channel, urza_by_video, metadata):
@@ -338,6 +353,137 @@ def corpus_chunks(transcript_paths, channel, urza_by_video, metadata):
             continue
         segments = json.loads(diarization_path.read_text(encoding="utf-8"))["segments"]
         yield from chunk_video(transcript, segments, urza_by_video[video_id], metadata.get(video_id))
+
+
+def ordered_package_index(index, paths):
+    by_id = {entry["video_id"]: entry for entry in index}
+    if len(paths) != len(by_id):
+        return index
+    ids = []
+    for path in paths:
+        with path.open("rb") as file:
+            match = re.search(rb'"video_id"\s*:\s*"([A-Za-z0-9_-]{11})"', file.read(16384))
+        video_id = match.group(1).decode("ascii") if match else json.loads(path.read_bytes())["video_id"]
+        ids.append(video_id)
+    return [by_id[vid] for vid in ids] if set(ids) == set(by_id) else index
+
+
+def sentence_word_index(transcript, segments, urza, rows):
+    from make_translation_package import sentences
+
+    words, languages = spoken_words(transcript)
+    speakers = speakers_of_words(words, segments, urza) if words else []
+    ranges = sentences(words, languages, speakers)
+    word_to_sentence = []
+    for sid, ((start, stop), row) in enumerate(zip(ranges, rows, strict=True)):
+        language = languages[start]
+        if (row["language"] != language or row[f"text_{language}"] != text_of(words, range(start, stop))
+                or row["start"] != round(words[start]["start"], 2) or row["end"] != round(words[stop - 1]["end"], 2)):
+            raise ValueError(f"Sentence source differs from timed words: {transcript['video_id']}/{row['id']}")
+        word_to_sentence.extend([sid] * (stop - start))
+    return words, ranges, word_to_sentence
+
+
+def plan_bilingual_text(indices, original, words, ranges, word_to_sentence, rows, fragments):
+    """Return a per-language list of (requires translation, text) pieces for one span."""
+    pieces = {"cs": [], "en": []}
+    languages = set()
+    for sid, group in groupby(indices, key=word_to_sentence.__getitem__):
+        section = list(group)
+        row = rows[sid]
+        source = row["language"]
+        target = "en" if source == "cs" else "cs"
+        languages.add(source)
+        start, stop = ranges[sid]
+        if len(section) == stop - start:
+            for lang in pieces:
+                pieces[lang].append((False, row[f"text_{lang}"]))
+        else:
+            excerpt = text_of(words, section)
+            pieces[source].append((False, excerpt))
+            pieces[target].append((True, excerpt))
+            fragments[target].add(excerpt)
+    if len(languages) == 1:
+        pieces[languages.pop()] = [(False, original)]
+    return pieces
+
+
+def translate_fragments(texts, target):
+    if not texts:
+        return {}
+    import torch
+    from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, logging
+
+    logging.set_verbosity_error()
+    source = "cs" if target == "en" else "en"
+    model_id = f"Helsinki-NLP/opus-mt-{source}-{target}"
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    tokenizer = AutoTokenizer.from_pretrained(model_id)
+    model = AutoModelForSeq2SeqLM.from_pretrained(
+        model_id, dtype=torch.float16 if device == "cuda" else torch.float32,
+    ).eval().to(device)
+    batch_size = 96 if device == "cuda" else 16
+    ordered = sorted(texts, key=lambda text: (len(text), text))
+    output = {}
+    print(f"Translating {len(ordered):,} clipped fragments into {target} on {device}", flush=True)
+    with torch.inference_mode():
+        for i in range(0, len(ordered), batch_size):
+            batch = ordered[i:i + batch_size]
+            encoded = tokenizer(batch, return_tensors="pt", padding=True).to(device)
+            budget = max(24, 2 * encoded.input_ids.shape[1] + 12)
+            generated = model.generate(**encoded, num_beams=2, max_new_tokens=budget)
+            decoded = tokenizer.batch_decode(generated.cpu(), skip_special_tokens=True)
+            for text, answer in zip(batch, decoded, strict=True):
+                answer = answer.strip()
+                if not answer and any(character.isalpha() for character in text):
+                    one = tokenizer(text, return_tensors="pt").to(device)
+                    retry = model.generate(**one, num_beams=4, min_new_tokens=1, max_new_tokens=budget)
+                    answer = tokenizer.decode(retry[0].cpu(), skip_special_tokens=True).strip()
+                    if not answer:
+                        raise ValueError(f"Empty {target} translation for clipped fragment {text!r}")
+                output[text] = answer or text
+            if (i // batch_size + 1) % 24 == 0 or len(output) == len(ordered):
+                print(f"{target}: {len(output):,}/{len(ordered):,} fragments translated", flush=True)
+    return output
+
+
+def package_chunks(package, local_paths, limit):
+    fragments = {"cs": set(), "en": set()}
+    with TemporaryFile(mode="w+t", encoding="utf-8") as spool:
+        with ZipFile(package) as archive:
+            index = ordered_package_index(json.loads(archive.read("index.json")), local_paths)[:limit]
+            decisions = json.loads(archive.read("raw/channel/urza_videos.json"))
+            urza_by_video = {video["video_id"]: set(video["urza_segments"]) for video in decisions["videos"]}
+            metadata = {row["id"]: row for row in json.loads(archive.read("raw/metadata/yt_full.json"))}
+            for position, entry in enumerate(index, 1):
+                vid = entry["video_id"]
+                transcript = json.loads(archive.read(entry["transcript_file"]))
+                rows = json.loads(archive.read(entry["sentences_file"]))["sentences"]
+                segments = json.loads(archive.read(entry["diarization_file"]))["segments"]
+                urza = urza_by_video[vid]
+                words, ranges, word_to_sentence = sentence_word_index(transcript, segments, urza, rows)
+                for chunk in chunk_video(transcript, segments, urza, metadata.get(vid), include_word_indices=True):
+                    for prefix, key in (("text", "word_indices"), ("context", "context_word_indices")):
+                        indices = chunk.pop(key)
+                        chunk[prefix] = plan_bilingual_text(
+                            indices, chunk[f"{prefix}_cs"], words, ranges, word_to_sentence, rows, fragments,
+                        )
+                    spool.write(json.dumps(chunk, ensure_ascii=False) + "\n")
+                if position % 200 == 0 or position == len(index):
+                    print(f"Prepared chunk spans for {position}/{len(index)} videos", flush=True)
+        translations = {target: translate_fragments(texts, target) for target, texts in fragments.items()}
+        spool.seek(0)
+        for line in spool:
+            chunk = json.loads(line)
+            for prefix in ("text", "context"):
+                for target, pieces in chunk.pop(prefix).items():
+                    if len(pieces) == 1 and not pieces[0][0]:
+                        text = pieces[0][1]
+                    else:
+                        text = " ".join(translations[target][text] if translate else text for translate, text in pieces)
+                        text = re.sub(r"\s+([,.?!…:;])", r"\1", text).strip()
+                    chunk[f"{prefix}_{target}"] = text
+            yield chunk
 
 
 def export_record(chunk):
@@ -401,6 +547,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--work", type=Path, default=Path.home() / "urza_diar")
     ap.add_argument("--transcripts", type=Path, help="default: <work>/transcripts")
+    ap.add_argument("--package", type=Path, help="bilingual pre-chunking ZIP including raw transcripts and diarization")
     ap.add_argument("--meta", type=Path, default=ROOT / "real_data" / "yt_full.json")
     ap.add_argument("--out-dir", type=Path, default=ROOT / "real_data")
     ap.add_argument("--limit", type=int, help="process only the first N transcripts")
@@ -411,7 +558,11 @@ def main():
         ap.error("--limit must be positive")
 
     transcript_dir = args.transcripts or args.work / "transcripts"
-    paths = sorted(transcript_dir.glob("*/transcript.json"))[:args.limit]
+    paths = sorted(transcript_dir.glob("*/transcript.json"))
+    if args.package:
+        write_corpus(package_chunks(args.package, paths, args.limit), args.out_dir)
+        return
+    paths = paths[:args.limit]
     if not paths:
         ap.error(f"no transcript.json files found under {transcript_dir}")
 
