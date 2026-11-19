@@ -1,0 +1,149 @@
+000    0.0 190  0.04 | nebyla živá bytost, tak třeba, jak se to zpracovat sami za sebou.
+001    3.5 201  0.00 | Že tam těch cest je spousta. Já chápu, že vlastně se ovlivnilo.
+002    8.6 190  0.09 | Já jsem taky viděla spoustu věcí, které mě nějaký ovlivnily a na
+003   12.9 208  0.06 | základě toho už je třeba na některé věci nedívám.
+004   17.3 221 -0.02 | Ale já bych to třeba nevěděla.
+005   19.6 216  0.05 | A to je stejné jak s tím učením, já to nevím, co
+006   22.3 218  0.05 | komu nastavit. Tak i kdybych chtěla, tak si vlastně představit, kde, u
+007   28.0 220  0.02 | koho, jak by ten filter měl být, protože třeba u člověka, který
+008   33.6 167  0.07 | miluje zvířata a má sen, že bude třeba veterinářem, tak to bude
+009   38.4 202  0.04 | úplně jiný, než u člověka, který chce třeba malovat.
+010   43.3 241       | Třeba,
+011   44.0   0       | já
+012   44.1 216       | nevím.
+013   46.3 221  0.06 | Jsou lidi, kteří už od malička pětají myši a dají na nich
+014   50.8 210  0.07 | pokusy, tak těm asi spousta věcí vadit nebude a pak jsou lidi,
+015   55.6 192  0.03 | kterým vadí jenom pohled na myši, takže se na to nebudou dívat.
+016   59.6 194  0.07 | Takže já fakt nevím, jak bych to nastavoval.
+017   65.5 137  0.55 | Já bych se mu měl možná pár věcí. Mně přijde hodně zajímavý
+018   69.0 137       | to, jak jsi říkala,
+019   70.1 119  0.57 | že tě vlastně těsí víc věcí, než tvoje děti, což je vlastně
+020   73.7 130  0.45 | pravda, protože
+021   75.9   0       | no,
+022   78.7 133  0.60 | ale zase znám třeba případy lidí, kdy jsou rodiče,
+023   82.7 127  0.54 | který byli hodně vyděšený a přenesli ten strach na svoje děti a
+024   85.9 117  0.60 | to dítě se s tím vlastně celý život nějakým způsobem
+025   89.6 131  0.58 | jako smyřuje. Mám ve svým okolí hodně blízkého člověka, který má hodně
+026   95.0 122  0.72 | vystrašenou maminku, která ji předvším se snažila ochránit a ona je teď
+027  101.2 126  0.67 | šíleně vystrašená úplně ze všeho na světě. A pak zjistila, že to
+028  104.7 110  0.60 | je vlastně převzatý, protože s ním chodí na nějaké terapie a tak,
+029  107.5 128  0.58 | a zjistila, že to má vlastně převzatý od mamky a že ona
+030  110.7 124  0.63 | si pak vybavuje, že spousty těch věcí se nebála a že vlastně
+031  113.4 113  0.71 | tím, že ji ta máma předtím chránila, tak ona se toho začala
+032  115.7 105       | bát.
+033  116.5 127  0.59 | A že vlastně se to na ní přeneslo ve spoustě věcí a
+034  119.2 126  0.52 | že se spoustou věcí, s kterými byla v pohodě, tak potom vždycky,
+035  123.5 118  0.60 | když jí mamka říkala prostě jako, nechoď venku pod mě, někdo tě
+036  126.4 121  0.62 | tam přepadne a znásilní, tak ona má doteď problém jít venku pod
+037  129.6  94       | mě třeba.
+038  131.0 118  0.50 | A pamatuje si, že ten problém neměla, jako když byla malá. Akorát,
+039  134.2 129  0.62 | že potom jí to ta mama furt říkala a tohle to ji
+040  136.4 122  0.45 | štípila a ona se od té doby toho začala bát.
+041  140.2 130  0.60 | A když mluvíte právě o tom, co jste viděl v té televizi
+042  145.2 106  0.64 | a že se snažíte ochránit od něčeho, aby viděli něco, co třeba
+043  149.9 122  0.58 | nechtějí. Já si myslím, že tohle se stejně nedá ochránit, protože třeba
+044  156.4 117  0.55 | tady ten jeden z Ježka, který kouká na ty Destiny videa a
+045  162.5 110  0.59 | vždycky nabízí všem, aby se podívali taky,
+046  165.2 120  0.58 | tak vlastně jsme byli na liže, ne, to byl nějaký jiný výlet,
+047  168.6 121       | kde
+048  169.9 111  0.69 | kde jedný spolužač se právě nabíd, že jí ukáže jedno nějaký brutální
+049  174.1 124  0.52 | video a ona řekla, že to chce vidět pak se na to
+050  177.2 124  0.55 | podívala, ale pak to pro ní bylo hrozný a bylo to pro
+051  180.4 110  0.40 | ní hodně hrozně hrozný
+052  182.3 128  0.62 | a já jsem to s ní tam řešil vlastně jsme spolu nějakou
+053  185.0 117  0.59 | dobu byli vlastně to asi taky bylo, nevím a rozebírali jsme to
+054  188.8 133  0.60 | s ní a nějakým způsobem to s náma sdílela
+055  194.8 127  0.62 | prostě řešili jsme to nějak, jsme o tom mluvili, ona se časem
+056  199.6 125  0.60 | upokojila a teď třeba ví, že tohle to není něco, co chce
+057  201.9 119  0.53 | vidět a už vždycky, když on přijde, tak ona řekne, že to
+058  204.1 110       | vidět prostě nechce.
+059  205.6 139  0.61 | A je to podle mě cená zkušenost, že prostě může něco vidět,
+060  210.1 115  0.51 | co je pro ní hrozný, ono jí to nějakým způsobem fakt vyděsilo
+061  213.6 135  0.59 | a pak s tím strachem pracuje.
+062  216.8 144  0.55 | Protože já si myslím, že to,
+063  219.3 132  0.51 | co bych nechtěl, aby ty děti vyrůstaly ve světě nějakým umělým, kde
+064  222.2 124  0.51 | nic nevyděsí, protože v normálním světě nás věci děsí a to, co
+065  225.4 120  0.61 | je dobré, je se naučit s tím nějak pracovat.
+066  227.3 137  0.63 | Takže ona chtěla vidět něco, co nevěděla, co bude, i když on
+067  232.5 116  0.57 | říkal, co tam bude, ale ona se neuměla představit, jak hrozný to
+068  234.8 113  0.57 | pro ní bude, takže on řekl, co tam bude za brutální věc.
+069  239.5 121  0.57 | Ona řekla, tak to chci vidět, pak se na to podívala, pak
+070  241.7 110       | to tam fakt bylo.
+071  242.8 120  0.49 | Já jsem to teda viděl také a i mě to překvapilo, že
+072  245.2 105  0.51 | to bylo mnohem horší, než jsem si myslel, že to bude.
+073  247.7 140  0.55 | Ale ona od té doby to má jako
+074  250.3 120  0.59 | zpracovaný s tím způsobem, že prostě říká, já už tohle to nechci.
+075  254.7 125  0.62 | A nemyslím si, že takováhle zkušenost je špatná.
+076  258.4 141  0.53 | To by mě zajímalo u vás. Za prvý, jestli jste o tom
+077  261.1 122  0.62 | s někým mluvil, když jste tam viděl ty věci v té televizi,
+078  263.7 112  0.50 | jestli jste to pak třeba babičce řekl, nebo jestli jste...
+079  268.8 105       | Já
+080  290.7 155  0.51 | třeba si myslím, že hodně často, když člověk něco vidí a teď
+081  293.8 139  0.60 | ho to nějak vyděsí nebo traumatizuje, tak si kolikrát u toho přijde
+082  297.0 133  0.64 | nepatřičně a nepřijde to třeba sdílet. Já nevím, kdybych se v noci
+083  301.2 137  0.59 | díval u babičky na televizi na nějakou krvárnu a pak bych tam
+084  304.5 137  0.62 | viděl něco, co by pro mě bylo hrozný, tak to asi nebudu
+085  306.4 130       | tý babičce říct.
+086  307.8 151  0.53 | Na druhou stranu přesně si umím představit, že tenhle ten týpek z
+087  312.3 146  0.65 | Ježka, co kouká na ty videa, i kdyby to tam bylo zakázaný,
+088  315.4 153  0.57 | tak se vzadím, že na ně bude stejně koukat a dost možná
+089  318.7 149  0.65 | to bude taky ukazovat spolužákům. Ale nebudou tam nastaveny ty pravidla, že
+090  322.4 135  0.61 | je jenom tomu, kdo chce a zároveň, když tam uvidí něco, co
+091  325.5 145  0.59 | pro ně bude hrozný, tak za náma asi nepřijdu, protože viděli něco,
+092  328.2 142  0.58 | co je vlastně zakázaný a teď jako ví, že děli něco, co
+093  330.9 145  0.63 | neměli dělat a teď je to blbý. A vlastně úplně stejně, jako
+094  336.1 151  0.54 | se snažíme těm dětem říkat, tak prostě děláte věci, tak je dělejte,
+095  340.4 141  0.66 | my vám k tomu třeba někdy něco řekneme, ale dělejte si, co
+096  343.9 133  0.64 | potřebujete a můžete za náma přijít s tím, jaký to bylo.
+097  347.3 130  0.63 | a když jste vlastně mluvil o tom, že vy se třeba stejně
+098  350.0 116  0.64 | jako ty děti budete chránit před chlastem, tak je budete chránit před
+099  352.9 115  0.34 | tou televizí, tak zase prostě
+100  355.6 122       | děcka
+101  357.4 127  0.63 | začínají někdy chlastat, některý dřív, některý později a často to dělají potají.
+102  363.7 142  0.54 | To, o co my se snažíme, je, aby to nedělali potají
+103  369.0 155  0.61 | a abychom třeba o tom věděli, že se něco takového děje.
+104  373.1 142  0.45 | A přijde mi vlastně
+105  376.0 148  0.48 | výrazně lepší stav, když to dítě ví,
+106  378.9 141  0.53 | že ať přijde s násilnýma videama, s pornem, s klastem, s drogama,
+107  385.5 140  0.52 | s cigaretou, s čímkoliv,
+108  388.7 143  0.66 | takže já neřeknu, co to děláš, okamžitě s tím přestaň, protože pak
+109  392.4 120  0.48 | to ani nebudu vědět,
+110  394.4 138  0.45 | ale řeknu, tak ty děláš tohle,
+111  397.0 118  0.49 | a teď záleží, co to je, tak o tom můžeme buď mluvit,
+112  399.9 110  0.39 | nebo něco takového.
+113  401.5 135  0.56 | A vlastně je pro mě asi důležitý, že to dítě ví, že
+114  406.4 125  0.69 | za mnou může přijít, jako to řekne kámošům, takže to řekne i
+115  410.3 126  0.61 | mně a že mu to nebudu zakazovat, protože v momentě, kdy mu
+116  412.8 132  0.64 | to začnu zakazovat, tak ono si to stejně nějak najde a obstará,
+117  417.5  99       | protože
+118  418.8 103       | jako
+119  420.6 105  0.51 | každý dítě se dostane k chlastu, i když by jako teoretickým to
+120  423.5 103  0.40 | nikdo neměl prodat, ale on prodá a nebo mají kamaráda, který jim
+121  426.5 127  0.45 | to koupí, prostě jako těch cest je spousta a my se snažíme
+122  430.7 127  0.55 | u těchto věcí spíš jako být než nebýt.
+123  473.2 199  0.12 | Já bych si říkala, že ty děti se vlastně kdy pojímají věcí,
+124  475.7 196  0.03 | než mi rozpojíte, co třeba dva bude na nějakou detektivku a já
+125  478.5 191 -0.02 | dělám tohle, co dělá to mám my, to je film.
+126  483.5 205  0.07 | Takže děti mají třeba něco úplně jinak, než to mám my, protože
+127  487.1 186  0.17 | zase myslím, nebo já jsem úplně jiná, mě nedá se to samozřejmě
+128  490.4 186  0.05 | na něco nastavit, mě nám úplně jinak a musím na to dívat,
+129  493.3 176  0.03 | tak to tam reaguje někdo.
+130  501.2 196  0.07 | Máme to samo zkušeno. Já jsem se taky hrozně bála možných videí,
+131  505.3 197 -0.05 | které podle mě nebyly úplně strašné, ale v jeho chvíli mu to
+132  511.3 201  0.01 | přišlo hrozně a přišlo mi to kařít s nějakým způsobem.
+133  516.2 200  0.13 | jsme jeli v YouTube odstraně, což dneska už vidím jako vozost,
+134  521.0 192  0.08 | protože když jsme ho zprovozdili, tak samozřejmě nemůže být žádná znova.
+135  524.7   0       | Jo,
+136  525.1 130       | jasně.
+137  525.8   0       | Ale
+138  526.3 227       | nějak
+139  526.6 215  0.06 | jsme o tom vyprávili a prostě ten strach, ne že by ho
+140  531.5 217  0.14 | překonal, ale právě si nastavil sámky hranice, kde když vidíš nějaké obrazy,
+141  536.5 200  0.02 | které se mu nezdá, tak už na to prostě neklidí.
+142  538.9 201  0.10 | Mně některé věci prostě taky přijdou na odpornější, než on je vidí.
+143  543.2 191  0.15 | a což dokážu testovat a kolikrát mi chce něco říct, a pak
+144  547.3 202 -0.02 | mi říká, že toho testu je radši někdo jiný, když ví, že
+145  551.8 221       | jako já,
+146  555.4 202  0.04 | mně to přijde příště, tak je bude.
+147  581.5 170  0.46 | Klidně se ptejte, to nevadí, že se ptáte to opakovaně.
+148  585.1 140  0.26 | A z toho tu jsme.

@@ -1,0 +1,36 @@
+#!/bin/bash
+# MetaCentrum GPU job array: transcribe all audio with faster-whisper large-v3 (per-word confidence).
+# Each array task takes a disjoint 1/N of the videos; finished videos are skipped, so resubmitting
+# the same command continues where it stopped. Submit from the folder that holds code/ and logs/:
+#     cd ~/urza_transcribe && qsub -o logs/ -J 1-20 -v NSHARDS=20 code/run_local.pbs
+# One quick test task (one video):
+#     qsub -o logs/ -v FILES=08hwEuoSR_o code/run_local.pbs
+# Upgrade transcripts made before the language check (detect languages, redo English windows, clean up):
+#     qsub -o logs/ -J 1-10 -v NSHARDS=10,FIX=1 code/run_local.pbs
+#PBS -N urza_whisper_local
+#PBS -l select=1:ncpus=4:ngpus=1:gpu_mem=16gb:mem=32gb:scratch_local=20gb
+#PBS -l walltime=12:00:00
+#PBS -j oe
+
+WORK=${WORK:-$PBS_O_WORKDIR}                                  # $HOME differs per compute node
+VENV=${VENV:-/storage/praha1/home/rolloj/urza_asr_bench/venv}
+export HF_HOME=${HF_HOME:-/storage/praha1/home/rolloj/urza_asr_bench/hf-cache}
+AUDIO_DIR=${AUDIO_DIR:-/storage/brno2/home/vladikxyz/scraping/audio}
+OUT_DIR=${OUT_DIR:-$WORK/transcriptions}
+
+cd "$WORK"
+source "$VENV/bin/activate"
+export TMPDIR=$SCRATCHDIR
+# CTranslate2 finds cuDNN/cuBLAS only through LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$(python -c 'import glob,site; print(":".join(glob.glob(site.getsitepackages()[0]+"/nvidia/*/lib")))'):${LD_LIBRARY_PATH:-}
+nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
+
+ARGS=(--audio-dir "$AUDIO_DIR" --out "$OUT_DIR")
+[ -n "${PBS_ARRAY_INDEX:-}" ] && ARGS+=(--shard "$PBS_ARRAY_INDEX/${NSHARDS:?set NSHARDS to the -J size}")
+[ -n "${FILES:-}" ] && ARGS+=(--files $FILES)
+[ -n "${LIMIT:-}" ] && ARGS+=(--limit "$LIMIT")
+[ -n "${FIX:-}" ] && ARGS+=(--fix)          # upgrade transcripts made before the language check
+python code/transcribe_local.py "${ARGS[@]}"
+status=$?
+clean_scratch
+exit $status

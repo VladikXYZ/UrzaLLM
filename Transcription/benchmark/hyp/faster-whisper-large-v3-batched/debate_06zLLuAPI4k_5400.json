@@ -1,0 +1,334 @@
+{
+ "model": "faster-whisper-large-v3-batched",
+ "clip": "debate_06zLLuAPI4k_5400",
+ "audio_seconds": 180.0,
+ "seconds": 18.0,
+ "windows": [
+  {
+   "start": 0.0,
+   "end": 1.78,
+   "text": "nejsou legitimní a toto je"
+  },
+  {
+   "start": 1.78,
+   "end": 4.12,
+   "text": "sebevlastnictví lidí. A ty tvrdíš,"
+  },
+  {
+   "start": 4.12,
+   "end": 6.34,
+   "text": "že v tomto,"
+  },
+  {
+   "start": 6.96,
+   "end": 8.08,
+   "text": "čili věci,"
+  },
+  {
+   "start": 8.16,
+   "end": 10.0,
+   "text": "který stát má právo dělat"
+  },
+  {
+   "start": 10.0,
+   "end": 12.18,
+   "text": "v této množině a zároveň"
+  },
+  {
+   "start": 12.7,
+   "end": 14.1,
+   "text": "zasahují do sebevlastnictví,"
+  },
+  {
+   "start": 14.1,
+   "end": 16.38,
+   "text": "tak ty... Takže já říkám, že existuje tady ta množina."
+  },
+  {
+   "start": 16.52,
+   "end": 18.06,
+   "text": "Ale říká, že v této množině"
+  },
+  {
+   "start": 18.06,
+   "end": 19.7,
+   "text": "je vždy nadřazeno právo státu nad"
+  },
+  {
+   "start": 19.7,
+   "end": 20.58,
+   "text": "sebevlastnictvím."
+  },
+  {
+   "start": 23.21,
+   "end": 24.39,
+   "text": "A není to tautologie."
+  },
+  {
+   "start": 24.39,
+   "end": 27.43,
+   "text": "Mně to logicky z toho vyplývá, já tam tautologii nevím."
+  },
+  {
+   "start": 27.67,
+   "end": 30.03,
+   "text": "Není to tautologie, protože byste taky mohli říct, že je to naopak."
+  },
+  {
+   "start": 30.15,
+   "end": 31.31,
+   "text": "No podle mě..."
+  },
+  {
+   "start": 31.31,
+   "end": 32.95,
+   "text": "A státu stejně zbydou tyhle práva."
+  },
+  {
+   "start": 33.01,
+   "end": 38.85,
+   "text": "No podle mě pro celou tady tu část platí, že je to nadřazený věcem."
+  },
+  {
+   "start": 40.43,
+   "end": 42.35,
+   "text": "No ne, ty bys to taky mohl nadefinovat tak,"
+  },
+  {
+   "start": 42.45,
+   "end": 44.31,
+   "text": "ty bys mohl nadefinovat to tak,"
+  },
+  {
+   "start": 44.35,
+   "end": 46.35,
+   "text": "že tady, my si povíme"
+  },
+  {
+   "start": 46.35,
+   "end": 47.99,
+   "text": "o tomhle tom sektoru, který teď zabarvím."
+  },
+  {
+   "start": 48.09,
+   "end": 48.43,
+   "text": "No."
+  },
+  {
+   "start": 51.57,
+   "end": 52.81,
+   "text": "Co může dělat stát,"
+  },
+  {
+   "start": 52.85,
+   "end": 54.13,
+   "text": "na co má podle tebe právo,"
+  },
+  {
+   "start": 54.13,
+   "end": 55.47,
+   "text": "na co nemá právo o sebevlastnictví."
+  },
+  {
+   "start": 55.51,
+   "end": 58.23,
+   "text": "Sektor, který jsem zabarvil, by mohl"
+  },
+  {
+   "start": 58.93,
+   "end": 60.15,
+   "text": "být rozhodnut, buď"
+  },
+  {
+   "start": 60.79,
+   "end": 61.83,
+   "text": "sebevlastnictví je nadřazeno,"
+  },
+  {
+   "start": 61.85,
+   "end": 63.63,
+   "text": "anebo práva státu jsou nadřazeno."
+  },
+  {
+   "start": 63.67,
+   "end": 65.67,
+   "text": "No ale počkej, kdyby to bylo, že"
+  },
+  {
+   "start": 65.67,
+   "end": 66.33,
+   "text": "tak"
+  },
+  {
+   "start": 66.93,
+   "end": 70.71,
+   "text": "Kdyby to bylo, že se vlastníci nadřeznou, tak ty věci nejsou tady, ale tady."
+  },
+  {
+   "start": 71.37,
+   "end": 71.77,
+   "text": "Ne."
+  },
+  {
+   "start": 71.83,
+   "end": 73.79,
+   "text": "Ne, tak jsou tady, protože nemá právo."
+  },
+  {
+   "start": 76.73,
+   "end": 80.37,
+   "text": "No, no ne, kdybychom se bavili v negativních právech, tak ano,"
+  },
+  {
+   "start": 80.41,
+   "end": 83.27,
+   "text": "ale my se bavíme v pozitivních právech a v pozitivních právách se ti ty práva"
+  },
+  {
+   "start": 83.27,
+   "end": 87.25,
+   "text": "prostě můžou jako třískat. Čili jinými slovy, ty..."
+  },
+  {
+   "start": 87.25,
+   "end": 89.47,
+   "text": "Nemusíme se bavit v pozitivních právech, nemyslím."
+  },
+  {
+   "start": 89.81,
+   "end": 93.65,
+   "text": "No, baví se v pozitivních právech už proto, že říká, že ten stát může zasahovat do..."
+  },
+  {
+   "start": 94.11,
+   "end": 96.49,
+   "text": "majitku jiných lidí, tak to jsou jednoznačný pozitivní práva."
+  },
+  {
+   "start": 96.59,
+   "end": 97.13,
+   "text": "Dobře, pokračujeme."
+  },
+  {
+   "start": 97.33,
+   "end": 99.15,
+   "text": "Což znamená, že jestliže se bavíme o pozitivních právech,"
+  },
+  {
+   "start": 99.23,
+   "end": 100.83,
+   "text": "tak může docházet ke konfliktu těch práv."
+  },
+  {
+   "start": 101.19,
+   "end": 101.63,
+   "text": "Samozřejmě."
+  },
+  {
+   "start": 101.75,
+   "end": 103.67,
+   "text": "A tohle je konflikt práv."
+  },
+  {
+   "start": 103.81,
+   "end": 105.73,
+   "text": "Tady, když tohleto označím jako S,"
+  },
+  {
+   "start": 105.95,
+   "end": 107.47,
+   "text": "tak tady je sebevlastnictví,"
+  },
+  {
+   "start": 107.51,
+   "end": 109.17,
+   "text": "X jsou věci, které stát může dělat"
+  },
+  {
+   "start": 109.17,
+   "end": 111.85,
+   "text": "a S a X jsou někde v konfliktu."
+  },
+  {
+   "start": 112.27,
+   "end": 112.71,
+   "text": "No."
+  },
+  {
+   "start": 113.03,
+   "end": 115.69,
+   "text": "A ty říkáš, že když je S a X v konfliktu,"
+  },
+  {
+   "start": 115.71,
+   "end": 117.37,
+   "text": "tak vždy je X nadřazeno."
+  },
+  {
+   "start": 123.69,
+   "end": 127.71,
+   "text": "že sebevlastnictví je nadřazeno právům státu, tak ta věc není tady, ale tady."
+  },
+  {
+   "start": 127.83,
+   "end": 130.01,
+   "text": "Protože to znamená, že na to stát nemá právo."
+  },
+  {
+   "start": 130.19,
+   "end": 134.37,
+   "text": "No ne, tak ty můžeš to definovat tak, že stát má právo."
+  },
+  {
+   "start": 134.37,
+   "end": 142.31,
+   "text": "Takže podle mě, ty se mě ptáš, jestli existuje tady ten kvadrant."
+  },
+  {
+   "start": 144.43,
+   "end": 149.11,
+   "text": "No já, ten kvadrant zjevně existuje, protože zjevně existují..."
+  },
+  {
+   "start": 149.38,
+   "end": 154.3,
+   "text": "Práva, který ty přiškáváš státu a který jsou v rozporu se sebevlastnictvím,"
+  },
+  {
+   "start": 155.13,
+   "end": 159.26,
+   "text": "což znamená, že v případě, že nějaký právo, třeba stát totiž,"
+  },
+  {
+   "start": 159.28,
+   "end": 163.32,
+   "text": "ono to právo státu, ty mu nemusíš dávat explicitně na to sebevlastnictví."
+  },
+  {
+   "start": 163.38,
+   "end": 170.94,
+   "text": "Ty můžeš mi třeba říct, stát má právo jakýkolivkus majetku vyhodit ze svýho toho území, třeba."
+  },
+  {
+   "start": 171.12,
+   "end": 171.8,
+   "text": "Ok."
+  },
+  {
+   "start": 172.12,
+   "end": 173.08,
+   "text": "Třeba, příklad."
+  },
+  {
+   "start": 173.28,
+   "end": 177.24,
+   "text": "A teď, tohle můžeš říct."
+  },
+  {
+   "start": 177.61,
+   "end": 179.99,
+   "text": "Ano, ale sebevlastnictví je nadřazeno, což znamená,"
+  }
+ ],
+ "text": "nejsou legitimní a toto je sebevlastnictví lidí. A ty tvrdíš, že v tomto, čili věci, který stát má právo dělat v této množině a zároveň zasahují do sebevlastnictví, tak ty... Takže já říkám, že existuje tady ta množina. Ale říká, že v této množině je vždy nadřazeno právo státu nad sebevlastnictvím. A není to tautologie. Mně to logicky z toho vyplývá, já tam tautologii nevím. Není to tautologie, protože byste taky mohli říct, že je to naopak. No podle mě... A státu stejně zbydou tyhle práva. No podle mě pro celou tady tu část platí, že je to nadřazený věcem. No ne, ty bys to taky mohl nadefinovat tak, ty bys mohl nadefinovat to tak, že tady, my si povíme o tomhle tom sektoru, který teď zabarvím. No. Co může dělat stát, na co má podle tebe právo, na co nemá právo o sebevlastnictví. Sektor, který jsem zabarvil, by mohl být rozhodnut, buď sebevlastnictví je nadřazeno, anebo práva státu jsou nadřazeno. No ale počkej, kdyby to bylo, že tak Kdyby to bylo, že se vlastníci nadřeznou, tak ty věci nejsou tady, ale tady. Ne. Ne, tak jsou tady, protože nemá právo. No, no ne, kdybychom se bavili v negativních právech, tak ano, ale my se bavíme v pozitivních právech a v pozitivních právách se ti ty práva prostě můžou jako třískat. Čili jinými slovy, ty... Nemusíme se bavit v pozitivních právech, nemyslím. No, baví se v pozitivních právech už proto, že říká, že ten stát může zasahovat do... majitku jiných lidí, tak to jsou jednoznačný pozitivní práva. Dobře, pokračujeme. Což znamená, že jestliže se bavíme o pozitivních právech, tak může docházet ke konfliktu těch práv. Samozřejmě. A tohle je konflikt práv. Tady, když tohleto označím jako S, tak tady je sebevlastnictví, X jsou věci, které stát může dělat a S a X jsou někde v konfliktu. No. A ty říkáš, že když je S a X v konfliktu, tak vždy je X nadřazeno. že sebevlastnictví je nadřazeno právům státu, tak ta věc není tady, ale tady. Protože to znamená, že na to stát nemá právo. No ne, tak ty můžeš to definovat tak, že stát má právo. Takže podle mě, ty se mě ptáš, jestli existuje tady ten kvadrant. No já, ten kvadrant zjevně existuje, protože zjevně existují... Práva, který ty přiškáváš státu a který jsou v rozporu se sebevlastnictvím, což znamená, že v případě, že nějaký právo, třeba stát totiž, ono to právo státu, ty mu nemusíš dávat explicitně na to sebevlastnictví. Ty můžeš mi třeba říct, stát má právo jakýkolivkus majetku vyhodit ze svýho toho území, třeba. Ok. Třeba, příklad. A teď, tohle můžeš říct. Ano, ale sebevlastnictví je nadřazeno, což znamená,"
+}

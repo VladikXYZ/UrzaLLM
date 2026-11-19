@@ -1,0 +1,336 @@
+000    0.0 242  0.10 | se bavit chtějí a baví se s lidmi, se kterými se bavit
+001    2.1 235  0.14 | chtějí a nejsou donuceni, jo, vy jste ve stejném ročníku, tak vy
+002    5.2 237  0.11 | prostě utvářejte nějakou
+003    8.5 240  0.11 | skupinu kamarádů, tak mi přijde, že ty vztahy jsou mnohem upřímnější
+004   11.8   0       | a
+005   12.0 226       | že v
+006   12.9 223  0.13 | tomhle mi připadá, že je to velký rozdíl.
+007   16.9 130  0.41 | Čili vidíš rozdíl hlavně v těch vztazích?
+008   18.4 249       | Hlavně
+009   18.7 244       | v
+010   18.8   0       | těch
+011   18.9 241       | vztazích, jo.
+012   20.2 145  0.38 | Vlastně, když se nad tím tak zamyslím, tak asi souhlasím, nebo ještě
+013   23.8 125  0.48 | jen v těch vztazích, ale pak taky mně přijde hodně rozdíl v
+014   26.5 113  0.33 | nějakém individualismu.
+015   28.0   0       | Jo,
+016   28.5 218       | to určitě.
+017   29.1 198       | Že
+018   29.3 128       | když
+019   29.5 125  0.50 | vidím, třeba i když přijdu někam přednášet do nějaký školy, tak mi
+020   32.7 120  0.49 | přijde, že ty děti jsou tam mnohem víc jako takový jako stádní
+021   36.7 120  0.57 | a že vy jste hodně jako takový samorostní.
+022   40.9   0       | A
+023   40.9 267       | každý
+024   41.2 278  0.08 | má nějaký svoje specifický, mi přijde jako, no já nevím, že každý,
+025   45.6 256  0.17 | každý, jakože když se třeba zeptáte, mi přijde děti jako v věžku,
+026   50.1 255  0.11 | co si třeba myslí, že by chtěli jednou v životě dělat, tak
+027   53.4 264  0.19 | je to takový mnohem rozmanitější, zatímco prostě v té bývají škole, tak
+028   57.3 254  0.08 | tam každý měl vybranou jednu z deseti vejšek, na kterou chce prostě
+029   61.4 264  0.24 | jít a všechny měly vlastně stejné plány, jakože jo, skončí škola, tak
+030   65.0 240  0.17 | půjdu tady na tu vejšku, tady na tu vejšku a prostě nevím,
+031   67.8 244  0.12 | připadám, že vejšku to je mnohem rozmanitější, to co jako třeba
+032   70.4 269       | kdo
+033   70.9 158       | by
+034   71.3 149       | chtěl
+035   71.5   0       | dělat.
+036   72.6 122  0.39 | A ještě mě zajímalo, když už jsme byli u té grlovačky, no
+037   75.9 127  0.45 | jestli máš nějaký zajímavý zážitky z grlovačky vlastně, já se na tvý
+038   79.4 117  0.20 | grlovačce nevím, jestli jsi byl, ale už
+039   81.1   0       | si
+040   81.2   0       | ji
+041   81.2 115       | nepamatuji.
+042   81.5 216  0.01 | Já si upřímně
+043   82.8   0       | taky
+044   82.9 127       | moc
+045   83.2 109       | nepamatuji. Takže
+046   84.1   0       | to
+047   84.2   0       | asi
+048   84.3   0       | tak
+049   84.5 301  0.13 | traumaticky nebylo. Ano, mně to přišlo v pohodě, ale hlavně mě to
+050   88.7 274  0.15 | nějak moc nevadilo, to bylo spojené s tím, že od svou prezentací
+051   93.5 240  0.10 | toho portfolia, takže to byla taková, já nevím, nemám z toho žádný
+052   98.3 258  0.13 | trauma, nějak jsem se toho nebála, nějak mi to tam nevadilo, takže.
+053  102.7   0       | No
+054  103.0   0       | a
+055  103.2 122  0.41 | co je pro tebe vešku nejtěžší?
+056  107.9 120  0.45 | Spousta lidí třeba říká, že je pro ně těžká ta svoboda, nebo
+057  111.3  98  0.43 | co je tam pro tebe nejnáročnější?
+058  116.2 292       | Nejnáročnější?
+059  116.9 114       | No,
+060  119.9 252  0.02 | jakože třeba minulej rok, no, já vlastně nevím, jakože, asi vlastně to,
+061  128.8 263  0.05 | že, nevím, jak jsem byla zvyklá na to, že náde mnou někdo
+062  132.3 257  0.14 | stojí a prostě mi říká, co mám umět
+063  135.6   0       | a
+064  136.0   0       | tak
+065  136.2 273       | já
+066  136.4 272       | jsem
+067  136.5 260  0.09 | to brala jako jo, ne, že bych to brala, Albo tak, že
+068  139.2 274  0.16 | když tohle budu umět, tak jsem prostě v pohodě a tak jsem
+069  142.2 249  0.12 | prostě jako, tak prostě, nevím, no prostě, že jako, jo, tak umím
+070  146.9 255  0.21 | tohle z toho, protože oni mi to tak řekli, že je to
+071  148.8 235       | správně a
+072  149.3   0       | že
+073  149.3   0       | to
+074  149.4   0       | budu
+075  149.6 248       | potřebovat, tak umím,
+076  150.5 240       | jsem
+077  150.6   0       | v
+078  150.8 268  0.10 | pohodě. A teď, jak tam nikdo takový nestojí, tak asi jako najít
+079  153.5 258  0.10 | se sama to, co já chci umět, nebo to, co jako, no,
+080  159.4 260       | jakože
+081  160.0 268  0.13 | prostě najít se v tom sama a sama
+082  161.8 251       | si
+083  162.0 242  0.14 | uvělat nějakej ten svůj plán, nebo se rozhodnout, na jaký chci chodit
+084  165.5 234  0.15 | lekce a co je pro mě důležitý.
+085  167.7   0       | A
+086  168.0 248  0.15 | teď už je to asi vlastně lepší, teď už mi to tak
+087  170.4 234  0.14 | nevadí. Ne, že nevadí, ale teď už mi to nepřipadá tak těžký,
+088  173.4 235  0.21 | ale třeba minulej rok, jako na začátku školního roku, tohle mi přišlo
+089  175.9 225  0.07 | jako sama
+090  177.2 241       | si
+091  177.5 223  0.17 | nějak utvořit ten svůj, jako co budu dělat
+092  180.5   0       | v
+093  180.6   0       | tom
+094  180.7 227 -0.02 | týdnu a kdy tam budu chodit,
+095  182.4 220       | kdy
+096  182.5 222       | tam
+097  182.7 141  0.16 | nebudu chodit a tak. Jako je fakt, že tohle to říkají asi
+098  185.7 121  0.45 | nejčastěji lidi, co tam přijdou, že to je jako těžký ten, jako
+099  190.3 120  0.46 | když jsi něčím, kde máš nalajnováno a najednou přijdeš někam, kde si
+100  193.6 113       | můžeš dělat,
+101  194.0   0       | co
+102  194.1   0       | chceš.
+103  194.2 263  0.12 | Tyhle nemáš zodpovědnost za to, co umíš a najednou máš všechnu zodpovědnost
+104  198.9 231       | za to, co
+105  199.3 232       | umíš
+106  199.5 119       | a
+107  200.1 264  0.12 | zodpovědnost za všechny svůj čas
+108  201.9   0       | prostě
+109  202.3   0       | a
+110  202.4 248       | to, jak
+111  202.6   0       | ho
+112  202.7 235       | strávíš
+113  203.3 254  0.19 | se tím, co tam jsi ho prostě neměl, tam jsi měl přesně
+114  205.8 227       | nalajnováno, kdy, kde
+115  206.8 221       | máš
+116  207.2 216       | být,
+117  207.5 222  0.08 | jak dlouho tam máš být a co máš umět.
+118  209.6 130  0.39 | Ale to je vlastně zajímavý, když to často lidi říkají jako tu
+119  212.5 121  0.40 | nejnáročnější věc, tak je to vlastně zase něco, co se tím jako
+120  214.6 122       | hodně naučej,
+121  215.8 124       | protože
+122  216.1   0       | to
+123  216.2 121  0.36 | mi přijde, že z toho plyne další jako dobrý skill, naučím se,
+124  219.2 118  0.36 | co vlastně chci umět, že si to jako vyberu,
+125  221.1   0       | že
+126  221.2   0       | jo?
+127  221.3   0       | Mně
+128  221.4   0       | to
+129  221.5 261  0.13 | připadá jako už velký jako rozdíl, že třeba jako minulej rok versus
+130  224.8 256  0.23 | teďko na začátek školního roku, tak mi přijde, že teď je to
+131  227.3 244  0.13 | pro mě mnohem jako snažit nějak jako říct a nějak
+132  230.2   0       | si
+133  230.3   0       | to
+134  230.4   0       | prostě
+135  230.8 233       | namyslet
+136  231.3   0       | a
+137  231.5 222       | takhle.
+138  231.8 245  0.20 | Teď něco minulej rok jsem, to bylo i tak, že jsem měla
+139  235.3 244  0.14 | pocit, že bych si měla teda nabrat všechno,
+140  238.0 146       | tak
+141  238.6 152       | jsem
+142  238.9 144       | si
+143  239.0 267       | toho nabrala vlastně
+144  240.0   0       | spoustu,
+145  240.3   0       | ale
+146  240.5 280  0.13 | pak jsem tam vlastně třeba na spoustu těch předmětů vlastně jako nechodila,
+147  243.3   0       | ale
+148  244.2 282  0.13 | tím, že jsem si je nabrala všechno, tak jsem si pak vlastně
+149  246.5 272  0.11 | nemohla vybrat, teď už se mi někam nechtělo, teď jsem třeba šla
+150  249.2 267  0.13 | na předmět a pak jsem neměla energii na to jít prostě na
+151  251.5 258  0.14 | jiný, který mě vlastně zajímal víc
+152  253.2   0       | a
+153  253.4 171       | teď
+154  253.8 277       | už
+155  253.9 274  0.11 | mám pocit, že jsem si fakt nabrala to, na co vím, že
+156  256.4 285       | chci
+157  256.6 298       | chodit
+158  257.0   0       | a
+159  257.7 258  0.21 | domluvila jsem si to, kde vím, že že fakt jo, tohle mě
+160  260.6 235  0.11 | zajímá, tady prostě tímhle chci trávit ten čas a nějak jako věřím,
+161  265.3 249       | že tenhle
+162  265.6 245       | rok
+163  265.8 115       | to
+164  266.0 247       | budu
+165  266.3 249  0.11 | mít líp vlastně naplánovaný, než jsem měla minulý rok.
+166  269.3   0       | Jo,
+167  269.7 127  0.39 | jo, tohle je klasika, jak vždycky ty lidi se tam přijdou třeba
+168  272.0 115  0.46 | z nějakých tý státní školy nebo nějaký jiný školy, tak vždycky tam
+169  274.4 113  0.43 | sedí s těma rozvrhama a snaží se
+170  276.2 128  0.27 | vyplnit každý okinko
+171  277.3   0       | v
+172  277.4 134  0.37 | rozvrhu,
+173  279.8 124  0.48 | protože na to byli zvyklí, že se to vlastně tak má dělat.
+174  284.0 128  0.40 | Hele, píše nám náš Honza
+175  286.0 120  0.50 | a píše nám, no díváte se na point toho, že pro dospívající
+176  290.9 114  0.53 | mozek je takové krátkodobé štěstí hodně domrdávající. Kdy třeba sociální sítě
+177  296.5 110  0.51 | prokazatelně domrdávají mozek ve vývoji.
+178  299.2 120  0.56 | A píše, vidím tam ty body, které vidím pozitivně, ale
+179  304.0 113  0.58 | jak ten mozek je neurologicky tím zničen. Je to pro mě silné
+180  307.6 107  0.46 | kriterium, kvůli kterému mám tendenci to hodnotit.
+181  310.2 112  0.57 | Takže to nám píše náš Honza a myslím, že to vyjádření k
+182  313.5 110  0.56 | tomu krátkodobnímu a dlouhodobnímu štěstí.
+183  316.3 110  0.20 | A já teda, Honzo,
+184  318.3 117  0.52 | nebo chceš k tomu něco?
+185  319.6   0       | Asi
+186  320.0 252       | ne.
+187  322.9 130  0.45 | Ono je to těžké, to se budeme muset zvyknout, protože já mám
+188  325.3 118  0.53 | hrozně tendenci mluvit a nepuštět lidi ke slovu a ty jsi taková,
+189  328.9 121  0.43 | že si to slovo nebereš, takže diváci můžou hezky se ptát buď
+190  332.7 113  0.58 | přímo tebe, anebo mě můžou půzorovat ať ti nechám víc prostoru.
+191  338.5 142  0.59 | Každopádně, Honzo, já úplně vlastně
+192  342.0 106       | nesouhlasím,
+193  343.0 127  0.54 | protože tím, že je mozek neurologicky zničen, jako existují styry, které ukazují,
+194  347.6 119  0.44 | že když jsou dětka příliš mnoho na třeba tabletech nebo na tom
+195  350.8 117  0.56 | TikToku a podobně,
+196  353.6 120  0.53 | takže jako potom, když si jim udělají scan mozku, tak je jedinej,
+197  357.4 123  0.50 | než když tam nejsou, ale já si myslím, že to pouze dokazuje
+198  360.4 124  0.59 | neuroplasticitu toho mozku, protože úplně stejně tak, když budeš mít dítě, který
+199  364.3 114  0.54 | bude jako celý život, já nevím, prostě jezdit na koni nebo hrát
+200  368.0 106  0.47 | na hlubými nástroji nebo podobně, tak ten mozek je neuroplastický, takže se
+201  371.2 119  0.51 | tam stanou nějaké změny a já nemyslím si, že ten mozek je
+202  374.4 120  0.51 | tím jako zničen. Samozřejmě se může dít to, že když tam jedeš
+203  378.5 113  0.61 | ten krátkodobý dopamin, tak ti to může přepávat ty receptory a můžeš
+204  381.6 117  0.51 | si tam vytvářet závislost. Na druhou stranu jako zase překonání té závislosti
+205  386.6 116  0.54 | už v tom útlým věku si myslím, že může být jako dobrý
+206  391.3 115  0.46 | start do toho, jak se sebou
+207  392.6   0       | pracovat.
+208  392.6 127       | Takže
+209  392.9   0       | když
+210  393.0   0       | to
+211  393.0 241  0.21 | malé dítě překoná potom tu závislost třeba na tom počítači, takže se
+212  396.3 257  0.16 | tím tak jako vlastně něco naučí.
+213  397.7   0       | No,
+214  398.2 133  0.53 | jakože myslím si, že jo, jakože já třeba vím o jednom konkrétním
+215  400.9 115  0.47 | případu, jakože to je jako jeden, ale jako, nebo takhle, jeden je,
+216  405.5 133  0.48 | protože je hrozně jako hustej, ale pak jsou spoustu dalších i u
+217  408.1 122  0.46 | nás ve škole, kdy si to ty děti nějak jako hlídaj, ale
+218  410.5 114  0.56 | že prostě se fakt spadl do obrovský závislosti a měl se vyřízený
+219  414.3 113  0.49 | rodiče, takže ty mu prostě řekli, hle, je to na tobě, jakože
+220  417.1 111  0.40 | jsme tady pro tebe, pomůžeme ti, ale je to tvoje rozhodnutí a
+221  420.3 120  0.52 | on se prostě sám došel k tomu v nějakých deseti, že prostě
+222  423.2 111  0.57 | už to fakt jako takhle nejde, že nechce a od té doby
+223  425.6 105  0.48 | teď mu je prostě patnáct, šestnáct a furt se hlídá, aby se
+224  427.8 115  0.51 | mu to jako nestalo, což když mu ten telefon by ti rodiče
+225  430.9 108  0.56 | brali, tak pak bude takový ten neustálej boj o to, jak si
+226  433.3  98  0.52 | telefon, na jak dlouho ho můžeš mít a tak, že si to
+227  435.9  99  0.58 | dítě vlastně nedojde vůbec k tomu, že má problém.
+228  437.6 277  0.01 | Nainstalují mu Family Link.
+229  439.0   0       | Cože?
+230  439.5   0       | Že
+231  440.0   0       | mu
+232  440.0 244 -0.03 | nainstalují Family Link.
+233  441.2   0       | Co
+234  441.2   0       | je
+235  441.3 113       | Family
+236  441.5  93       | Link?
+237  442.0   0       | Taková
+238  442.4 233  0.12 | aplikace, přes kterou řidiče můžou kontrolovat tvůj telefon a vidí, na jaký
+239  446.0 227  0.12 | aplikaci seš, kolik hodin, kde máš polohu, kolik máš procent.
+240  449.9 116       | Jaký
+241  450.0 107       | porno
+242  450.3 100       | sleduješ?
+243  450.9   0       | No
+244  451.0 318       | jo,
+245  451.2 318       | všechno.
+246  452.6 102  0.28 | Počkej, polohu ti to sleduje?
+247  454.0 101       | Jo,
+248  454.4 311       | polohu, no.
+249  455.7 261  0.09 | Myslím, že polohu a prostě
+250  457.5   0       | vidíš
+251  457.7   0       | tam
+252  457.9 240  0.11 | všechno a můžeš právě jako dětem dávat limity na
+253  460.4 216       | aplikaci,
+254  460.9 229       | že
+255  461.0 235  0.16 | třeba na téhle aplikaci můžeš být dneska 30 minut,
+256  463.4 234  0.17 | Celkově na telefonu můžeš být dneska hodinu, a v 9 hodin se
+257  467.2 231  0.17 | ti prostě vypne telefon a můžeš jenom volat a psát
+258  469.5   0       | a
+259  469.7 115  0.35 | takové věci. Jak to víš, ty to jsi někdy měla, nebo jsi
+260  472.2 108       | znala někoho,
+261  472.8 110       | kdo
+262  472.9   0       | to
+263  472.9 113       | měl?
+264  473.0 113       | Já
+265  473.3   0       | jsem
+266  473.3 227       | měla tu aplikaci, no.
+267  474.5   0       | To
+268  474.6   0       | mi
+269  474.7 120       | dali
+270  474.8 108       | rodiče
+271  475.1 115       | Family
+272  475.3 103       | Link,
+273  475.7 133       | a pak ti dali do Ježka?
+274  477.3 269  0.11 | Ale to bylo takový, jakože, no, měla jsem jenom chvíli ten Family
+275  481.4 245       | Link, no.
+276  482.0   0       | A
+277  482.2 122       | kolik
+278  482.4   0       | ti
+279  482.5 115       | bylo?
+280  483.9   0       | Tak jeden,
+281  484.9 226  0.09 | no, já jsem svůj první dotykovej telefon jsem měla až asi v
+282  489.2 233  0.10 | jedenácti, protože jsem mu potřána i dost.
+283  491.5   0       | Já
+284  492.0 103       | jsem
+285  492.1   0       | v
+286  492.2 292 -0.00 | jednácti ještě neměla ani dlačítka. No, v jednácti jsem měla po časti,
+287  495.5 245  0.01 | protože jsem jezdila sama po Breze.
+288  497.5 233  0.08 | No a potom podle mě třeba od jednácti do třinácti jsem měla
+289  500.6 233       | ten family link.
+290  502.5 130       | Jasně.
+291  503.9 104  0.54 | Dobrá, tak co tady máme dále?
+292  510.3 102  0.54 | Neurologické zničení mozku, jo.
+293  512.6 117  0.49 | Anivia Kain se ptá,
+294  515.7 116  0.62 | můžete prosím navíc do nějaké praktické rady, jak pomoci a ulehčit život
+295  519.8 103  0.65 | kamarádovi, kterého rodiče nutí chodit do státní školy.
+296  523.0   0  0.49 | Co bys poradila kamarádovi?
+297  524.9 110       | Co
+298  525.1 290       | dělá,
+299  525.3 248  0.17 | když musí chodit do státní školy?
+300  528.4 247  0.11 | Já jsem odešla, ale...
+301  532.1 129  0.23 | Tam ho nutí rodiče,
+302  533.3   0       | to
+303  533.3   0       | je
+304  533.4 118  0.12 | blbý, no. No, to je blbý.
+305  534.9   0       | Jak
+306  535.3   0       | já
+307  535.4 133  0.38 | myslím, že když ty rodiče jsou ty, který to chtějí, tak jsi
+308  537.8 110  0.37 | docela v high.
+309  539.4   0       | To
+310  539.5   0       | jsi
+311  539.6 274  0.02 | docela jako, že vlastně nevím,
+312  541.5 272       | co...
+313  543.4 127       | Jako...
+314  544.8 122  0.51 | Jako mě nejvíc ulehčilo to, že jsem se na to prostě vykašlal
+315  548.1 272       | a
+316  548.9 123       | že
+317  549.0 119  0.48 | jsem Já jsem jela na to, že budu mít čtyřky, abych
+318  552.1 112       | nedělala
+319  552.4  97       | reparace.
+320  552.7   0       | Já
+321  552.8   0       | jsem
+322  553.0 260  0.14 | potom dělala to, že jsem měla předměty, které mě bavily, jako třeba
+323  557.4 249  0.12 | matiku, a to mi nevadilo se na to učit. A vlastně jsem
+324  560.8 233  0.17 | potom měla často i radost, až jsem měla pak dobrou známku, protože
+325  563.4 235  0.02 | jsem měla dobrý pocit.
+326  566.1 258  0.15 | Ale že jsem si ty předměty nějak rozdělila do toho, které jsou
+327  569.6 251  0.19 | pro mě důležitější, které mě baví, a na předměty, které pro mě
+328  573.2 248  0.14 | jsou absolutně nedůležitý a které mě nebaví. A vlastně ty nedůležitý, tak
+329  578.4 246  0.22 | ty jsem vždycky si tak jenom projela před těma testama a byla
+330  580.7 237  0.18 | jsem jako dobrý trojka, že mě to vlastně nezajímalo. A ty předměty,
+331  585.2 245  0.20 | které mě vlastně bavily, tak tam jsem se jako víc jako že
+332  587.6 231  0.18 | jsem se na ty třeba učila a tak, abych měla jako třeba
+333  590.0 245  0.13 | tu jedničku, dvojku. A potom to pro mě bylo nějak jako stravitelný,
+334  593.7 235  0.17 | že jsem si to nějak jako rozdělila vlastně podle sebe, ten čas,
+335  598.4 216       | který tomu věnuju.

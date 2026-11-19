@@ -1,0 +1,24 @@
+#!/bin/bash
+# MetaCentrum GPU job: every benchmark model over the clips, one process per model.
+#     cd ~/urza_asr_bench && qsub -o logs/ code/benchmark/run_bench.pbs
+#PBS -N urza_asr_bench
+#PBS -l select=1:ncpus=8:ngpus=1:gpu_mem=20gb:mem=48gb:scratch_local=40gb
+#PBS -l walltime=4:00:00
+#PBS -j oe
+
+BENCH=${BENCH:-$PBS_O_WORKDIR}   # submit from the bench folder; $HOME differs per compute node
+MODELS=${MODELS:-"whisper-large-v3 whisper-large-v3-turbo whisper-large-v3-longform canary-1b-v2 parakeet-tdt-0.6b-v3 seamless-m4t-v2-large"}
+
+cd "$BENCH"
+source venv/bin/activate
+export HF_HOME=$BENCH/hf-cache TMPDIR=$SCRATCHDIR
+# faster-whisper (CTranslate2) finds cuDNN/cuBLAS only through LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$(python -c 'import glob,site; print(":".join(glob.glob(site.getsitepackages()[0]+"/nvidia/*/lib")))'):${LD_LIBRARY_PATH:-}
+nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
+
+for m in $MODELS; do
+    echo "=== $m $(date +%T)"
+    python code/benchmark/bench_asr.py --model "$m" --clips clips --out hyp || echo "!!! $m FAILED"
+done
+echo "=== all done $(date +%T)"
+clean_scratch

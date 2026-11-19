@@ -1,0 +1,21 @@
+# U = Urza, G = the woman who talks most (Gabriela; blocks match each other by voice embedding 0.5-0.86), A = man from the audience
+0-9 U
+10-15 ?
+16-19 U
+20-33 G
+34-56 U
+57-75 G
+76 U
+77-78 G
+79-86 ?
+87-120 U
+121-122 ?
+123-134 U
+135-149 G
+150-151 ?
+152-160 U
+161 ?
+162-172 G
+173-189 A
+190-191 ?
+192-199 U

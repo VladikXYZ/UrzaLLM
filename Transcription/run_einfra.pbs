@@ -1,0 +1,24 @@
+#!/bin/bash
+# MetaCentrum job: transcribe the Urza audio with the e-INFRA Whisper API.
+# Only ffmpeg decoding and HTTP calls run here, no GPU needed. Submit from the repo root:
+#     qsub -v SHARD=1/2 Transcription/run_einfra.pbs      (and SHARD=2/2 with the other person's key)
+# Resubmit the same command if the walltime runs out: finished videos and windows are skipped.
+#PBS -N urza_whisper
+#PBS -l select=1:ncpus=4:mem=8gb
+#PBS -l walltime=48:00:00
+#PBS -j oe
+
+# ---- edit these ----
+AUDIO_DIR=/storage/brno2/home/vladikxyz/audio          # the shared audio folder
+OUT_DIR=/storage/brno2/home/vladikxyz/transcriptions   # shared output folder (both need write access)
+KEY_FILE=$HOME/.einfra_key                             # your API key, on one line; chmod 600
+# --------------------
+
+set -euo pipefail
+cd "$PBS_O_WORKDIR"
+module add ffmpeg 2>/dev/null || true   # check `module avail ffmpeg` for the exact name if this is not enough
+export EINFRA_API_KEY=$(cat "$KEY_FILE")
+
+python3 Transcription/transcribe_einfra.py \
+    --audio-dir "$AUDIO_DIR" --out "$OUT_DIR" \
+    ${SHARD:+--shard "$SHARD"}

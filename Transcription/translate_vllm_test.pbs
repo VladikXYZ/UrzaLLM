@@ -1,0 +1,27 @@
+#!/bin/bash
+# MetaCentrum GPU job: every candidate model translates the same sample (quality + speed), one after another.
+#     cd ~/urza_translate && qsub -o logs/ code/translate_vllm_test.pbs
+#PBS -N urza_vllm_test
+#PBS -l select=1:ncpus=8:ngpus=1:gpu_mem=40gb:mem=64gb:scratch_local=40gb
+#PBS -l walltime=3:00:00
+#PBS -j oe
+# FP8 weights (QUANT=fp8, default) halve the memory, so the 22-30B models fit 40-48 GB GPUs, which are far
+# easier to get than 80 GB ones; QUANT= (empty) for 16-bit on a big GPU (then ask for gpu_mem=79gb)
+
+WORK=${WORK:-$PBS_O_WORKDIR}
+QUANT=${QUANT-fp8}
+export HF_HOME=/storage/praha1/home/rolloj/urza_asr_bench/hf-cache HF_HUB_CACHE=/storage/praha1/home/rolloj/urza_asr_bench/hf-cache/hub HF_HUB_OFFLINE=1
+# a link without the job array's [ ] (see diarization/run_channel.pbs); vLLM compiles kernels into TMPDIR
+SCR=/tmp/urza_scr_${PBS_JOBID//[^A-Za-z0-9]/_}; ln -sfn "$SCRATCHDIR" "$SCR"; export TMPDIR=$SCR VLLM_CACHE_ROOT=$SCR/vllm
+MODELS=${MODELS:-"mistralai/Mistral-Small-3.2-24B-Instruct-2506 utter-project/EuroLLM-22B-Instruct-2512 Qwen/Qwen3-30B-A3B-Instruct-2507"}
+cd "$WORK"
+SAMPLE=${SAMPLE:-$(cat code/test_sample.txt)}
+nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
+for m in $MODELS; do
+    echo "=== $m $(date +%T)"
+    venv_vllm/bin/python code/translate_vllm.py --model "$m" --package translation_package \
+        --out "out_test/${m//\//_}" --test $SAMPLE --test-batches 2 --group 100 ${QUANT:+--quantization $QUANT} 2>&1 \
+        | grep -v -E "it/s\]|Processed prompts|INFO [0-9-]+ [0-9:]+ \[(config|model_runner|gpu_model_runner|loader|weight_utils|default_loader)"
+done
+rm -f "$SCR"
+clean_scratch

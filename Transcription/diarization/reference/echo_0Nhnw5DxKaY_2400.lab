@@ -1,0 +1,8 @@
+# U = Urza, W1 = woman at the start, W2 = woman later (voice embeddings differ: 0.23-0.40)
+0-16 W1
+17-79 U
+80-122 U
+123-134 W2
+135-138 ?
+139-146 W2
+147-148 ?

@@ -28,7 +28,9 @@ def load_checkpoint(path: Path) -> dict:
 def save_checkpoint(data: dict, path: Path):
   tmp = path.with_suffix(".tmp")
   with open(tmp, "w", encoding="utf-8") as f:
-    json.dump(list(data.values()), f, ensure_ascii=False, indent=1)
+    # sorted, not in the order the parallel workers finished: files built from this list by position
+    # (translations, see fix_yt_translations.py) must keep the same order from run to run
+    json.dump(sorted(data.values(), key=lambda v: v["id"]), f, ensure_ascii=False, indent=1)
   tmp.replace(path)
 
 

@@ -1,0 +1,45 @@
+{
+ "model": "whisper-large-v3-longform",
+ "clip": "echo_0Nhnw5DxKaY_2400",
+ "audio_seconds": 180.0,
+ "seconds": 7.2,
+ "load_seconds": 3.5,
+ "windows": [
+  {
+   "start": 0.0,
+   "end": 16.66,
+   "text": "nebyla živá bytost, tak třeba jak se to zpracovat sami za sebou. Takže tam těch cest je spousta. Já chápu, že vlastně se ovlivnilo. Já jsem taky viděla spoustu věcí, které mě nějaké ovlivnily a na základě toho už třeba na některé věci nedívám."
+  },
+  {
+   "start": 17.33,
+   "end": 47.47,
+   "text": "Ale já bych to třeba nevěděla, a to je stejné jak s tím učením, já to nevím, co komu nastavit, tak i kdybych chtěla, tak si vlastně nepokážu představit, kde, u koho, jak by ten filter měl být. Protože třeba u člověka, který miluje zvířata a má sen, že bude třeba veterinářem, tak to bude úplně jiný, než u člověka, který chce třeba malovat. Třeba já nevím."
+  },
+  {
+   "start": 47.5,
+   "end": 76.99,
+   "text": "Jsou lidi, kteří už od malička pětají myši a dají na nich pokusy, tak těm asi spousta věcí vadit nebude. A pak jsou lidi, kterým vadí jenom pohled na myši, takže se na to nebudou dívat. Takže já fakt nevím, jak bych to nastavoval. Já bych se mu měl možná pár věcí. Mně přijde hodně zajímavý to, jak jsi říkala, že tě vlastně těsí víc věcí než tvoje děti, což je vlastně pravda, protože..."
+  },
+  {
+   "start": 76.99,
+   "end": 103.92,
+   "text": "Ale zase znám třeba případy lidí, kdy jsou rodiče, který byli hodně vyděšený a přenesli ten strach na svoje děti. A to dítě se s tím vlastně celý život nějakým způsobem je kosmiřuje. Mám ve svým okolí hodně blízkýho člověka, který má hodně vystrašenou maminku, která ji předvším se snažila ochránit. A ona vlastně zjistila, a ona je teď šíleně vystrašená úplně ze všeho na světě."
+  },
+  {
+   "start": 103.92,
+   "end": 130.59,
+   "text": "A pak zjistila, že to je vlastně převzatý, protože s tím chodí nějaký terapie a tak. A zjistila, že to má vlastně převzatý od mamky. A že ona si pak vybavuje, že spousty těch věcí se nebála a že vlastně tím, že ji ta máma předtím chránila, tak ona se toho začala bát. A že vlastně se to na ní přeneslo ve spoustě věcí a že se spoustou věcí, s kterýma byla v pohodě, tak potom vždycky, když jí mamka říkala prostě jako nechoď venku pod mě, někdo tě tam přepadne a znásilní, tak ona má do teď problém jít venku pod mě"
+  },
+  {
+   "start": 130.59,
+   "end": 158.02,
+   "text": "A pamatuje si, že ten problém neměla, jako když byla malá. Akorát, že potom jí to ta máma furt říkala a tohle to ji vštípila a ona se od té doby toho začala bát. A když mluvíte právě o tom, co jste viděl v té televizi a že se snažíte ochránit od něčeho, aby viděli něco, co třeba nechtěj. Já si myslím, že tohle se stejně nedá ochránit, protože třeba tady ten..."
+  },
+  {
+   "start": 158.02,
+   "end": 179.86,
+   "text": "jeden z Ježka, který kouká na ty Destiny videa a vždycky nabízí všem, aby se podívali taky, tak vlastně jsme byli, ne, to byl nějaký jiný výlet, kde jedný spolužač chce právě nabít, že jí ukáže jedno nějaké brutální video a ona řekla, že to chce vidět, pak se na to podívala, ale pak to pro ní bylo hrozný."
+  }
+ ],
+ "text": "nebyla živá bytost, tak třeba jak se to zpracovat sami za sebou. Takže tam těch cest je spousta. Já chápu, že vlastně se ovlivnilo. Já jsem taky viděla spoustu věcí, které mě nějaké ovlivnily a na základě toho už třeba na některé věci nedívám. Ale já bych to třeba nevěděla, a to je stejné jak s tím učením, já to nevím, co komu nastavit, tak i kdybych chtěla, tak si vlastně nepokážu představit, kde, u koho, jak by ten filter měl být. Protože třeba u člověka, který miluje zvířata a má sen, že bude třeba veterinářem, tak to bude úplně jiný, než u člověka, který chce třeba malovat. Třeba já nevím. Jsou lidi, kteří už od malička pětají myši a dají na nich pokusy, tak těm asi spousta věcí vadit nebude. A pak jsou lidi, kterým vadí jenom pohled na myši, takže se na to nebudou dívat. Takže já fakt nevím, jak bych to nastavoval. Já bych se mu měl možná pár věcí. Mně přijde hodně zajímavý to, jak jsi říkala, že tě vlastně těsí víc věcí než tvoje děti, což je vlastně pravda, protože... Ale zase znám třeba případy lidí, kdy jsou rodiče, který byli hodně vyděšený a přenesli ten strach na svoje děti. A to dítě se s tím vlastně celý život nějakým způsobem je kosmiřuje. Mám ve svým okolí hodně blízkýho člověka, který má hodně vystrašenou maminku, která ji předvším se snažila ochránit. A ona vlastně zjistila, a ona je teď šíleně vystrašená úplně ze všeho na světě. A pak zjistila, že to je vlastně převzatý, protože s tím chodí nějaký terapie a tak. A zjistila, že to má vlastně převzatý od mamky. A že ona si pak vybavuje, že spousty těch věcí se nebála a že vlastně tím, že ji ta máma předtím chránila, tak ona se toho začala bát. A že vlastně se to na ní přeneslo ve spoustě věcí a že se spoustou věcí, s kterýma byla v pohodě, tak potom vždycky, když jí mamka říkala prostě jako nechoď venku pod mě, někdo tě tam přepadne a znásilní, tak ona má do teď problém jít venku pod mě A pamatuje si, že ten problém neměla, jako když byla malá. Akorát, že potom jí to ta máma furt říkala a tohle to ji vštípila a ona se od té doby toho začala bát. A když mluvíte právě o tom, co jste viděl v té televizi a že se snažíte ochránit od něčeho, aby viděli něco, co třeba nechtěj. Já si myslím, že tohle se stejně nedá ochránit, protože třeba tady ten... jeden z Ježka, který kouká na ty Destiny videa a vždycky nabízí všem, aby se podívali taky, tak vlastně jsme byli, ne, to byl nějaký jiný výlet, kde jedný spolužač chce právě nabít, že jí ukáže jedno nějaké brutální video a ona řekla, že to chce vidět, pak se na to podívala, ale pak to pro ní bylo hrozný."
+}

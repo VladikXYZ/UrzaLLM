@@ -1,0 +1,296 @@
+000    0.5 149  0.32 | což je jenom efekt externího světa, což, jestli se rozhodne pak kvůli
+001    5.0 151  0.35 | tomu efektu deterministicky anebo skrz svobodnou vůli nebo cokoliv, tak to je
+002    8.7 149  0.33 | vlastně jedno. Ale ty chceš, aby ten reálný svět byl nastavený tak,
+003   11.5 152  0.35 | jako kdyby měl tu svobodnou vůli, aby jeho akty pak byly v
+004   14.4 149  0.31 | souladu s tím, co ty chceš po něm, aby on to dělal
+005   16.5 164  0.33 | správně. Ty chceš ještě
+006   17.7 163       | něco
+007   17.9 144       | dodat?
+008   18.3 120  0.04 | Já mám jednat ještě k tomu, a to je podle mě, že
+009   21.2 124  0.23 | ještě mi tam patí, jak používáš tu definici, protože ty jsi v
+010   24.9 106  0.14 | nějakém bodě řekl, že definice je arbitrární,
+011   30.0 116  0.17 | je, že co ty děláš, je, že my se koukáme, jak lidé
+012   32.4 113  0.15 | používají to slovo, nebo to slovní spojení a následně definice by měla
+013   36.5 109 -0.06 | být algoritmus, který
+014   38.5 113  0.06 | předvídá, kdy a jak se to používá a potom já můžu říct,
+015   41.5 106  0.18 | jestli tohle bylo správné použití toho pojmu, nebo ne. A teď, co
+016   45.2 117  0.08 | mně přijde, je, že já když nějak zadefinuju, co je ta svobodná
+017   49.0 113  0.15 | volba podle toho, jak to lidé používají, tak je to jiná definice,
+018   52.5 120  0.26 | než kterou používáš ty a ta, kterou používáš ty, by znamenala, že
+019   55.4 119       | to lidi nepožije.
+020   56.2 128       | Pozor,
+021   56.5 109       | záleží
+022   56.8 112  0.41 | jak kde. Když se budeme bavit u soudu, jestli je někdo svéprávný
+023   60.3 105  0.40 | nebo nesvéprávný, tak samozřejmě máš pravdu. Ale my jsme tady na to
+024   62.9 102  0.34 | šli úplně jinak. My jsme se tady bavili o tom,
+025   66.1 112  0.39 | jak můžou být troje svobodný nebo nesvobodný a jestli můžou mít svobodnou
+026   69.0 115  0.44 | vůli a jestli jsou to bytosti. A to už potom adresuje spíš
+027   71.5 115  0.34 | na tu debatu, která probíhala celé 20.
+028   73.5 111  0.49 | století mezi neurologama, já nevím, psychologama a filozofama a ta debata byla
+029   77.9 108       | jasně nastavená takhle.
+030   79.1 111  0.22 | Jo, ale já bych řekl, že v té debatě bude tež platit,
+031   81.8 103       | že někdo si
+032   83.2  99  0.22 | špatně nebo správně definuje pojmy v souladu s tím, jak se to
+033   87.2  89       | používá v běžném jazyce?
+034   88.8 129  0.40 | Myslím si, že v této debatě z toho všeho, co jsem četl,
+035   91.2 117  0.39 | se odpůjci i zastánci svobodné vůle
+036   93.8 111  0.45 | shodují na kritériu, že pokud můžeš všechno 100 % předvídat, tak to
+037   97.3  98       | svobodnou vůli nemáš.
+038  100.2 189  0.20 | Dobrý, dobrý. Už se tady prostě na toho
+039  101.8 194       | necyklíme.
+040  102.4 163  0.47 | To jsem jenom chtěl říct, že jsem se věnoval tomu
+041  109.0 133       | tomu sporu.
+042  110.3 137  0.49 | A já neříkám, že asi když byste se zeptal lidí na ulici,
+043  113.6 128  0.53 | že to nebudou brát jinak. A já jsem si myslel, že se
+044  115.1 147  0.46 | bavíme o věcech, kdy může být umělá bytost skutečnou bytostí. A tam
+045  120.3 153  0.42 | podle mě už řešíme spíš tenhle ten spor, ve kterým mi přišlo,
+046  124.3 147  0.46 | Aspoň z toho, co jsem o něm četl, že se obě dvě
+047  128.4 143  0.48 | ty strany shodují na tomhle kritéru, jenom se nemůžou shodnout na
+048  131.2   0       | tom
+049  131.2 139       | důsledku.
+050  131.5 133       | Z
+051  131.8 132  0.13 | toho, co já vím o tom sporu, byť jsem to nikdy nečetl,
+052  134.6 114  0.22 | jenom jsem o tom debatoval s Liřma, tak se na tom ty
+053  136.7 108       | strany neschodují.
+054  137.7 187       | Aha,
+055  138.0   0       | OK.
+056  138.4 102       | Ale
+057  138.5 110  0.13 | Terka Sulice se na tom taky neschoduje, takže...
+058  141.5 177       | Já
+059  141.8 150  0.53 | nevím, to je jenom proto, že mě to téma zajímalo, tak jsem
+060  146.7 133  0.57 | se o něm četl, jak ty neurologické, tak ty deduktivní argumenty. Prostě
+061  150.6 124  0.52 | mi to přišlo zajímavý a přišlo mi, že tohle moc nikdo nezajímal.
+062  153.3   0       | Takže
+063  153.4   0       | na
+064  153.6 162  0.32 | základě tvojí definice by jsi došla k týmu závěru, vždycky to udělá
+065  156.5 115       | radost.
+066  157.7 146  0.44 | No ale já prostě teda neznám tu vaší. To by mě teda
+067  159.9 137       | zajímalo.
+068  161.2 140  0.34 | Jaká je podle vás teda,
+069  162.3   0       | co
+070  162.5 149  0.20 | znamená teda volba?
+071  164.2 159  0.32 | Tam je problém, že pro mě to je tak strašně nepraktický téma,
+072  167.3 150  0.27 | že trávit čas na vymyšlení té definice je pro mě
+073  169.6 149       | strašně...
+074  170.8   0       | Ale
+075  171.2 150  0.28 | pojďme dál, protože ještě nás toho tady čeká hodně.
+076  174.0 167  0.28 | Já vím, že nejradši, kdybychom to zapojili ještě pátýho hosta chat GPT,
+077  178.2 150  0.29 | tak by se na to možná rozřešili. Každopádně ještě letos, vlastně teďka
+078  182.1 136  0.24 | nedávno jste vy dva vydali debatu, kde se tě snaží Urza přesvědčit
+079  186.2 134  0.23 | o UNCAPu. Jsi přesvědčený?
+080  188.2  84       | Ještě
+081  188.7 119       | ne.
+082  188.9 130       | Ještě
+083  189.2 145       | ne,
+084  189.4 140       | ještě to…
+085  189.9 122       | Že
+086  190.2   0       | to
+087  190.3 120       | byly
+088  190.5 131  0.20 | nějaký otázky, který jsme si nedokázali zodpovědět.
+089  192.6 152       | Právě
+090  192.9 181       | mně
+091  193.1 154  0.32 | přišlo z téhle debaty spousta zajímavých otázek a i třeba nápadů, který
+092  202.1 132  0.35 | mi přišlo taky zajímavý. Třeba ten nápad s tím, že kdyby si
+093  205.8 124  0.25 | spozval Havlíčka a
+094  207.3 135  0.26 | odkoupil by, Anka Páce by odkoupil nějaký kus území, což je absolutně
+095  211.5 126       | nemožný,
+096  212.0 127       | prostě
+097  212.3 139  0.14 | kvůli
+098  213.4   0       | tu
+099  213.4 141  0.21 | nám důvodu.
+100  215.7 178  0.35 | Každopádně přišel mi na to dotaz, Jestli kdyby se prokázalo, nebo já
+101  220.2 151  0.35 | to přečtu rovnou, jestli například Saudská Arábie nebo Emiráty, kdyby šlo dokázat,
+102  225.1 150  0.26 | že ty šejkové pozemky někdy dávno legitimně koupily a homestedovaly a teď
+103  229.2 137  0.32 | jen tam vynucují ty pravidla, nějaké ty poplatky, tak jestli se jedná
+104  233.1 140       | o státy?
+105  235.0 104  0.39 | Já ještě jenom k tomu, já jsem šíleně překvapený z toho, já
+106  237.4 102  0.22 | jsem věděl, že z té debaty si odešel jako nerozhodnutý a myslel
+107  239.7 105  0.48 | jsem, že pak jsme měli rozhovor, ve kterém si řekl, že rozhodl
+108  243.2 151  0.25 | se. Ano. Kdy?
+109  244.5  85       | No
+110  244.9 110  0.39 | předtím, když jsme šli na toho 17.
+111  246.6 120       | listopadu.
+112  247.0   0       | Ten
+113  247.2 100       | den
+114  247.4 103  0.07 | nebo na začátku toho intra?
+115  250.1 130  0.07 | To, co jsem ti řekl v té debatě, je, že ty třeba
+116  252.6 111  0.17 | nukleární zbraně a podobně, tak to si chci nastudovat ve volném
+117  255.6 100       | čase.
+118  255.8   0       | No
+119  255.9   0       | v
+120  255.9   0       | té
+121  255.9 156       | debatě
+122  256.2 153       | právě jo,
+123  256.6 125       | ale
+124  256.8 133       | potom
+125  257.0 130       | jsem
+126  257.1 124       | říkal,
+127  257.7 139       | že
+128  258.0 124  0.14 | se vnímáš
+129  260.0 121  0.42 | jako anarchistusem, z toho pochopil, z toho rozhovoru.
+130  266.7   0       | Nebo
+131  267.1 102       | anarchického kapitalistu.
+132  268.2 149  0.41 | Ne po té naší debatě, tam vím, že jsme se
+133  270.0 131       | zase
+134  270.2 126       | řešili.
+135  270.9 157  0.19 | Neboť jsem měl další
+136  272.2 140       | rozhovor, kdybych si
+137  272.7   0       | toto
+138  273.0   0       | řekl.
+139  273.8 146  0.31 | A k tomu mimo dotazu?
+140  278.5 110  0.50 | Podle mě nikdo státem nebyl, ale opozici vymáhají svoje pravidla na svém
+141  284.8 103  0.35 | území, ale je to blbost v podstatě.
+142  288.3 128  0.40 | Já tenhle dotaz šíleně nemám rád, protože on je...
+143  291.2   0       | Co
+144  291.3   0       | jsi
+145  291.5   0       | s
+146  291.6   0       | tím
+147  291.6   0       | na
+148  291.7   0       | soudě říkal?
+149  293.7 112  0.45 | Podle mě ten dotaz je vlastně extrémně závadící v tom, že jsi
+150  296.9 137  0.44 | řekl, no vlastně tak jakoby jenom kdyby ten stát vlastně jel ty
+151  300.1 127  0.49 | pozemky legitimně, no tak přece to není stát. Jakože ano, je to
+152  303.2 117  0.41 | pravda, ale to je stejný jako kdybych ti ukradl tisícovku z peněženky
+153  306.4 135  0.54 | a teď bych řekl, no kdybys mi ji vlastně zaplatil, tak byla
+154  310.2 128       | moje.
+155  311.3 150  0.41 | Ano, ale ono se to nestalo. Takže to říct, kdyby někdo vlastnil
+156  316.5 149  0.40 | všechny ty pozemky toho státu, kdyby je legitimně získal a pak by
+157  320.2 142  0.47 | tam vymáhal ty přesné pravidla, co vymáhá stát, byl by to stát,
+158  322.8 141  0.42 | tak nebyl. Ale je to podle mě podobně dementní úvaha, jak když
+159  326.5 146  0.43 | si uchránu tisícovku, tak by se někdo přišel ptát, dobře, a kdyby
+160  329.9 137  0.46 | jsi mu ji nevzal, ale on ti ji třeba zaplatil za nějakou
+161  332.8 124  0.53 | práci, tak je ta tisícovka už urzová. No samozřejmě je, ale jak
+162  336.8 130  0.44 | je to relevantní k tomu, že jsem ti ji uchránil.
+163  339.0 137       | Tady
+164  339.7 139  0.25 | to třeba moc nechápu.
+165  341.7 198       | Možná dám ještě
+166  343.6 170  0.17 | rozvití jeho úlahy.
+167  345.2 159  0.20 | Představ si, že máš tady, že mám tady propisku a teď jakože
+168  348.8 155  0.15 | já bych ti řekla, že ti jí dám, ale ty mi za
+169  351.5 149  0.18 | to musíš dát milion korun.
+170  353.4 138       | A ty
+171  354.2 167       | to
+172  354.3 158       | odmítneš.
+173  355.0 117       | A
+174  355.4   0       | ty
+175  355.5 185  0.18 | to odmítneš.
+176  357.3 162  0.23 | A pak bych ti ukradla milion a řekla, no jasně, ale kdyby
+177  360.6 161  0.23 | jsi mi to dal dobrovolně, tak je to v pohodě. A ten
+178  363.1 173  0.35 | paradox je v tom, že ty podsouváš, že ta ta jakoby transakce,
+179  369.0 172  0.33 | ke který by nikdy nedošlo, takže je v pohodě za nějakých předpokladů,
+180  373.2 176       | který
+181  373.5 163  0.05 | jsou
+182  374.8 163  0.34 | absurdní přesně. Ty jako podsouváš absurdní předpoklad k tomu, aby si, a
+183  379.9 158  0.33 | tam podle mě je podsumována motivace, aby si posvětil něco,
+184  383.4 176       | co
+185  384.0 154  0.33 | s reálným předpokladem nikdy nemá ten závěr.
+186  386.9   0       | Přesně
+187  387.0 116       | tak,
+188  387.2 115  0.49 | jakože stát přece vzniknul tak, že si vzal území, dobře, i kdyby
+189  391.5 115  0.34 | třeba většinou získal nějak legitimně,
+190  392.8 133       | tak
+191  393.2 116       | rázně
+192  393.5 127       | si
+193  393.6 106  0.52 | tam vzal nějaký kusy území, které prostě tomu státu neplatří. Protože třeba,
+194  398.4 113  0.39 | když někde nějaká, já nevím, rodina už jako x set let vlastní
+195  402.7 115  0.36 | prostě nějakej pozemek, tak prostě je blbost tvrdit, že ten pozemek jako
+196  406.2 116  0.40 | legitimně vlastní Česká republika.
+197  408.4   0       | No
+198  408.6 193       | jo,
+199  408.8 148  0.24 | tady jo, ale třeba teď se
+200  411.0 138       | bavíme
+201  411.4   0       | o
+202  411.4   0       | tý
+203  411.5 126  0.38 | Soudský Arabi, o těch Emirátech, tak tam máš určitě nějaký prostě ty
+204  414.9 129  0.25 | obrovský pouště, kde to, si dokáže třeba představit, že to někdy kdysi
+205  418.6 131  0.07 | dávno prostě prodali pár prostě těm shakeům a potom
+206  421.9 148  0.22 | zjistíš, že je tam ropa a
+207  422.9 135       | oni...
+208  423.1 133       | Otázka,
+209  423.5 122  0.25 | je ty pouštění, kdo homesteroval vůbec?
+210  425.0   0       | Cože?
+211  425.5   0       | Je
+212  425.7   0       | ty
+213  425.7 107  0.31 | pouštění, kdo homesteroval?
+214  426.9   0       | Jakože...
+215  428.2 128  0.26 | Já si nevím. Nestačíte
+216  429.4   0       | mi
+217  429.5 148       | zapíchnout
+218  429.9 138       | vlajku
+219  430.1 155       | a celá
+220  430.7 156       | pouštění?
+221  431.2 143       | Neleží celá
+222  431.8 125       | pouštění.
+223  431.9   0       | No
+224  432.0 199       | dobře,
+225  432.2   0       | ale
+226  432.3 176       | tak za předpokladu,
+227  433.2 182       | že
+228  433.5 153       | teda...
+229  433.8   0       | Za
+230  433.9 170  0.30 | předpokladu, ale jak říkám, ta odpověď... Já si chci víc věnovat tomu,
+231  438.0 176  0.32 | co říkám k tomu, než té odpovědi,
+232  439.0 146       | Odpověď
+233  439.6   0       | je
+234  439.7 159  0.38 | strašně triviální, ale je prostě podle mě debilní, nebo ta odpověď je
+235  443.6 162  0.31 | pravdivá, ale je to úplně zavádějící a vlastně to celý tím převrátíš,
+236  447.4 147  0.42 | takže prostě za předpokladu, že by někdo homesteroval tu poušť, což by
+237  451.1 141  0.36 | já nevím, znamenalo, že ji zavodnil, začal tam pěstovat prostě zeleň a
+238  454.8 136  0.36 | ono to potom celý vyschlo a zůstal ten pozemek, který jeho a
+239  458.3 141  0.39 | potom to někomu prodal, tak ano, za toho předpokladu by to byla
+240  463.5 147  0.31 | pravda, ale prostě to se nestalo, že jo. Prostě tu poušť pravděpodobně
+241  467.9 153  0.41 | nikdo ani nehomestedoval, prostě ty pouště pravděpodobně nikomu vůbec jako nepatří, nebo
+242  473.3 135  0.46 | jakože umím si představit, že nějaký kusy nějakých pouští někomu patří, ale
+243  476.3 125  0.29 | pokud je někde poušť, která je tam, já nevím třeba jak dávno
+244  478.4 105  0.45 | jsou tam poušti, třeba nějaký geologové mi řeknou, že jsou tam celkem
+245  480.9 125  0.42 | malou dobu, ale pokud je někde nějaká poušť třeba delší dobu, než
+246  484.4 127  0.42 | existuje lidská rasa, tak si nemyslím, že ta poušť vůbec je celá
+247  488.6 116  0.44 | homestedovaná a že vůbec by něčí patřila, podobně jako oceá A tak
+248  492.6 149  0.28 | třeba, co když to homestudovali na základ nějakých kritérií, které měly tenkrát
+249  496.4 130  0.32 | ta společnost? Třeba já vím, že v Australii, když se nějak kolonizoval
+250  500.1 124  0.26 | Australie, tak tam se to přivlastňovalo tím, že ten člověk si mohl
+251  504.1 130  0.21 | vzít to území, které byl schopný obejít za jeden
+252  508.0 130       | den.
+253  508.4 119       | Ano,
+254  508.5 111       | já vím.
+255  509.3 138       | A
+256  509.5 169  0.08 | teďka to
+257  510.7 172  0.33 | třeba není podle mě smícení z práce třeba podle nějakých mých kritérií.
+258  514.4 120  0.42 | Ale podle kritérií to můžeš říct, že si to homestudovali náckové židovský
+259  518.1 108  0.37 | majetek, protože podle jejich kritérií v tehdy si ho homestudovali.
+260  521.0 147  0.49 | Ale ta pointa je, že tvrdit, že ten stát je legitimním vlastníkem
+261  529.0 120  0.50 | území, protože se mohlo stát, že by ho legitimně nabral vlastně, je
+262  534.9 137       | nesmysl,
+263  536.0 135  0.34 | protože on
+264  537.0 135       | ho
+265  537.1 126  0.52 | dobrovolně nenabral. A já bych se mohl stát dobrovolným vlastníkem těch mikrofonů,
+266  542.1 132  0.38 | kdybych je koupil. Ale pokud si teďka vezmu a dám si do
+267  545.3 129       | tašky a jdu,
+268  546.1 154  0.53 | tak jsem se nestal. A potom řekněme, že bych si teďka tady
+269  549.0 139  0.44 | vzal ty mikrofony a šel do piče.
+270  552.1 141  0.40 | A potom bys mi řekl, hej Urzo, ty jsi mi vzal mikrofony.
+271  554.8 122  0.36 | A já bych řekl, hele, ale Šimone,
+272  558.1 178  0.32 | kdybych je od tebe koupil, tak to vlastně nebyla krádež, co? A
+273  561.9 192  0.19 | teď bych tě nutil do, odpověď mi, kdybych je koupil, byla by
+274  564.1 166  0.36 | to krádež, Šimone? A ty bys jako řekl, nebyla. A já bych
+275  566.8 157  0.34 | řekl, aha, tak z toho něco plyne. Nebylo z toho vůbec nic.
+276  569.2 145  0.43 | Takže jako, ano, nebyly by to státy, ale vůbec nic z toho
+277  572.1 112       | neplyne.
+278  573.3 121  0.28 | Ne, tak to byl dotaz od diváka, jo. Určitě takhle hloupý dotaz
+279  576.4 109       | nepoložil.
+280  577.1 132       | Ale
+281  577.5 163  0.33 | taky teď už smysl odpojit, jak jsme si to stary říkali, protože…
+282  582.1 132  0.03 | Mám ještě analogii.
+283  583.4 151       | Jako
+284  583.5 174       | mě
+285  583.7 155  0.29 | přijde, že ty si odsoudil ten předpoklad, ale jakože, a kdyby ten
+286  588.2 133  0.20 | předpoklad teda platil?
+287  589.4 135       | Tak
+288  589.6   0       | pak
+289  589.7   0       | ano,
+290  590.0 115       | ale
+291  590.1 125       | jen
+292  590.9 153       | taky
+293  591.2 162  0.26 | analogie, ale bojím se, že bude
+294  592.4 135  0.14 | demonetizovaný, takže… Aha, já mám dobrou analogii, která nebude demonizovat, takže dejme
+295  596.1 116  0.14 | tomu, že by tvoji diváci shippovali mě a...

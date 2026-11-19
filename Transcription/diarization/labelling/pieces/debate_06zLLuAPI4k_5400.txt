@@ -1,0 +1,429 @@
+000    0.0 144  0.53 | nejsou legitimní a toto je sebevlastnictví lidí. A ty tvrdíš, že v
+001    5.4 120       | tomto,
+002    6.9 108  0.52 | čili věci, který stát má právo dělat v této množině
+003   11.2  81       | a
+004   11.6 127       | zároveň
+005   12.7 157  0.39 | zasahují do sebevlastnictví,
+006   14.1 157       | tak
+007   14.3 160       | ty...
+008   14.5 159       | Takže
+009   14.7 191       | já
+010   14.9 179  0.23 | říkám, že existuje tady ta množina.
+011   16.5 126       | Ale
+012   16.9 132  0.51 | říkáš, že v této množině je vždy nadřazeno právo státu nad sebevlastnictví.
+013   23.0 119       | A
+014   23.6 160       | není
+015   23.9 164       | to ta
+016   24.1 154       | autologie.
+017   24.4  94       | Mně
+018   24.6   0       | to
+019   24.7 149       | logicky z toho
+020   25.3 136       | vyplývá,
+021   26.0 155       | já
+022   26.2 120       | tam touto
+023   26.8 121       | logii
+024   27.1  93       | nevím.
+025   27.4 186       | Není
+026   28.0   0       | to
+027   28.0 200       | tak,
+028   28.2   0       | protože
+029   28.8 162  0.57 | byste taky mohli říct, že je to naopak.
+030   30.1 128       | No,
+031   30.4 198       | podle mě...
+032   31.3 162       | A
+033   31.6 166       | státu
+034   31.8 165       | stejně
+035   32.0 146       | zbydou tyhle práva.
+036   33.0   0       | No,
+037   33.2 213  0.23 | podle mě pro celou tady tu část platí,
+038   36.5 160  0.21 | že je
+039   38.2   0       | to
+040   38.3 127       | nadřezený věcem.
+041   40.0 146  0.54 | No ne, ty bys to taky mohl nadefinovat tak, že tady, my
+042   46.1 171       | si povídáme
+043   46.4   0       | o
+044   46.5 162       | tomhle
+045   46.7 159       | tomu
+046   46.8 133  0.44 | sektoru, který teď zabarvím.
+047   51.6 148  0.57 | Co může dělat stát, na co má podle tebe právo, na co
+048   54.3 118  0.48 | nemá právo v sebe vlastnictví.
+049   55.5 163       | Sektor,
+050   55.9 156  0.32 | který jsem zabarvil, by
+051   57.2 158  0.28 | mohl být rozhodnut, buď
+052   60.1 156       | se
+053   60.7   0       | ve
+054   60.9 146       | vlastnictví je nadřazeno,
+055   61.9 140       | anebo
+056   62.4 143       | práva státu jsou
+057   63.3 101       | nadřazeny.
+058   63.7   0       | No
+059   63.8 156       | ale
+060   63.9 160  0.31 | počkej, kdyby to bylo, že se vlastnictví je nadřazeno, tak ty věci
+061   70.0 166       | nejsou tady, ale tady.
+062   71.5 112       | Ne.
+063   71.8 101       | Ne,
+064   72.2   0       | tak
+065   72.2 152  0.19 | jsou tady, protože nemá právo.
+066   76.8 161       | No,
+067   77.2 159       | no
+068   77.5 168  0.38 | ne, kdybychom se bavili v negativních právech, tak ano, ale my se
+069   80.7 141  0.54 | bavíme v pozitivních právech. a v pozitivních právách se ti ty práva
+070   83.2 127  0.46 | prostě můžou jako třískat. Čili jinými slovy, ty... Nemyslím, že se bavíme
+071   88.2 120       | v pozitivních právech.
+072   90.0   0       | Bavíme
+073   90.4   0       | se
+074   90.5   0       | v
+075   90.5 127  0.54 | pozitivních právech už proto, že říká, že ten stát může zasahovat do
+076   94.1 116  0.37 | majetku jiných lidí, tak to jsou jednoznační
+077   95.9 110       | pozitivní
+078   96.3 118       | práva.
+079   97.1 155       | Což
+080   97.5 147       | znamená,
+081   97.8 131  0.61 | že jestliže se bavíme v pozitivních právech, tak může docházet ke konfliktu
+082  100.4 102       | těch práv.
+083  101.2 103       | Samozřejmě.
+084  101.7   0       | A
+085  102.0 135  0.57 | tohle je konflikt práv. A tady, když tohleto označím jako S, tak
+086  106.5 139  0.53 | tady je sebevlastnictví, X jsou věci, které stát může dělat a S
+087  110.5 140  0.51 | a X jsou někde v konfliktu.
+088  112.9   0       | A
+089  113.3   0       | ty
+090  113.6 137  0.43 | říkáš, že když je S a X v konfliktu, tak vždy je
+091  116.7  96       | X nadřazeno.
+092  117.5   0       | No,
+093  117.7 164  0.24 | ale kdyby jsi říkal, že když jsou tyhle věci v konfliktu, tak
+094  122.0 166  0.32 | to znamená, že sebevlastnictví je nadřazeno
+095  125.3 162  0.29 | právům státu, tak ta věc není tady, ale tady. Protože to znamená,
+096  128.6 171  0.32 | že na to stát nemá právo. No
+097  130.7   0       | ne,
+098  130.8   0       | tak
+099  130.9   0       | ty
+100  131.1 108       | můžeš
+101  131.5   0       | to
+102  131.5 130  0.55 | definovat tak, že stát
+103  134.1   0       | má
+104  134.1 125       | právo.
+105  134.4   0       | Takže
+106  134.6 183  0.20 | podle mě, ty se mě ptáš, jestli existuje tady ten kvadrant.
+107  144.4 140  0.51 | No já, ten kvadrant zjevně existuje, protože zjevně existují práva, které ty
+108  150.1 129  0.26 | přiškáváš státu
+109  151.4 149       | a
+110  152.3 134       | které
+111  152.6 127  0.43 | jsou v rozporu se sebevlastnictvím, což
+112  155.3 131  0.53 | znamená, že v případě, že nějaké právo, Třeba stát totiž, ono to
+113  159.7 207       | právo
+114  160.3 159       | státu,
+115  160.8 131  0.45 | ty mu nemusíš dávat jako explicitně na to sebevlastnictví. Ty můžeš mít
+116  163.8 127  0.39 | třeba říct, stát má právo jakýkoliv kus majetku vyhodit ze svýho toho
+117  169.8 100  0.39 | území třeba.
+118  172.3 149       | Třeba,
+119  172.8   0       | příklad.
+120  173.6 153       | A
+121  174.0 141  0.55 | teď tohle můžeš říct ano, ale sebevlastnictví je nadřazeno, což znamená, že
+122  180.2 120  0.41 | v takovém případě to nemá právo
+123  181.6 122       | udělat.
+124  181.9 164       | No
+125  182.0 165       | takže
+126  182.3   0       | to je v Y.
+127  183.8 202  0.24 | Jestli to nemá právo, tak to je v Y.
+128  188.4 120  0.45 | No jo, ale ty říkáš, jako jasně, ale jde o to, že
+129  191.8 137  0.50 | ty nějak říkáš, že stát může do nějaký míry rozhodovat o všech
+130  196.6 133  0.52 | objektech na tom, ale ty objekty jsou jednak neživý a jednak živý
+131  199.9 132  0.50 | a jednak jsou to lidi, prostě. Ty říkáš, že stát má právo
+132  202.7 130  0.40 | rozhodovat o všem na svým území do nějaký míry.
+133  206.7 127       | Ano,
+134  207.1 122       | do
+135  207.4 148  0.24 | nějaký míry. Což znamená i o lidech, i o věcech.
+136  211.8 155       | A
+137  212.2 154  0.35 | teď za předpokladu, že já řeknu,
+138  215.7 145  0.54 | stát může udělat cokoliv s tím, tak ty říkáš, že má to
+139  218.3 110       | právo,
+140  219.9 142  0.40 | včetně lidí, což bude zasahovat do jejich sebevlastnictví.
+141  223.4   0       | Ale
+142  223.7   0       | to
+143  223.9 105       | nerozporuje.
+144  224.9   0       | To
+145  225.1   0       | se
+146  225.2 201  0.27 | pro mě neví. Nebo ty rozumíš, co se snažím
+147  228.1 192       | říct.
+148  228.2   0       | Já
+149  228.3 117       | naprosto
+150  228.7 129       | chápu.
+151  229.9 244       | Asi jsme podle něj na
+152  230.9   0       | sem.
+153  231.6 184       | Já
+154  231.9 161       | bych
+155  232.1 153  0.06 | to možná řešil jenom přes příklady, Jestli to bude možná jednodušší na
+156  234.9 107  0.09 | vysvětlení, že právě máš sebevlastnictví X, který nepřekrývá, co by bylo tady
+157  241.9  79       | třeba v
+158  242.8  81       | této
+159  243.0 166  0.30 | šásti? Tady stát má právo…
+160  245.6 124       | Zabavit
+161  245.8   0       | je
+162  245.9   0       | auto.
+163  247.4 120       | Zabavit
+164  247.8   0       | je
+165  247.9  79       | auto.
+166  248.2   0       | Nebo
+167  248.3 167  0.19 | dávat pravidla silničního provozu.
+168  250.1 115       | Super.
+169  250.4   0       | To
+170  250.5   0       | je
+171  250.6 133  0.10 | tak krásný příklad. Y je co?
+172  253.3   0       | To
+173  253.8   0       | není
+174  253.9 126       | zajímavá věc.
+175  255.2 172  0.30 | Stát nemá právo, já bych řekl třeba zabít člověka.
+176  259.3   0       | To
+177  259.7   0       | by
+178  259.7 112       | bylo
+179  260.3  99       | tady.
+180  264.9  79  0.18 | Znárodnit tvůj barák.
+181  269.7 159  0.29 | Já bych třeba řekl, že stát nemá právo šířit nenávist k nějakým…
+182  275.9 157  0.36 | Počkej, co je tady vlastně? Co je podle tebe v Y?
+183  279.1 161  0.16 | Existuje podle tebe vůbec Y?
+184  282.6 162  0.22 | Budu na to chvilku přemýšlet, ale teďkon se ptáme, jestli si myslím,
+185  289.1 164  0.26 | že je něco, co stát nesmí dělat, co nezasahuje do lidí.
+186  294.1 119  0.49 | Nezasahuje do sebevlastnictví, čili vlastně
+187  295.6   0       | jo.
+188  295.8 163       | Tak
+189  295.9 149       | co
+190  296.1 186  0.12 | nezasahuje do lidí, tak
+191  298.4 160  0.33 | ano, myslím si, že třeba znádaně ani majetku za nějakých případů určitě
+192  308.9 162  0.22 | není přijatelný. ze nějakých případů možná
+193  312.4 141  0.20 | trochu je, ale řekl bych, že spíš není.
+194  314.8 134       | Chce
+195  315.2 110       | třeba
+196  315.3 124       | šířit
+197  315.6  81 -0.00 | dezinformace, to by mohlo spadat do Y, ne?
+198  317.4   0       | To
+199  317.5   0       | by
+200  317.7  99       | mě
+201  317.8 100       | spadá do Y, protože
+202  318.8  99       | šířit
+203  319.0  95       | dezinformace
+204  319.6  97       | je
+205  319.7  95  0.40 | podle mě úplná...
+206  321.4   0       | To
+207  321.4   0       | by
+208  321.5 172       | řekl,
+209  321.7   0       | že
+210  321.7 197       | stále
+211  321.8 131       | ty docela dělají.
+212  323.1 153       | Já
+213  323.4   0       | nevím,
+214  323.6   0       | ale
+215  323.7 132 -0.00 | ty neříkáš, že dělají,
+216  325.2 105       | nedělají,
+217  325.5   0       | ta
+218  325.6 104       | otázka
+219  325.8 111  0.02 | je, jestli to je nebo není.
+220  327.1   0       | Já
+221  327.4 146  0.47 | tím neporučuji ničí právo,
+222  328.9 102       | dokonce,
+223  329.3 107       | jakože...
+224  330.1  60       | Jo,
+225  330.5  94       | jasně, logicky.
+226  333.9 117 -0.03 | Já
+227  334.9 177  0.23 | bych řekl, že stát nemá právo mít názorové médium, které velmi evidentně
+228  346.2 155  0.34 | ovlivňuje tu demokracii, která v něm funguje. Nebo
+229  349.4 145       | třeba
+230  349.5   0       | je
+231  349.6   0       | otázka,
+232  349.7 103       | proč
+233  350.0  99  0.32 | budou demokratické státy. Dobře,
+234  351.6 102       | tak
+235  351.8 103       | to
+236  351.9 123  0.42 | je v Y, protože
+237  353.1 100       | názorové
+238  353.4  97       | médium
+239  353.7  93  0.52 | není sebevlastnictví a je to nějaká...
+240  356.6   0       | Asi,
+241  357.4 136       | nebo
+242  357.5 194       | třeba bych řekl, že
+243  358.5 166       | stát...
+244  360.0 133       | Jo,
+245  360.4 120       | dobře,
+246  360.6 137  0.56 | tak je takové. Tak existuje nějaký Y, bytě třeba malý,
+247  363.4 124       | existuje
+248  363.8 131       | nějaký
+249  364.1 127       | X,
+250  364.3   0       | který...
+251  364.3 188       | Zamyslím se na to,
+252  365.1   0       | je
+253  365.2   0       | to
+254  365.2 191       | zajímavá
+255  365.3 171       | otázka,
+256  365.7 160       | ale...
+257  367.8 157       | Existuje nějaký malý Y,
+258  369.3 140       | existuje
+259  369.7 139       | nějaký
+260  369.9 133       | velký X,
+261  371.5 131  0.59 | existuje nějaký velký X a pak existuje tady tohle,
+262  376.5 120  0.50 | kdy práva států nadřezvat na... Jo, ale počkejte, to je důležitý, protože
+263  380.9 145  0.54 | já už chápu, že ono prostě jde o to, že podle mě
+264  386.4 163       | tohle
+265  386.8 150  0.55 | je... Ty máš nějakou dělící čáru mezi tím, co ten stát může
+266  389.5 120       | a co nemůže,
+267  390.3 154  0.13 | což
+268  391.4 141  0.54 | jsme se ještě nedostali k tomu, jak se tato čára kreslí,
+269  394.3 151       | ale tomu potom
+270  395.9 144       | bude
+271  396.4 115  0.56 | rozdíl, jestli je tohleto tady nebo tady, že jo? Prostě jako, že
+272  398.7 149  0.54 | ty nějak nakreslíš tuhletu čáru,
+273  400.6 161       | ale
+274  401.4 146       | potom
+275  401.7 144  0.56 | jako ta čára logicky nebude vést tudy.
+276  405.9 140       | Jako,
+277  406.4   0       | že
+278  406.5 144       | pokud
+279  406.6   0       | by
+280  406.7 138       | se to tam přímo
+281  408.2 136  0.32 | nedodal, tak ta čára,
+282  410.4 165  0.42 | nakresl jsem to takhle z toho důvodu, že ty když, a o
+283  412.9 146  0.50 | tom jsme se ještě nebavili, budeš nějak definovat, kde se liší x
+284  416.1 137       | a y,
+285  417.0 132  0.48 | tak ať přijdeš s jakoukoliv definicí, tak to rozhodně nepovede takhle.
+286  420.5 132       | Ano.
+287  421.4 157  0.54 | Což znamená, že je u
+288  425.6 156       | mě
+289  425.9 129       | legitimní
+290  426.4 125  0.38 | otázka, jestli tohle,
+291  428.7 143       | jestli
+292  428.9   0       | je
+293  429.0 135       | nadřazeno x nebo
+294  429.8 117       | s.
+295  430.0   0       | Pro
+296  430.1   0       | tom,
+297  430.2 271       | protože
+298  430.3 225       | jsem tě rozuměl, ty
+299  431.3   0       | se
+300  431.6 205  0.21 | právě právě ještě existuje tady
+301  432.8   0       | ta
+302  432.9 183       | část.
+303  434.8 193  0.26 | Jestli nějaká nějaká věc sebevlastnictví, nebo to je ta věc, ze které
+304  438.3 161  0.22 | mě podle něj jako obviňuješ.
+305  440.6 157  0.49 | Existuje. Já se ptám, jestli…
+306  443.2   0       | V
+307  443.8 115       | případě, když se to
+308  444.4 109       | stane…
+309  444.8   0       | V
+310  444.8 127       | případě,
+311  445.0 126       | když
+312  445.1 137       | se to stane,
+313  445.6 128       | tak
+314  445.7 138       | myslím,
+315  446.0   0       | že
+316  446.1   0       | mám
+317  446.1 144  0.46 | všechno… Jak udělat, co uděláš? Ano, protože si myslím, že ty jako
+318  450.8 132  0.17 | tuhletu
+319  452.1 162       | část
+320  452.2 127 -0.01 | nemůžeš… Nebo jinými slovy, já se stanu diktátorem a nevím, co dělat,
+321  457.0 106  0.05 | jsi můj poradce. A
+322  458.6   0       | já
+323  458.6   0       | se
+324  458.8   0       | ptám,
+325  459.2 155 -0.04 | kdykoliv se
+326  460.4   0       | S
+327  460.7 124       | a
+328  460.9 111       | X
+329  461.1 135 -0.04 | bude překrývat, co
+330  462.6 126       | mám
+331  462.8 100  0.04 | udělat, zadefinuj mi pravidlo, nezajímá mě jako výčet.
+332  467.5 155  0.33 | Čekaj, zadefinuju, pro nezajímá mě výčet, tak jako nějaký výčet tam asi
+333  470.9 157       | bude.
+334  473.6 178  0.39 | Možná se posuneme rád,
+335  474.7   0       | když
+336  474.8 158       | řekneš,
+337  475.1   0       | kde
+338  475.2   0       | je
+339  475.2 143       | tato
+340  475.4 125  0.44 | čára, jak se tato čára určí.
+341  477.0 159       | Možná
+342  477.3 171       | tím
+343  477.5   0       | se
+344  477.5 156       | posuneme,
+345  478.0 127       | protože
+346  478.2   0       | si
+347  478.3 157  0.49 | myslím, že tohle tady, a
+348  480.1   0       | ono
+349  480.2   0       | je
+350  480.3   0       | to
+351  480.3 162       | stejně
+352  480.5 180       | zajímavé. No to
+353  481.3 202       | si
+354  481.4   0       | myslím,
+355  481.6   0       | že
+356  481.7 208       | jako
+357  482.8 162  0.28 | nekonečná historická diskuze, na kterou teď dokážu dát. Jo, ale já se
+358  485.0 132  0.50 | ptám podle tebe, neptám se, co ty státy reálně dělají, protože že
+359  487.9 123       | asi
+360  488.4 143       | chápou,
+361  488.9 126       | že
+362  489.0 116       | ty
+363  489.5 118  0.50 | nebudeš univerzální obhájce všeho, co státy dělají.
+364  492.0 131  0.42 | Takže se ptám, kde podle tebe má být čára mezi X
+365  495.0 164       | a
+366  495.1   0       | Y,
+367  495.5 143  0.59 | jinými slovy ze všech akcí, který stát může udělat, který jsou opravněný
+368  499.1 146       | a který
+369  499.4 137       | ne.
+370  499.7 152       | A
+371  500.1 146       | teď samozřejmě,
+372  500.6 139  0.44 | jakým způsobem k tomu vůbec dojdeš?
+373  505.0 171  0.32 | No tak, určitě bych řekl, že ta čára je hodně ovlivněná tím
+374  508.3 158  0.26 | sebevlastnictvím. Prostě protože, jako určitě je mnoho věcí, který stát nemůže dělat,
+375  514.8 134  0.33 | protože nějak vážně poškozují něčí sebevlastnictví.
+376  517.9   0       | Takže
+377  518.0 102  0.18 | míra poškození sebevlastnictví.
+378  519.6 147       | Mě
+379  519.9 126  0.52 | by zajímalo vůbec, jak tu čáru definuješ, spíš než začneš tím určitě
+380  523.0 123  0.42 | tohle. To, na co se ptám je, je to to, co si
+381  525.6 132  0.45 | rozhodne ta většina, nebo je to to, co si rozhodne většina s
+382  528.5 123  0.41 | nějakým principiálním omezením, a pokud tak s jakým?
+383  531.0 194       | Počkej,
+384  531.4 193  0.28 | ty jsi zdal, že se ptáš mě, jak to já mám,
+385  533.5 193       | co
+386  533.8 177       | vnímám
+387  534.0 143  0.49 | morálně nebo ne. Jo, ale chtěl bych, abys mi spíš dal nějakou
+388  536.9 125  0.66 | ucelenou odpověď a pak ašel do nějakých detailů, protože když řekneš, určitě
+389  540.4 127  0.48 | je to nějak ovlivněno sebevlastnictvím, tak to
+390  542.9 126       | moc
+391  543.2 106       | neříkáš.
+392  543.7   0       | No,
+393  543.9 199  0.23 | ty se mi tady doslova ptáš na čáru, která rozhoduje všechna možná
+394  547.2 143       | rozhodnutí.
+395  548.5 115       | Ne, jestli to
+396  549.4 103       | zatím
+397  549.5   0       | je
+398  549.8   0       | něco.
+399  549.9 220  0.10 | Jestli jsou legitimní
+400  551.4   0       | nebo
+401  551.5   0       | ne.
+402  551.7   0       | ze
+403  551.7 159  0.26 | strany státu. Můžeš mi taky říct, je
+404  553.0   0       | to
+405  553.0 135       | naprosto
+406  553.3 161       | ad
+407  553.5 130       | hoc
+408  553.7 128  0.52 | a na každou situaci se podívám a řeknu si, přijde mi to
+409  555.8 125  0.48 | tak nebo tak, což je taky odpověď, ale já nějak doufám, že
+410  559.1 133  0.58 | ta tvoje odpověď bude nějaká trošku principiálnější. No, to
+411  562.9 162       | jsem
+412  563.1 205  0.26 | začal tím, že minimálně jeden ten princip určitě
+413  565.7 178       | souvisí
+414  566.2   0       | s
+415  566.3 168  0.26 | sebevlastnictvím, že věci, který stát může dělat,
+416  570.2 160  0.28 | určitě jsou tím výrazně oblivněný, že nějaké věci zasahující s oblastnictví určitě
+417  574.4 130  0.31 | nemůže. Nemůže tě podle mě odsejchovat.
+418  577.0   0       | Ale
+419  577.3 112       | tohle
+420  577.5 109  0.53 | je podle mě úplně jakože přesně to, co mi tak zrovna přijde,
+421  580.5 110  0.50 | protože když řekneš nějaký věci nemůže, tak já potřebuji nějak definovat to
+422  584.4 105       | nějaký, nebo definovat
+423  585.2 111       | nenutně,
+424  585.8 144  0.53 | ale jakože jestliže je to takhle, že mi řekneš, tak odsejchovat tě
+425  589.0 135  0.46 | třeba nemůže, poslat za hranice tě může, znásemnit tě nemůže, zakázat ti
+426  592.4 149  0.40 | drogy může, tak to je fakt, že za tebou teda budu chodit
+427  594.6 128  0.43 | a ptát se tě na každou věc, jak to je. A to,
+428  596.7 158  0.49 | co doufám, je, že máš nějakou principálnější odpověď, kterou my...

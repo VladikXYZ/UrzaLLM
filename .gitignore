@@ -23,3 +23,12 @@ Chunks/output/projection/
 ASRBench/out/
 ASRBench/envs/
 ASRBench/models/
+
+# Transcription pipeline: large or derived data (shared outside git), local tool settings and caches
+real_data/transcripts_urza.json
+real_data/transcripts_other.json
+real_data/*.zip
+Transcription/*.zip
+Viewpoints/.cache/
+materials/*.local-backup.json
+.claude/

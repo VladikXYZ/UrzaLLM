@@ -1,0 +1,34 @@
+#!/bin/bash
+# Submit from the directory containing code/production/, translation_package/, and venv_vllm/.
+# qsub -o logs/ -J 1-4 -v SHARDS=4 code/production/run_translation.pbs
+#PBS -N urza_translate
+#PBS -l select=1:ncpus=8:ngpus=1:gpu_mem=40gb:gpu_cap=compute_89:mem=64gb:scratch_local=40gb
+#PBS -l walltime=12:00:00
+#PBS -j oe
+set -euo pipefail
+
+WORK=${WORK:-$PBS_O_WORKDIR}
+SHARDS=${SHARDS:-4}
+SHARD=${SHARD:-${PBS_ARRAY_INDEX:?set SHARD for a single job}}
+OUT=${OUT:-$WORK/translations_mistral}
+MODEL=mistralai/Mistral-Small-3.2-24B-Instruct-2506
+
+cd "$WORK"
+exec >> "logs/${PBS_JOBID}.live.log" 2>&1
+echo "Starting shard $SHARD/$SHARDS on $(hostname) at $(date -Is)"
+nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
+
+export HF_HOME=/storage/praha1/home/rolloj/urza_asr_bench/hf-cache
+export HF_HUB_CACHE=$HF_HOME/hub HF_HUB_OFFLINE=1
+# PBS adds brackets to array scratch paths. Use a plain path for compilation.
+scratch_link=$(mktemp -d /tmp/urza_translate.XXXXXXXX)
+ln -s "$SCRATCHDIR" "$scratch_link/work"
+export TMPDIR=$scratch_link/work VLLM_CACHE_ROOT=$scratch_link/work/vllm
+trap 'rm -f "$scratch_link/work"; rmdir "$scratch_link"; clean_scratch' EXIT
+
+venv_vllm/bin/python -u code/production/translate_vllm.py \
+    --model "$MODEL" --quantization fp8 --max-len 4096 \
+    --package translation_package --out "$OUT" --shard "$SHARD/$SHARDS" \
+    --batch-sentences "${BATCH_SENTENCES:-12}" --batch-words 240 --group 12
+
+echo "SHARD_OK $SHARD/$SHARDS $(date -Is)"

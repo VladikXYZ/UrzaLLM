@@ -1,0 +1,163 @@
+000    0.0  99  0.55 | což znamená, že tam pak stojí ty řidiči jako v hrozných pošmínkách,
+001    4.7  99  0.57 | zklesá jim soustředěnost a všechno, takže potom kolik ráda je o život
+002    8.1 100       | i v tomhle.
+003    8.9 115  0.49 | Ale chtěl jsem se dostat k tomu, že řada lidí, když jim
+004   11.9 102  0.35 | řeknu svět bez státu nebo společnost bez státu, beztátní společnost, volnotržní společnost,
+005   16.5 104  0.53 | tak si představí, že ty služby, který nám poskytuje stát, že jsem
+006   21.0 107  0.49 | proti jejich poskytování, Že teda nechci, aby jsme měli školství, že nechci,
+007   24.9  99  0.48 | aby jsme měli zdravotnictví, že nechci, aby jsme měli policii, že nechci,
+008   27.9  95  0.42 | aby jsme měli prostě armádu a tak dále.
+009   30.6 117  0.57 | Ale tohle to je strašně častý omyl. Já vlastně nejsem proti tomu,
+010   35.7  98  0.55 | aby existovaly všechny ty služby. Já si naopak myslím, že ty služby
+011   38.1  97  0.32 | jsou důležitý a že je jako společnost potřebujeme.
+012   41.5 109  0.48 | Jediné, o čem mluvím, je, že by ty služby neměly být monopolizovány
+013   45.9 111  0.50 | a neměly by mít jenom jednu entitú, která je může provozovat a
+014   51.5 113  0.50 | která mimochodem násilím blokuje všechny ostatní, kdo by ji chtěli konkurovat. Tohle
+015   56.2 112  0.52 | je něco, co nevidíme, protože nás to tak ve škole naučili a
+016   61.0 110  0.40 | je to braný v naší společnosti jako běžný. Ale prostě stát je
+017   63.8 108  0.53 | tady ten největší gang, který v podstatě násilím brání každému, kdo mu
+018   68.0 103  0.50 | chce dělat konkurenci, protože zkuste si konkurovat v těch zásadních odvětvích, prostě
+019   71.9 106  0.52 | vám to nedovolí a když to přesto zkusíte udělat, tak na vás
+020   75.4 105  0.51 | přijdou a fyzicky vás prostě zrušejí, zakleknou vás, zavřou vás. Což znamená,
+021   80.0 113  0.47 | že je důležité si uvědomit, že anarchokapitalismus neznamená, že tady nebudeme mít
+022   86.1 107  0.49 | zdravotnictví, školství a policii, jenom to znamená, že na tyhle služby nebude
+023   89.8 108  0.49 | mít nikdo monopol, že tady bude spousta firem, které budou nabízet svoje
+024   95.2 103  0.51 | služby a lidi se budou dobrovolně od nich nějakým způsobem kupovat, případně
+025  101.0 100  0.54 | od nich dostávat, v případě nějaké charity atd. dále. Prostě to záleží,
+026  105.3 108  0.45 | jak by to všechno bylo. Ale prostě samozřejmě ta civilizace v tom
+027  110.3 102  0.47 | stavu, v jakém je teď, je vlastně na nejpokročilejší úrovni, asi jak
+028  114.3  99  0.37 | kdybyla, co se týče technologií a tak dále.
+029  116.8 106  0.49 | A samozřejmě všechny ty služby, které tady poptáváme, jsou naprosto zásadní. A
+030  122.7 103  0.44 | já si jenom nepřeju, aby byly monopolizovány. Chci, abych rozhodl k jejich
+031  126.8 103  0.47 | decentralizaci ve smyslu, že prostě si budou moct všichni s ním volně
+032  131.7 105  0.46 | konkurovat a kdokoliv bude moct přijít na trh se svým řešením. A
+033  135.3 105  0.42 | samozřejmě, když to řešení bude špatný, tak si ho od něj nikdo
+034  137.6 100  0.49 | nekoupí a když to řešení bude dobrý, tak ho lidi začnou poptávat.
+035  140.8 104  0.50 | A tohle je v podstatě ta zásadní změna, který nikoli v tom,
+036  144.7 101  0.45 | že by vlastně jsme přišli o možnost vyšetřovat vraždu,
+037  149.2 103  0.48 | ale o to, že ten, kdo bude vyšetřovat tu vraždu, nebude prostě
+038  152.6 100  0.48 | monopolista a nebude ten, kdo všechny ostatní nutí, aby to nedělali. Tohle
+039  157.3 136  0.14 | si ještě můžu představit, že by mohlo fungovat, ale mnohem hůř si
+040  160.4 145  0.17 | můžu představit vlastně potom ten soud,
+041  164.3 114       | jak
+042  165.0 118       | by
+043  165.1 139  0.18 | se řešil v takovýhle společnosti potom ten trest pro opachatele nějakého zločinu.
+044  171.9 107  0.54 | Víceméně úplně stejně, tohle je také hodně těžká vlastně představa, úplně stejně
+045  177.6 103  0.47 | jako si můžou konkurovat firmy v oblasti ledčeho, tak si můžou podle
+046  183.1 101  0.50 | mě konkurovat firmy úplně stejně i v oblasti práva. A můžete mít
+047  187.9 104  0.50 | jednotlivé firmy, které jako arbitrážní, které přicházejí vlastně s tím, že jsou
+048  192.9 106  0.45 | teda soudci a potom vlastně by to mohlo probíhat tím způsobem, že
+049  197.7 103  0.49 | když někdo osloví svoji bezpečnostní agenturu, která má něco udělat, se za
+050  201.7 102  0.49 | něj někde postavit nebo něco vyřešit a podobně, tak často může narazit
+051  205.2 110  0.49 | na to, že přišel do konfliktu s jiným člověkem, který má zase
+052  208.6  99  0.37 | svoji bezpečnostní agenturu.
+053  210.2 109  0.49 | A jak jsme si říkali na začátku, ta válka mezi nimi je
+054  212.6 107  0.51 | drahá, což znamená, že oni velice pravděpodobně do těch smluv se svými
+055  215.8 101       | klienty
+056  216.8 105  0.44 | zabudujou prostě, budeme vás chránit a v momentě, kdy narazíme na někoho,
+057  221.6 105  0.40 | toho, kdo odporuje vaší verzi, tak o tom rozhodne soud, kterej, a
+058  226.6 104  0.46 | teď v tý smlouvě už může být zakotveno rovnou,
+059  229.9  99  0.31 | kterej arbiter o tom bude rozhodovat, případně,
+060  232.8 103  0.45 | která, jako typicky si umím představit, nějakou množinu arbitrů, kterou bude mít
+061  236.5 108  0.52 | každá ta firma, a potom, když dojde ke konfliktu mezi nima, tak
+062  240.1 102  0.44 | se z těch dvou množin vybere nějakej, kterej je tam v průvniku,
+063  242.8 102  0.55 | případně podobně, jako se to u nějakých arbitráží teď dělá, že vlastně
+064  246.4  99  0.47 | každá strana dá svýho arbitra, ti se potom musí dohodnout na nějakém
+065  250.9  99  0.50 | třetím a vlastně ten tribunal potom může mít takhle jako tři lidi.
+066  253.7 111  0.45 | Těch způsobů je samozřejmě celá řada,
+067  257.1 110  0.49 | ale jedná se principálně o to, že právo nebude centrické, jak jsme
+068  261.2 111  0.45 | na ně zvyklí. A je to hrozně těžké si to představit, protože
+069  263.7 104  0.46 | my, když jsme vyrůstali a žijeme celou dobu ve společnosti s centrickým
+070  266.6 102  0.49 | právem, tak si strašně těžko můžeme představit jinou možnost. A ta jiná
+071  269.6 105  0.50 | možnost je vlastně policentrické právo, který nevzniká z hora, ale je dáno
+072  273.6 110  0.39 | ze spoda. Což znamená, že vlastně tím,
+073  277.0 112  0.47 | jak je potřeba řešit spory, tak se různí lidé obracejí na různé
+074  281.7 106  0.46 | soudce a tito soudci jsou plaseni za to, že ty spory řeší.
+075  285.8 109  0.50 | A tím vlastně dávají třeba určité precedenty, případně každý má nějaký svůj
+076  290.1 108  0.38 | způsob, podle kterého soudí. A samozřejmě bychom mohli říct,
+077  294.3 107  0.43 | že by to byl pak hrozný chaos, že by tam bylo strašně
+078  297.4 109  0.49 | moc soudců, kdy každý bude soudit úplně jinak. Ale tohle je extrémně
+079  301.2 108  0.45 | nepravděpodobné právě proto, že i trh má vlastnost, že často sjednocuje tam,
+080  307.0 112  0.50 | kde je to potřeba. Což znamená, že ono by nedávalo moc smyslu,
+081  311.2 105  0.40 | on by si nikdo neplatil soudce, který by najednou rozhodoval nějak úplně
+082  314.4 109  0.43 | mimo, jak si to lidi nepřejou. Čili ti soudci by pravděpodobně rozhodovali
+083  318.7 108  0.31 | nějakým způsobem minimálně podobně.
+084  321.6 106  0.51 | Už z toho důvodu, a tohle je zase vlastně další jako další
+085  325.4 108  0.53 | obrovská kapitola a to jsou negativní práva a soudce rozhodující podle negativního
+086  331.3 100  0.51 | práva má tu obrovskou výhodu, že není vlastně v rozporu a v
+087  334.8  99  0.52 | kolizi s rozhodnutíma jiných soudců, který taky rozhodují, který taky respektují negativní
+088  339.4 105  0.47 | práva, což se liší od práv pozitivních, což je často v současnosti,
+089  344.4 102  0.58 | kdy dnešní stát garantuje lidem spoustu pozitivních práv, který jsou ale často
+090  349.3 106  0.42 | sami se sebou v rozporu, což znamená, že pak to tu centrální
+091  352.4 105  0.56 | autoritu vyžaduje. Nesmíme, když to právo vzniká ze spoda. A není to
+092  355.6 112  0.52 | mimochodem jenom teoretický koncept, ono už se tohleto jako v historii jako
+093  359.5 113  0.51 | víckrát stalo a potom můžeme vidět, že když se tohleto stalo, tak
+094  363.1 108  0.60 | to přesně nějakým způsobem konvergovalo k těm negativním právům. a můžeme se
+095  369.3 105  0.49 | podívat například do Anglie, kde vzniklo vlastně koupecký právo, protože
+096  375.5 111  0.52 | kupci potřebovali řešit svoje spory a nemohli čekat na to, než se
+097  380.2  99  0.48 | vždycky rozsoudí v Londýně, protože to soudnictví tam bylo v hrozném stavu,
+098  384.3 100  0.47 | je to středovek, bylo to tam v hrozném stavu, navíc to bylo
+099  386.9 100  0.59 | daleko a když se prostě něco stalo, tak oni potřebovali nějakým způsobem
+100  390.4 106  0.50 | rozsoudit. A přesně tímhle tím způsobem tam vzniklo bylo kupecké právo, které
+101  395.1 103  0.24 | vzniklo ze spoda, bylo to vlastně
+102  397.3 101  0.42 | policentrické právo, nemělo na začátku tento jedno centrum, ale vzniklo právě přesně
+103  401.1 100  0.50 | od spoda, úplně naopak, než jsme zvyklí dneska, že to právo vzniká.
+104  403.7 109  0.40 | A tohleto právo tam fungovalo strašně dlouho a potom bylo začleněno do
+105  407.1  99  0.43 | anglického práva.
+106  410.1   0       | A
+107  411.1 110  0.50 | je pravda, že na většině míst na světě je teda právo centrický,
+108  415.9 103  0.47 | ale policentrický právo není jenom teorie, která jako v teorii funguje samozřejmě
+109  420.7 102  0.47 | skvěle, ale podle mě líp než to centrický právo, ale navíc je
+110  425.0  98  0.54 | i v nějakých případech vyskoušená v praxi a rozhodně to fungovalo. Vlastně
+111  430.7 108  0.49 | tam, kde to centrický právo nestačilo, třeba v Anglii těm kupcům, tak
+112  435.8  98  0.45 | tam to bylo nahrazeno právě tím policentrickým, že oni si to právo
+113  438.4  94  0.28 | založili jako vlastní.
+114  440.2 135  0.16 | K tomu je možná dobrý dodat, že kdyby to někoho zajímalo ještě
+115  444.2 124  0.18 | víc do hloubky, tak by měl navštívit vaše stránky a vaš podcast
+116  448.6 120  0.09 | například, který se jmenuje Svobodný přístav.
+117  451.3 117       | Moje
+118  451.8 121  0.57 | stránky jsou urza .cz a potom mám YouTube kanál, který se jmenuje
+119  455.6 107  0.37 | kanál Svobodného přístavu.
+120  457.0 158       | Já
+121  457.1 134       | totiž
+122  457.4 127  0.16 | poslouchám dosluchátek ze Spotify, takže já na tom říkám podcast, ale je
+123  461.2 124  0.09 | to YouTube kanál. My
+124  466.3 126       | vlastně
+125  466.6 111  0.54 | děláme YouTube videa, který se automaticky převádí, protože lidi chtěli je poslouchat
+126  470.2 102  0.48 | do sluchátek jako vy, takže jsme udělali to, že se to automaticky
+127  472.8 102  0.45 | převádí na Spotify, ale ten kanál je YouTube kanál, jmenuje se kanál
+128  475.6 106  0.51 | svobodného přístavu a hlavně, když se podíváte na stránku urza .cz,
+129  480.4 105  0.58 | tak nebo přímo můžete na podstránku uncap .urza .cz a na týhle
+130  485.1 106  0.54 | subdoméně najdete moje texty, který se věnují těm jednotlivým odvětvím. Kromě toho
+131  489.6 105  0.54 | jsem o tom napsal knížku, která se jmenuje Anarchokapitalismus.
+132  492.6 102       | Jo,
+133  493.1   0       | to
+134  493.2 122       | se
+135  493.3 115       | výborně prodávalo.
+136  494.8 149  0.20 | Já bych k tomu ještě chtěl možná říct to, protože si občas
+137  497.9 124  0.20 | poslechnu ty vaše pořady, že pro lidi, který se teďka třeba lekli,
+138  503.6 124  0.04 | vy nejste žádný revolucionář. Vy si uvědomujete, že to nemůže být hned
+139  508.9 126  0.18 | a je to spíš taková vize ideální společnosti, který asi ještě máme
+140  513.9 122  0.10 | daleko. Říkám to správně?
+141  516.4 117  0.58 | Víceméně ano, já bych tomu neříkal vize ideální společnosti, je to prostě
+142  520.2 102  0.49 | podle mě krok dál, podobně jako jako prostě dřív byli tady nějaký
+143  526.1 111       | prostě panovníci,
+144  527.2  99  0.49 | to se potom nějak transformovalo v demokracii, spousta absolutistických režimů se přerodila
+145  532.9 103  0.44 | v demokratický, tak si myslím, že tohleto je zase o krok dál,
+146  536.6  99  0.46 | je to vlastně další vývojový stupeň, podle mě je to krok ke
+147  539.2  98       | svobodě.
+148  541.4 100  0.51 | řekněme to, že se ten stát zmenšuje, až se zjistí, že je
+149  545.4 105  0.56 | vlastně postradatelný. A je samozřejmě podle mě, jako je to evoluční krok,
+150  552.1 103  0.48 | nikoli revoluční, protože já si myslím, že revoluce
+151  555.3 105  0.49 | tady není vůbec ani cestou, ani kdybych chtěl, tak si myslím, že
+152  559.3 102  0.49 | něco takového nejde revolučně nastolit.
+153  562.7 108  0.48 | A to z toho důvodu, že skoro všechny režimy dokážete
+154  567.7  96  0.46 | nastolit násilím v podstatě, dokážete tady vybudovat násilím nacismus,
+155  572.2  97  0.47 | fašismus, komunismus, vlastně i demokracii dokážete jako násilím prostě, když pak všichni
+156  576.5  94  0.43 | budou hlasovat třeba po víně a tak dále, tak prostě jako všechny
+157  580.1 102  0.49 | teda, že my nějakým způsobem můžete, ale tenhle ten podle mě násilím
+158  583.9 107  0.50 | proti lidu ani
+159  586.6 105  0.51 | jako nijak prosadit nejde,
+160  588.9 112  0.43 | protože řekněme, že bych se třeba já
+161  592.9 102  0.38 | najednou stal někým, kdo má obrovskou moc nad jako výkonem a silovýma
+162  597.5  99  0.48 | složkama prostě tady v České republice.

@@ -1,0 +1,38 @@
+#!/bin/bash
+# MetaCentrum CPU job: the Python environments for the diarization benchmark, built once.
+#   venv_dz   DiariZen (BUT): torch 2.8 (its pyannote fork needs torchaudio < 2.9) + DiariZen from GitHub
+#   venv_pya  pyannote.audio 4 (community-1, 3.1), the ECAPA baseline, scoring, clip cutting
+# Sortformer runs in the ASR benchmark's venv (~/urza_asr_bench/venv: torch cu128 + nemo_toolkit[asr]).
+#     cd ~/urza_diar && qsub -o logs/ code/diarization/setup_env.pbs
+#PBS -N urza_diar_setup
+#PBS -l select=1:ncpus=4:mem=16gb:scratch_local=40gb
+#PBS -l walltime=2:00:00
+#PBS -j oe
+set -euo pipefail
+
+WORK=${WORK:-$PBS_O_WORKDIR}                               # $HOME differs per compute node
+UV=${UV:-/storage/praha1/home/rolloj/urza_asr_bench/uvpkg/bin/uv}
+export UV_CACHE_DIR=$SCRATCHDIR/uv-cache UV_PYTHON_INSTALL_DIR=$WORK/python UV_LINK_MODE=copy
+cd "$WORK"
+trap 'clean_scratch' EXIT
+CU=https://download.pytorch.org/whl/cu128
+
+# --- DiariZen
+rm -rf venv_dz DiariZen
+git clone -q --recursive https://github.com/BUTSpeechFIT/DiariZen.git
+$UV venv -p 3.12 --seed venv_dz
+$UV pip install -p venv_dz/bin/python torch==2.8.0 torchaudio==2.8.0 --index-url $CU
+$UV pip install -p venv_dz/bin/python "torch==2.8.0" "torchaudio==2.8.0" "numpy<2" einops h5py scipy soundfile \
+    tabulate toml tqdm accelerate pyyaml librosa -e DiariZen/pyannote-audio -e DiariZen \
+    --extra-index-url $CU --index-strategy unsafe-best-match
+
+# --- pyannote 4 + baseline + scoring
+rm -rf venv_pya
+$UV venv -p 3.12 --seed venv_pya
+$UV pip install -p venv_pya/bin/python torch==2.8.0 torchaudio==2.8.0 --index-url $CU
+$UV pip install -p venv_pya/bin/python "torch==2.8.0" "torchaudio==2.8.0" "pyannote.audio>=4" pyannote.metrics \
+    speechbrain scikit-learn soundfile av --extra-index-url $CU --index-strategy unsafe-best-match
+
+venv_dz/bin/python -c "import sys; sys.modules['spacy']=None; import torch; from diarizen.pipelines.inference import DiariZenPipeline; print('diarizen ok, torch', torch.__version__)"
+venv_pya/bin/python -c "import torch, pyannote.audio, speechbrain, av; print('pyannote', pyannote.audio.__version__, 'torch', torch.__version__)"
+echo SETUP_OK

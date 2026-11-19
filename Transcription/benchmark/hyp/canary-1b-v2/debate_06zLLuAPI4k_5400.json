@@ -1,0 +1,66 @@
+{
+ "model": "canary-1b-v2",
+ "clip": "debate_06zLLuAPI4k_5400",
+ "audio_seconds": 180.0,
+ "seconds": 9.4,
+ "load_seconds": 236.0,
+ "windows": [
+  {
+   "k": 0,
+   "start": 0.0,
+   "end": 21.73,
+   "silent": false,
+   "text": "nejsou legitimní a toto je sebevlastnictví lidí. A ty tvrdíš, že v tomto, čili věci, který stát má právo dělat v týdletém množině, a zároveň zasahují do sebevlastnictví, tak ty... Takže já říkám, že existuje tady ta množina. Ale říká, že v týdletém množině je vždy nadřazeno právo státu nad sebevlastnictvím."
+  },
+  {
+   "k": 1,
+   "start": 21.73,
+   "end": 40.43,
+   "silent": false,
+   "text": "A není to ta autologie? Mně to logicky z toho vyplývá, já tam tu autologii nevím. Není to ta autologie? Ano. No, proč bys si taky mohl říct, že je to naopak? No, podle mě. A státu stejně zbydou tyhle práva. No, podle mě pro celou tady tu část platí, že je to nadřazeným věcem, že jo?"
+  },
+  {
+   "k": 2,
+   "start": 40.43,
+   "end": 66.89,
+   "silent": false,
+   "text": "No, ne, teď bys to taky mohl nadefinovat tak. Ty bys mohl nadefinovat to tak, že tady, my se bavíme o tomhle tom sektoru, který teď zabarvím. No. Co může dělat stát? Na co má podle tebe právo? Na co nemá právo? Sobevlastnictví. Sektor, který jsem zabarvil, by mohl být rozhodnut. Buď sebevlastnictví je nadřazeno, anebo práva státu jsou nadřazena. No, ale počkej, kdyby to bylo, že."
+  },
+  {
+   "k": 3,
+   "start": 66.89,
+   "end": 93.95,
+   "silent": false,
+   "text": "Kdyby to bylo, že jsou vlastníci nadřazení, tak ty věci nejsou tady, ale tady. Ne. Ne, když tam, tak jsou tady, protože nemá právo. No, ne, kdybychom se bavili v negativních právech, tak ano, ale my se bavíme v pozitivních právech a v pozitivních právech se ti ty práva prostě můžou jako třískat. Čili jinými slovy, ty. Nebo se bavíme v pozitivních právech, nemyslím. Nebo v těch pozitivních právech už proto, že říká, že ten stát může zasahovat do."
+  },
+  {
+   "k": 4,
+   "start": 93.95,
+   "end": 123.27,
+   "silent": false,
+   "text": "Majetku jiných lidí, tak to jsou jednoznačně pozitivní práva. Dobře, pokračujeme. Což znamená, že jestliže se bavíme o pozitivních právech, tak může docházet ke konfliktu těch práv. Samozřejmě. A tohle je konflikt práv. Tady, když tohle označím jako S, tak tady je sebevlastnictví, X jsou věci, které stát může dělat, a S a X jsou někde v konfliktu. No. A ty ty říkáš, že když je S a X v konfliktu, tak vždy je X nadřazeno. No. Ale kdyby si ty říkal, že když jsou tyhle věci v konfliktu, tak to znamená, že jako."
+  },
+  {
+   "k": 5,
+   "start": 123.27,
+   "end": 149.39,
+   "silent": false,
+   "text": "Sébevlastnictví je nadřazeno právům státu, tak ta věc není tady, ale tady. Protože to znamená, že na to stát nemá právo. No, ne, tak ty. No, ne, a teď ty můžeš to definovat tak, že stát má právo. Takže podle mě, podle mě, ty se mě ptáš, jestli existuje tady ten kvadrant. No, já. Ten kvadrant zjevně existuje, protože zjevně existují."
+  },
+  {
+   "k": 6,
+   "start": 149.39,
+   "end": 177.61,
+   "silent": false,
+   "text": "Práva, které ty přiškáváš státu a které jsou v rozporu se sebevlastnictvím, což znamená, že v případě, že nějaké právo, třeba stát totiž, ono to právo státu, ty mu nemusíš dávat jako explicitně na to sebevlastnictví. Ty můžeš mi třeba říct, stát má právo jakýkoliv kus majetku vyhodit ze svého toho území, třeba. Třeba, příklad. A teď tohle můžeš říct,"
+  },
+  {
+   "k": 7,
+   "start": 177.61,
+   "end": 180.0,
+   "silent": false,
+   "text": "Ano, ale sebevlastnictví je nadřazeno, což znamená,"
+  }
+ ],
+ "text": "nejsou legitimní a toto je sebevlastnictví lidí. A ty tvrdíš, že v tomto, čili věci, který stát má právo dělat v týdletém množině, a zároveň zasahují do sebevlastnictví, tak ty... Takže já říkám, že existuje tady ta množina. Ale říká, že v týdletém množině je vždy nadřazeno právo státu nad sebevlastnictvím. A není to ta autologie? Mně to logicky z toho vyplývá, já tam tu autologii nevím. Není to ta autologie? Ano. No, proč bys si taky mohl říct, že je to naopak? No, podle mě. A státu stejně zbydou tyhle práva. No, podle mě pro celou tady tu část platí, že je to nadřazeným věcem, že jo? No, ne, teď bys to taky mohl nadefinovat tak. Ty bys mohl nadefinovat to tak, že tady, my se bavíme o tomhle tom sektoru, který teď zabarvím. No. Co může dělat stát? Na co má podle tebe právo? Na co nemá právo? Sobevlastnictví. Sektor, který jsem zabarvil, by mohl být rozhodnut. Buď sebevlastnictví je nadřazeno, anebo práva státu jsou nadřazena. No, ale počkej, kdyby to bylo, že. Kdyby to bylo, že jsou vlastníci nadřazení, tak ty věci nejsou tady, ale tady. Ne. Ne, když tam, tak jsou tady, protože nemá právo. No, ne, kdybychom se bavili v negativních právech, tak ano, ale my se bavíme v pozitivních právech a v pozitivních právech se ti ty práva prostě můžou jako třískat. Čili jinými slovy, ty. Nebo se bavíme v pozitivních právech, nemyslím. Nebo v těch pozitivních právech už proto, že říká, že ten stát může zasahovat do. Majetku jiných lidí, tak to jsou jednoznačně pozitivní práva. Dobře, pokračujeme. Což znamená, že jestliže se bavíme o pozitivních právech, tak může docházet ke konfliktu těch práv. Samozřejmě. A tohle je konflikt práv. Tady, když tohle označím jako S, tak tady je sebevlastnictví, X jsou věci, které stát může dělat, a S a X jsou někde v konfliktu. No. A ty ty říkáš, že když je S a X v konfliktu, tak vždy je X nadřazeno. No. Ale kdyby si ty říkal, že když jsou tyhle věci v konfliktu, tak to znamená, že jako. Sébevlastnictví je nadřazeno právům státu, tak ta věc není tady, ale tady. Protože to znamená, že na to stát nemá právo. No, ne, tak ty. No, ne, a teď ty můžeš to definovat tak, že stát má právo. Takže podle mě, podle mě, ty se mě ptáš, jestli existuje tady ten kvadrant. No, já. Ten kvadrant zjevně existuje, protože zjevně existují. Práva, které ty přiškáváš státu a které jsou v rozporu se sebevlastnictvím, což znamená, že v případě, že nějaké právo, třeba stát totiž, ono to právo státu, ty mu nemusíš dávat jako explicitně na to sebevlastnictví. Ty můžeš mi třeba říct, stát má právo jakýkoliv kus majetku vyhodit ze svého toho území, třeba. Třeba, příklad. A teď tohle můžeš říct, Ano, ale sebevlastnictví je nadřazeno, což znamená,"
+}

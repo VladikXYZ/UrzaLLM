@@ -1,0 +1,59 @@
+{
+ "model": "canary-1b-v2",
+ "clip": "studio_01Xg98XMRXE_1800",
+ "audio_seconds": 180.0,
+ "seconds": 4.2,
+ "load_seconds": 236.0,
+ "windows": [
+  {
+   "k": 0,
+   "start": 0.0,
+   "end": 22.05,
+   "silent": false,
+   "text": "A baví se s lidmi, se kterými se bavit chtějí, a nejsou donuceni. Jo, vy jste ve stejném ročníku, tak vy prostě utváříte nějakou skupinu, kamarádu. Tak mi přijde, že ty vztahy jsou mnohem upřímnější a že v tomhle mi připadá, že je to velký rozdíl. Čili vidíš rozdíl hlavně v těch vztazích? Hlavně v těch vztazích, jo. Vlastně, když se nad tím tak zamyslím, tak."
+  },
+  {
+   "k": 1,
+   "start": 22.05,
+   "end": 47.89,
+   "silent": false,
+   "text": "Asi souhlasím, nebo ještě jedna v těch vztazích, ale pak taky mě přijde hodně rozdíl v nějakém individualismu. Jo, to určitě. Když vidím, třeba když přijdu někam přednášet do nějaké školy, tak mi přijde, že ty děti jsou tam mnohem víc jako takový stádní a že vy jste hodně jako takový samorostý. Každý má nějaký svoje specifický, mi přijde jako. No, já nevím, že každý, jakože když se třeba."
+  },
+  {
+   "k": 2,
+   "start": 47.89,
+   "end": 76.25,
+   "silent": false,
+   "text": "Zeptáte se, přijdou děti jako Věšku, co si třeba myslí, že by chtěli jednou v životě dělat, tak je to takový mnohem rozmanitější. Zatímco prostě v té bývalé škole, tak tam každý měl vybranou jednu z, nevím, z deseti vejšek, na kterou chce prostě jít, a všichni měli vlastně stejný plán, jako že jo, skončí škola, tak půjdu tady na tu vejšku, tady na tu vejšku. A prostě nevím, připadá mi, že Věšku to je mnohem rozmanitější, to, co jako třeba. Jo, jo. A ještě mě zajímalo, když už jsme byli u té."
+  },
+  {
+   "k": 3,
+   "start": 76.25,
+   "end": 102.83,
+   "silent": false,
+   "text": "Jestli máš nějaké zajímavé zážitky z grudovačky, vlastně. Já jsem na tvé grudovačce nevím, jestli byl, ale už si nepamatuju. A já musím upřímně taky být. Takže to asi tak traumatické nebylo. Ale hlavně hrozně, no, mě to nějak moc nevadilo. To bylo spojené s tím, že s tou prezentací toho portfolia, takže to bylo taková, no, nevím, nemám z toho žádný trauma, nějak jsem se toho nebál, nějak mi to tam nevadilo, jako. Takže."
+  },
+  {
+   "k": 4,
+   "start": 102.83,
+   "end": 130.41,
+   "silent": false,
+   "text": "No, a co je pro tebe vešku nejtěžší? Spousta lidí třeba říká, že je pro ně těžká ta svoboda, nebo co je tam vlastně pro tebe nejnáročnější? Nejnáročnější? No, jakože třeba minulý rok, no, já vlastně nevím, jakože asi vlastně to, že."
+  },
+  {
+   "k": 5,
+   "start": 130.41,
+   "end": 159.03,
+   "silent": false,
+   "text": "Nevím, jak jsem byla zvyklá na to, že nad tím někdo stojí a prostě mi říká, co mám umět. A tak já jsem to brala jako, jo, nebo jako ne, že bych to brala, ale když tohle budu umět, tak jsem prostě v pohodě. A tak jsem prostě jako tak, prostě nevím, no prostě, že jako, jo, tak umím tohlen s toho, protože oni mi to tak řekli, že je to správně a že to budu potřebovat, tak umím, jsem v pohodě. A teď, jak tam nikdo takový nestojí, tak asi jako najít se sama to, co já chci umět, nebo to, co jako."
+  },
+  {
+   "k": 6,
+   "start": 159.03,
+   "end": 180.0,
+   "silent": false,
+   "text": "No, jakože prostě najít se v tom sama a sama si udělat nějaký ten svůj plán nebo se rozhodnout, na jaký chci chodit lekce a co je pro mě důležité. A tak jako, nebo teď už je to asi vlastně lepší, teď už mi to nějak nevadí, nebo ne, že nevadí, ale teď už mi to nepřipadá tak těžké. Ale třeba minulý rok, jako na začátku školního roku, tohle mi přišlo jako sama si nějak utvořit ten svůj současný."
+  }
+ ],
+ "text": "A baví se s lidmi, se kterými se bavit chtějí, a nejsou donuceni. Jo, vy jste ve stejném ročníku, tak vy prostě utváříte nějakou skupinu, kamarádu. Tak mi přijde, že ty vztahy jsou mnohem upřímnější a že v tomhle mi připadá, že je to velký rozdíl. Čili vidíš rozdíl hlavně v těch vztazích? Hlavně v těch vztazích, jo. Vlastně, když se nad tím tak zamyslím, tak. Asi souhlasím, nebo ještě jedna v těch vztazích, ale pak taky mě přijde hodně rozdíl v nějakém individualismu. Jo, to určitě. Když vidím, třeba když přijdu někam přednášet do nějaké školy, tak mi přijde, že ty děti jsou tam mnohem víc jako takový stádní a že vy jste hodně jako takový samorostý. Každý má nějaký svoje specifický, mi přijde jako. No, já nevím, že každý, jakože když se třeba. Zeptáte se, přijdou děti jako Věšku, co si třeba myslí, že by chtěli jednou v životě dělat, tak je to takový mnohem rozmanitější. Zatímco prostě v té bývalé škole, tak tam každý měl vybranou jednu z, nevím, z deseti vejšek, na kterou chce prostě jít, a všichni měli vlastně stejný plán, jako že jo, skončí škola, tak půjdu tady na tu vejšku, tady na tu vejšku. A prostě nevím, připadá mi, že Věšku to je mnohem rozmanitější, to, co jako třeba. Jo, jo. A ještě mě zajímalo, když už jsme byli u té. Jestli máš nějaké zajímavé zážitky z grudovačky, vlastně. Já jsem na tvé grudovačce nevím, jestli byl, ale už si nepamatuju. A já musím upřímně taky být. Takže to asi tak traumatické nebylo. Ale hlavně hrozně, no, mě to nějak moc nevadilo. To bylo spojené s tím, že s tou prezentací toho portfolia, takže to bylo taková, no, nevím, nemám z toho žádný trauma, nějak jsem se toho nebál, nějak mi to tam nevadilo, jako. Takže. No, a co je pro tebe vešku nejtěžší? Spousta lidí třeba říká, že je pro ně těžká ta svoboda, nebo co je tam vlastně pro tebe nejnáročnější? Nejnáročnější? No, jakože třeba minulý rok, no, já vlastně nevím, jakože asi vlastně to, že. Nevím, jak jsem byla zvyklá na to, že nad tím někdo stojí a prostě mi říká, co mám umět. A tak já jsem to brala jako, jo, nebo jako ne, že bych to brala, ale když tohle budu umět, tak jsem prostě v pohodě. A tak jsem prostě jako tak, prostě nevím, no prostě, že jako, jo, tak umím tohlen s toho, protože oni mi to tak řekli, že je to správně a že to budu potřebovat, tak umím, jsem v pohodě. A teď, jak tam nikdo takový nestojí, tak asi jako najít se sama to, co já chci umět, nebo to, co jako. No, jakože prostě najít se v tom sama a sama si udělat nějaký ten svůj plán nebo se rozhodnout, na jaký chci chodit lekce a co je pro mě důležité. A tak jako, nebo teď už je to asi vlastně lepší, teď už mi to nějak nevadí, nebo ne, že nevadí, ale teď už mi to nepřipadá tak těžké. Ale třeba minulý rok, jako na začátku školního roku, tohle mi přišlo jako sama si nějak utvořit ten svůj současný."
+}

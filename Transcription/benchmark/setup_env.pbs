@@ -1,0 +1,27 @@
+#!/bin/bash
+# MetaCentrum CPU job: build $BENCH/venv (Python 3.12, torch CUDA, NeMo ASR, faster-whisper, transformers).
+# Run once; run_bench.pbs uses the result. Needs the uv binary in $BENCH/uvpkg/bin/uv.
+#PBS -N urza_asr_setup
+#PBS -l select=1:ncpus=4:mem=16gb:scratch_local=40gb
+#PBS -l walltime=2:00:00
+#PBS -j oe
+set -euo pipefail
+
+BENCH=${BENCH:-$PBS_O_WORKDIR}   # submit from the bench folder; $HOME differs per compute node
+UV=$BENCH/uvpkg/bin/uv
+export UV_CACHE_DIR=$SCRATCHDIR/uv-cache UV_PYTHON_INSTALL_DIR=$BENCH/python UV_LINK_MODE=copy
+cd "$BENCH"
+trap 'clean_scratch' EXIT
+
+rm -rf venv
+$UV venv -p 3.12 --seed venv
+source venv/bin/activate
+$UV pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu128
+$UV pip install "nemo_toolkit[asr]" faster-whisper "transformers>=4.45" sentencepiece protobuf soundfile numpy requests
+python - <<'PY'
+import torch, nemo, faster_whisper, transformers, ctranslate2
+print("torch", torch.__version__, "cuda build", torch.version.cuda)
+print("nemo", nemo.__version__, "| faster-whisper", faster_whisper.__version__,
+      "| ctranslate2", ctranslate2.__version__, "| transformers", transformers.__version__)
+PY
+echo SETUP_OK

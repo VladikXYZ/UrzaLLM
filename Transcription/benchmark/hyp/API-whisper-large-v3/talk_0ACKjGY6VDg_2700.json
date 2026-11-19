@@ -1,0 +1,59 @@
+{
+ "model": "API-whisper-large-v3",
+ "clip": "talk_0ACKjGY6VDg_2700",
+ "audio_seconds": 180.0,
+ "seconds": 8.5,
+ "load_seconds": 0,
+ "windows": [
+  {
+   "k": 0,
+   "start": 0.0,
+   "end": 25.97,
+   "text": "tak to první bude asi, že si budu muset jako zamyslet nad sebou, proč mám pocit, že to ten člověk dělá moc a že mám tendenci ho nějakým způsobem soudit a hodnotit. A to první, co uvidím, je jako nějaká práce pro mě na sobě spíš než na tom člověku. A s tím člověkem o tom potom můžu klidně nějak mluvit, ale a klidně mu třeba říct nějaký svoje obavy, ale přijde mi, že"
+  },
+  {
+   "k": 1,
+   "start": 25.97,
+   "end": 43.89,
+   "text": "je prezentovat jako svoje obavy a ne jako něco, co... - To je hodně složité tohle, že jo? To spousta lidí říká, že sděluje své obavy a vlastně je to nějaká možnost vládci k něčemu. - Ano. Ano a proto říkám, to první, co bych dělal, je zamyslet se nad tím. Jako dítě je moc na technologiích, tak si říkám, sakra,"
+  },
+  {
+   "k": 2,
+   "start": 43.89,
+   "end": 73.05,
+   "text": "asi bych potřeboval trošku zapracovat na svém respektujícím přístupu. - Když to pak třeba stane, že nám to naruší úplně komplet plány celé rodiny, a jako nemůžu prostě nechat pětiletí dítě samotně doma, a jako aby nejsme všichni taky seděli doma, protože prostě musí koukat na své Rusáky, Amerikány, a tak to je jedno YouTube."
+  },
+  {
+   "k": 3,
+   "start": 73.05,
+   "end": 100.71,
+   "text": "Jo, že jako potom ještě s těmi ostatními, abychom se prostě nějak tak dohromady nějaký plány všichni, že jako já jí klidně nechám. Kolikrát jsem jí nechala doma sama, samotnou, ať se na to kouká, že jsme pryč. Ale prostě jako někdy to fakt narušuje už hodně, jako plány těch ostatních lidí. No, já si myslím ale, že jedna věc je někoho vychovávat a druhá věc je hlídat si svoje hranice."
+  },
+  {
+   "k": 4,
+   "start": 100.71,
+   "end": 124.75,
+   "text": "A je důležité, aby to, co tady říkáme, nesplývalo s takovým tím, že to dítě může všechno i na můj úkor. A to samozřejmě ne. Ale jde o to, že si potřebuju dobře, když mám pocit, že je moc na... My jsme se tady bavili o pocitu, že je moc na technologiích nebo moc kouká na porno. Což je jiný pocit než..."
+  },
+  {
+   "k": 5,
+   "start": 124.75,
+   "end": 138.55,
+   "text": "Já chci jít ven a nemůžu, protože dítě je doma. A teď je tam nějaký konflikt těch potřeb, které je potřeba řešit, ale vnímám jako fakt úplně jinou věc, kdy..."
+  },
+  {
+   "k": 6,
+   "start": 138.55,
+   "end": 165.29,
+   "text": "já mám pocit, že pro něj by bylo lepší něco dělat jinak. A mezi tím, když já potřebuju, aby se něco dělo jinak pro svoji vlastní pohodu a pro svoje vlastní nějaké nastavení hranic. A tyhle dva procesy jsou podle mě úplně jiný. A i když to může někdy vést k podobným věcem, nebo se to sebe může týkat, nebo to může mít podobný závěr, tak si ale myslím, že je hodně odlišný,"
+  },
+  {
+   "k": 7,
+   "start": 165.29,
+   "end": 180.0,
+   "text": "kdy je ta motivace, jdu tě vychovat a kdy je ta motivace, hele, mě v tom není dobře, pojďme s tím něco udělat. Tak já mám víceméně tu druhou situaci, že prostě to vždycky jako nějak nabůrá, byli jsme dohodnutí, že se někam jede, že má prostě poslední půl hodinu"
+  }
+ ],
+ "text": "tak to první bude asi, že si budu muset jako zamyslet nad sebou, proč mám pocit, že to ten člověk dělá moc a že mám tendenci ho nějakým způsobem soudit a hodnotit. A to první, co uvidím, je jako nějaká práce pro mě na sobě spíš než na tom člověku. A s tím člověkem o tom potom můžu klidně nějak mluvit, ale a klidně mu třeba říct nějaký svoje obavy, ale přijde mi, že je prezentovat jako svoje obavy a ne jako něco, co... - To je hodně složité tohle, že jo? To spousta lidí říká, že sděluje své obavy a vlastně je to nějaká možnost vládci k něčemu. - Ano. Ano a proto říkám, to první, co bych dělal, je zamyslet se nad tím. Jako dítě je moc na technologiích, tak si říkám, sakra, asi bych potřeboval trošku zapracovat na svém respektujícím přístupu. - Když to pak třeba stane, že nám to naruší úplně komplet plány celé rodiny, a jako nemůžu prostě nechat pětiletí dítě samotně doma, a jako aby nejsme všichni taky seděli doma, protože prostě musí koukat na své Rusáky, Amerikány, a tak to je jedno YouTube. Jo, že jako potom ještě s těmi ostatními, abychom se prostě nějak tak dohromady nějaký plány všichni, že jako já jí klidně nechám. Kolikrát jsem jí nechala doma sama, samotnou, ať se na to kouká, že jsme pryč. Ale prostě jako někdy to fakt narušuje už hodně, jako plány těch ostatních lidí. No, já si myslím ale, že jedna věc je někoho vychovávat a druhá věc je hlídat si svoje hranice. A je důležité, aby to, co tady říkáme, nesplývalo s takovým tím, že to dítě může všechno i na můj úkor. A to samozřejmě ne. Ale jde o to, že si potřebuju dobře, když mám pocit, že je moc na... My jsme se tady bavili o pocitu, že je moc na technologiích nebo moc kouká na porno. Což je jiný pocit než... Já chci jít ven a nemůžu, protože dítě je doma. A teď je tam nějaký konflikt těch potřeb, které je potřeba řešit, ale vnímám jako fakt úplně jinou věc, kdy... já mám pocit, že pro něj by bylo lepší něco dělat jinak. A mezi tím, když já potřebuju, aby se něco dělo jinak pro svoji vlastní pohodu a pro svoje vlastní nějaké nastavení hranic. A tyhle dva procesy jsou podle mě úplně jiný. A i když to může někdy vést k podobným věcem, nebo se to sebe může týkat, nebo to může mít podobný závěr, tak si ale myslím, že je hodně odlišný, kdy je ta motivace, jdu tě vychovat a kdy je ta motivace, hele, mě v tom není dobře, pojďme s tím něco udělat. Tak já mám víceméně tu druhou situaci, že prostě to vždycky jako nějak nabůrá, byli jsme dohodnutí, že se někam jede, že má prostě poslední půl hodinu",
+ "note": "e-INFRA API; seconds = wall time with 4 parallel requests shared between 2 files"
+}

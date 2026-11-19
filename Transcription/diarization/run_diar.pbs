@@ -1,0 +1,35 @@
+#!/bin/bash
+# MetaCentrum GPU job: cut the test clips (first time only), run every diarization system over them, score.
+#     cd ~/urza_diar && qsub -o logs/ code/diarization/run_diar.pbs
+#     qsub -o logs/ -v SYSTEMS="diarizen-large" code/diarization/run_diar.pbs     # one system only
+#PBS -N urza_diar_bench
+#PBS -l select=1:ncpus=4:ngpus=1:gpu_mem=16gb:mem=32gb:scratch_local=40gb
+#PBS -l walltime=3:00:00
+#PBS -j oe
+
+WORK=${WORK:-$PBS_O_WORKDIR}                               # $HOME differs per compute node
+VENV_NEMO=${VENV_NEMO:-/storage/praha1/home/rolloj/urza_asr_bench/venv}
+AUDIO_DIR=${AUDIO_DIR:-/storage/brno2/home/vladikxyz/scraping/audio}
+SYSTEMS=${SYSTEMS:-"sortformer-v2.1 sortformer-v2 sortformer-v1 diarizen-large diarizen-large-v2 pyannote-community-1 pyannote-3.1 ecapa-ahc"}
+export HF_HOME=${HF_HOME:-/storage/praha1/home/rolloj/urza_asr_bench/hf-cache} TMPDIR=$SCRATCHDIR
+C=$WORK/code/diarization
+
+cd "$WORK"
+nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
+[ -f clips/enroll_solo_pBuDpAGGgnA.wav ] || venv_pya/bin/python $C/make_clips.py --audio-dir "$AUDIO_DIR" --out clips
+
+for s in $SYSTEMS; do
+    case $s in
+        sortformer-*) PY=$VENV_NEMO/bin/python ;;
+        diarizen-*)   PY=$WORK/venv_dz/bin/python ;;
+        *)            PY=$WORK/venv_pya/bin/python ;;
+    esac
+    echo "=== $s $(date +%T)"
+    $PY $C/diarize.py --system "$s" --clips clips --out hyp || echo "!!! $s FAILED"
+done
+
+if ls code/diarization/reference/*.rttm >/dev/null 2>&1; then
+    venv_pya/bin/python $C/score.py code/diarization/reference hyp clips | tee hyp/scores.txt
+fi
+echo "=== all done $(date +%T)"
+clean_scratch

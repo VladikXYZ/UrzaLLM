@@ -1,0 +1,200 @@
+000    0.0 173       | Tak
+001    0.4 141       | to
+002    0.5 137  0.49 | první bude asi, že si budu muset jako zamyslet nad sebou, proč
+003    4.7 132  0.57 | mám pocit, že to ten člověk dělá moc a že mám tendenci
+004    8.9 133  0.56 | ho nějakým způsobem soudit a hodnotit a to první, co uvidím, je
+005   13.5 130  0.59 | jako nějaká práce pro mě na sobě, spíš než na tom člověku
+006   17.4 154  0.52 | a s tím člověkem o tom potom můžu klidně nějak mluvit a
+007   21.3 143  0.55 | klidně mu třeba říct nějaké svoje obavy, ale přijde mi, že je
+008   26.2 146  0.52 | prezentovat jako svoje obavy a ne jako něco, co
+009   29.8 155       | ten...
+010   30.1 224       | To
+011   30.3 165       | je
+012   30.4 206  0.06 | hodně složité tady tohle, že jo? To
+013   31.9 229       | spousta
+014   32.2 139       | lidí
+015   32.5 198  0.08 | říká, že sděluje své obavy a vlastně je to nějaká možnost k
+016   36.0 161  0.54 | něčemu. Ano, a proto říkám, to první, co bych dělal, je zamyslet
+017   38.6 143       | se nad tím.
+018   40.2 142  0.48 | Jako dítě je moc na technologiích, tak si říkám, sakra,
+019   43.7 134  0.54 | asi bych potřeboval trošku zapracovat na svým respektujícím přístupu.
+020   52.1 221  0.12 | Takže ono se pak třeba stane, že nám
+021   54.1   0       | to
+022   54.1 217       | jako
+023   54.3 218       | naruší
+024   54.8 208  0.13 | úplně komplet plány celý rodině a jako nemůžu prostě nechat pětiletí dítě
+025   60.0 190  0.19 | samotný doma a jako aby nesme všichni taky seděli doma, protože prostě
+026   64.9 183  0.15 | musí koukat na sebe, Rusáky, Amerikány a tak to je jako dno
+027   69.7 188       | YouTube. tu.
+028   71.2 217  0.19 | A jo, že jako potom ještě s těmi ostatními, abychom se prostě
+029   76.9 218  0.21 | nějak tak dohromady,
+030   78.6 202  0.24 | nějaký plány všichni, že jako já ji klidně nechám, kolikrát jsem ji
+031   82.4 190  0.09 | nechala i doma samotnou, ať se na to kouká, že jsme pryč.
+032   85.8 199  0.19 | Ale prostě jako někdy to fakt narušuje už hodně, jako plány těch
+033   90.9 217       | ostatních lidí.
+034   92.9 149  0.54 | No, já si myslím ale, že jedna věc je někoho vychovávat a
+035   97.2 132  0.51 | druhá věc je hlídat si svoje To je hranice.
+036   99.6 148  0.48 | A je důležité, aby to, co tady říkáme, nesplývalo s takovým tím,
+037  107.2 152  0.53 | že to dítě může všechno i na můj úkor. A to samozřejmě
+038  111.7 142  0.56 | ne. Ale jde o to, že si potřebuji dobře, když mám pocit,
+039  115.7 146  0.63 | že je moc na, my jsme se tady bavili o pocitu, tu
+040  119.9 122  0.59 | je moc na technologiích nebo moc kouká na porno.
+041  122.7 141  0.53 | Což je jinej pocit, než já chci jít ven a nemůžu,
+042  128.0 140       | protože
+043  129.9 137  0.59 | dítě je doma. A teď je tam nějaký konflikt těch potřeb, které
+044  133.6 137  0.59 | je potřeba řešit, ale v ní mám jako fakt úplně jinou věc,
+045  137.2 146  0.57 | kdy já mám pocit, že pro něj by bylo lepší něco dělat
+046  140.7 141  0.61 | jinak a mezi tím, když já potřebuju, aby se něco dělo jinak
+047  144.7 139  0.71 | pro svoji vlastní pohodu a pro svoje vlastní nějaké nastavení hranic. a
+048  149.8 160  0.34 | tyhle dva procesy
+049  151.8 151  0.51 | jsou podle mě jako úplně jiný
+050  154.4 193       | a
+051  155.6 163  0.44 | i když to může někdy vést k podobným věcem, nebo se to
+052  158.8 159  0.49 | sebe může týkat, nebo to může mít podobný závěr, tak si ale
+053  161.9 153  0.51 | myslím, že je jako hodně
+054  164.2 137       | odlišný,
+055  166.1 144  0.54 | kdy je ta motivace, jdu tě vychovat a kdy je ta motivace,
+056  169.3 141  0.51 | hele, mě v tom není dobře, pojďme s tím něco udělat.
+057  172.3 215       | Tak
+058  172.4 205       | já
+059  172.6 216       | mám
+060  172.8 210  0.17 | více méně tu druhou
+061  174.2 194  0.17 | situaci, že prostě to vždycky jako nějak nabůrá, byli jsme dohodnutí, že
+062  177.3 191  0.13 | se někam jede, že má prostě poslední půl hodinu, pak jdem a
+063  180.5 181  0.14 | pak nejdu prostě. A jako se nám to celý prostě rozbíjí, že
+064  185.9 194       | jo.
+065  187.3 177  0.12 | Je to složitý.
+066  188.9   0       | Mně
+067  189.4 207  0.12 | někdy přijde jakože úplně super jako celkově překopat plány, že mám pocit,
+068  194.2 196  0.17 | že někdy jako lupíme na něčem jenom proto, že jsme se na
+069  197.2 185  0.11 | něčem domluvili a je potřeba to dodržet, aby to dítě teda vidělo,
+070  200.5 180  0.11 | že když se na něčem domluvíme, tak to prostě platí. Ale pro
+071  203.0 198  0.14 | mě je to třeba jako hodně úlevný, když si prostě řeknu, no
+072  207.5 188  0.06 | tak jako co, tak to bude jinak. Ale musí to být jako
+073  210.0 198  0.11 | souhledu se mnou, jo, zase.
+074  211.5 180       | No
+075  211.7 185  0.14 | jasně, tak já třeba ráda někam chodím včas, to asi nejprve budem.
+076  216.6 159  0.44 | Tohle hodně učíš i mě.
+077  219.4 226  0.11 | Já mám takový respekt takhle v čase třeba k času ostatních lidí,
+078  222.7 200  0.05 | protože mi to prostě je v pořádku, jako když jsi někam včas.
+079  225.4   0       | Já
+080  225.5   0       | bych
+081  225.6   0       | tak
+082  225.7 157       | rád chodil včas.
+083  228.2 308  0.02 | Já tam prostě jít.
+084  230.6   0  0.24 | Myslíš, že máš číkatelitě, co do chody?
+085  232.9   0       | Aha.
+086  234.2 226  0.11 | Škoda, že jsi tak daleko.
+087  237.6 133  0.53 | Mimochodem tohle to byl můj velký jako prozření, kdy já vlastně
+088  243.1 112  0.60 | chodím včas v podstatě všude a de facto nikdy se neopoužďuju až
+089  247.5 108       | na nějaké výjimky.
+090  250.5 137  0.40 | A mám vlastně
+091  252.3 118  0.63 | nejlepší kamarádku, která to má úplně naopak a nikdy nikam nepřijde, teď
+092  255.6   0       | už trochu.
+093  257.2 141  0.58 | A vůbec soužití s ní pro mě bylo hodně poučené v tom
+094  260.4 126  0.54 | si uvědomit, že to, jak to mám já, není to správně a
+095  262.8 116  0.59 | to, jak to má ona, není to špatně.
+096  265.2 127  0.54 | A že vlastně to, co jsem se ze začátku snažil, je, aby
+097  268.1 127  0.59 | to bylo nějak pomym, ale vlastně mi to nedošlo, protože jsem si
+098  271.6 123  0.52 | myslel, tak jako chodit včas, když se domluvíme prostě ve čtyři, tak
+099  274.6 110       | znamená ve čtyři.
+100  275.9 146  0.47 | Ale pak jsem si musel nějak uvědomit, že třeba ve čtyři pro
+101  279.1 127  0.58 | ní neznamená ve čtyři, ale znamená to od tří do pěti.
+102  283.2 182  0.43 | A že to není, ale jako špatně. A že to je prostě...
+103  287.8 201       | No,
+104  288.9 180  0.40 | to bylo hrozný. A že to je prostě jinej pohled na věc
+105  293.6 147  0.61 | a nedívat se na to, že to moje je to správný a
+106  297.7 146  0.56 | to druhé je to špatný. A tohle pro mě byla velká lekce,
+107  301.2 138  0.60 | zejména s tím časem, kdy jsme nakonec došli k nějakému kompromisu, že
+108  306.6 127  0.51 | teda jako se nějak už domluvíme, nebo že dá vědět, nebo že
+109  311.4 133  0.58 | třeba plus minus čtvrt hodiny je už jako hezký, což je pro
+110  315.0 121  0.36 | mě dřív bylo hrozný, teď až 4 hodiny už vím, že pro
+111  317.2 119  0.48 | ní plus minus dvě hodiny byl, tak jsme se nějak potkali prostě,
+112  320.7   0       | no.
+113  321.5 174  0.42 | A přijde mi, že s těmi dětmi je to i podobný, že
+114  323.8 145  0.57 | prostě tam není nějaký jako objektivní, univerzální dobře a špatně, nebo tak
+115  329.2 127  0.55 | to má být, nebo tak to musí být, ale že to je
+116  331.9 141  0.54 | jako já mám nějakou potřebu, ten druhý člověk má taky nějakou potřebu
+117  334.7 140  0.64 | a já mám prostě potřebu chodit na čas, ale když ji někdo
+118  338.7 143  0.50 | nemá, tak to neznamená, že on to udělá pomym, ale znamená to,
+119  342.8 143  0.44 | že pokud spolu chceme nějak výjít a interagovat, tak
+120  345.9 140  0.46 | pojďme hledat cestu.
+121  348.0 185  0.05 | No no, to se pak v tom spěchu blbě hledá ta cesta.
+122  351.1   0       | No
+123  351.4 171  0.37 | samozřejmě je potřeba to dělat jindy než tu chvíli.
+124  356.3 167  0.47 | No, jako často taky, a to mi přijde, že hodně často lidi
+125  360.1 160  0.56 | řeší ten problém jenom když nastane a jsou v těch emocích, což
+126  363.3 154  0.50 | je a to je mnohem obecnější než jenom s tímhle. Prostě nastane
+127  366.7 166  0.44 | problém, tak se to řeší a mluví se o tom výhradně tehdy,
+128  369.1 152       | když dojde
+129  371.7 156       | pivě, to nikam nevede.
+130  372.9 172  0.37 | Ale potom jako takovej lifehack je, říct si dobře, už desetkrát jsem
+131  378.2 161  0.48 | tam měl nějakej konflikt, tak počkejme, až bude fakt nějaká krásná situace,
+132  381.9 140  0.53 | až se s tím člověkem budu blízko, až nebude žádnej problém a
+133  384.4 146  0.49 | pojďme to téma otevřít, ne v tu chvíli, co se to děje.
+134  387.6 150  0.55 | A ono to potom přináší úplně jako mraky úplně jiných výsledků.
+135  392.1 327       | Já
+136  392.5 189       | to
+137  392.6 200  0.18 | nějak doufám, že jsme se dostali, já si myslím, že třeba těch
+138  395.4 218  0.18 | pět let je taková hranici, že už to vidím, že to začíná
+139  398.5 206  0.15 | někam vést a že doteď to moc nikam nevedlo a že doufám,
+140  402.9 199  0.11 | že se to nějak zlepší.
+141  405.9 197  0.09 | Nevím, jestli je to nějaký můj subjektivní pohled, že třeba u nějakých
+142  410.6 197  0.12 | joby vůbec ty děti nechávají uplynutí času, že máme tady nějaký, asi
+143  416.4 183  0.18 | taky to je tím, že pro ně ten čas je takový neuchoputelný,
+144  420.2 182  0.14 | když k tomu je furt koukáme Jdeme na ty mobily, hodinky a
+145  422.8 223  0.02 | myslím, co to už nás hlubší. Ale mně k tomu napadá jedna
+146  426.9 227  0.18 | věc, já to vědím jako přes druhé strany právě od rodičů, kdy
+147  430.2 218  0.11 | se snaží být jako z hlavy až moc jako respektující a vlastně
+148  435.2 210  0.12 | respektující sebe. Že tam pak házíme jenom ty děti a jsme vlastně
+149  439.7 226  0.06 | úplně bezdružení, a ty děti jsou vlastně jinak.
+150  443.2  96  0.25 | Takže nadšení a ne respektující.
+151  445.4 221  0.12 | Já tohle
+152  451.9 142  0.46 | třeba asi tolik nezdůraznuju, protože pro mě je extrémně snadný si hlídat
+153  455.6 122  0.57 | svoje hranice a vždycky bylo, což znamená, že jak v jednání s
+154  459.2 120  0.57 | dospělýma, tak v jednání s dětma se mi prakticky nikdy nestává, že
+155  462.2 116  0.57 | by někdo překračoval moje hranice a když se to stane, tak si
+156  465.4 133  0.52 | to umím říct, což znamená, že tuhle tu věc potom o ní
+157  471.7 137  0.45 | moc nemluvím, protože mi to jde, ale je jako důležitý to fakt
+158  477.5 131  0.56 | vnímat, že to není jako, že to dítě ať dělá cokoliv, ale
+159  481.0 157  0.44 | to ani nikdo jiný, jako ta pointa je, že jedno jestli to
+160  483.6 128       | dítě nebyl dospělej.
+161  484.7   0       | Jedno
+162  485.1 241  0.18 | tak, ale spousta dospělej, kteří fakt jako neumí, má s tím problém,
+163  488.0 231  0.07 | protože se to zdravě u sebe nenaučily, nebo neumí
+164  490.2 210       | prostředit.
+165  491.2 216  0.04 | A myslimy, já tebou mám taková generace fakt jako mezi těma dvěma
+166  494.6 206  0.06 | ruskýma kavenama.
+167  496.7 215  0.13 | Jako, že ty dítě jsou úplně někde jinde, a ty rodiče jsou
+168  499.4 183  0.09 | ale úplně jako někde jinde. Takže to je takový, že člověk si
+169  502.0 196  0.03 | je hledal dlouho, a já jsem si hledala ten kostel, jaký kostel
+170  505.4   0       | do sebe.
+171  506.6 199       | Takže tak.
+172  508.2 203  0.01 | Já chci uprostředovat, co je vlastně taková situace.
+173  512.5 205       | Já
+174  512.9 146  0.19 | bych hlavně neřekl, že ty hranice můžou být nějak úplně definovaný, nebo
+175  516.3 136  0.27 | že bych dokázal učit, co je vlastně moje hranice. My jsme tady
+176  519.6 132  0.17 | mluvili právě o tom, jak ty díti jsou třeba u těch technologií
+177  524.2 141  0.17 | a takhle. A pro mě třeba může být extrémně nekomfortní, pro mě
+178  530.0 146  0.09 | samotného, že moje dítě je celý den prostě tam něco hraje, co
+179  534.6 137  0.05 | já uznávám.
+180  537.0 166  0.36 | Takže je to vlastně moje hranice, která už je dávno překročená. Ale
+181  541.2 160  0.34 | jo, dá se to mluvit i z tajistých stran, takže to je
+182  544.9 158  0.13 | pro mě ten plusičík, že vlastně já mám tu svoji hranici a
+183  548.3 159  0.22 | zároveň, ale je to, o čem jsme se tady bavili, že vlastně
+184  551.9 162  0.07 | já bych měl pracovat sám na sobě.
+185  554.3 145  0.05 | Jestli bych tu svoji hranici měl nějak posouvat, jo, anebo jestli... Jo,
+186  560.5 149  0.27 | protože ta hranice vyplývá z toho, že buď to já mám nějaký
+187  564.7 157  0.21 | potřeby, nebo já jsem s tím nějak nekomfortní a s tím bych
+188  567.4 142  0.09 | mohl být extrémně nekomfortní.
+189  570.4 152  0.08 | Ale vlastně to spadá do té první skupiny, jo.
+190  574.0   0       | Já
+191  574.4 191  0.39 | to nevím úplně přesně definovat asi,
+192  577.6 139  0.49 | ale cítím, že tohle rozhodně není moje.
+193  580.5 133  0.63 | Že to není hlídání si svojich hranic, když mi není příjemný, že
+194  583.3 130       | někdo...
+195  585.4 162  0.56 | Ačkoliv zatím mě nenapadá nějaká přesná definice, tak to, co mě napadá,
+196  588.5 137  0.60 | je představit si, že by to bylo na někoho jiného než na
+197  590.8 133  0.57 | dítě. Že by to bylo na partnerku, že by to bylo na
+198  593.5 125  0.61 | sourozence, že by to bylo na kolegu v práci a podobně. A
+199  597.6 155  0.50 | prostě třeba hezký příklad, Titulky vytvořil JohnyX.

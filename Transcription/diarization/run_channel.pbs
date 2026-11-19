@@ -1,0 +1,36 @@
+#!/bin/bash
+# MetaCentrum GPU job array: Sortformer v2.1 diarization + Urza identification for every channel video.
+# Each task takes a disjoint 1/N of the videos; finished videos are skipped, so resubmitting continues.
+#     cd ~/urza_diar && qsub -o logs/ -J 1-20 -v NSHARDS=20 code/diarization/run_channel.pbs
+# A quick test on a few videos:
+#     qsub -o logs/ -v FILES="08hwEuoSR_o 7BoyLIptCWA",OUT_DIR=$HOME/urza_diar/channel_test code/diarization/run_channel.pbs
+#PBS -N urza_diar_channel
+#PBS -l select=1:ncpus=4:ngpus=1:gpu_mem=16gb:mem=32gb:scratch_local=60gb
+#PBS -l walltime=6:00:00
+#PBS -j oe
+
+WORK=${WORK:-$PBS_O_WORKDIR}                                   # $HOME differs per compute node
+VENV_NEMO=${VENV_NEMO:-/storage/praha1/home/rolloj/urza_asr_bench/venv}   # Sortformer (NeMo)
+VENV_PYA=${VENV_PYA:-$WORK/venv_pya}                                       # SpeechBrain ECAPA
+AUDIO_DIR=${AUDIO_DIR:-/storage/brno2/home/vladikxyz/scraping/audio}
+OUT_DIR=${OUT_DIR:-/storage/praha1/home/rolloj/urza_transcribe/diarization}
+URZA=${URZA:-$WORK/hyp/urza_voice.npy}            # the benchmark's reference: solo livestream pBuDpAGGgnA
+# In a job array the scratch folder is named like job_123[4].pbs-m1; NeMo's data loader reads "[4]" as a
+# glob pattern, finds no audio and fails with FileNotFoundError. Work through a link without brackets.
+SCR=/tmp/urza_scr_${PBS_JOBID//[^A-Za-z0-9]/_}
+ln -sfn "$SCRATCHDIR" "$SCR"
+export HF_HOME=${HF_HOME:-/storage/praha1/home/rolloj/urza_asr_bench/hf-cache} TMPDIR=$SCR
+
+cd "$WORK"
+nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
+ARGS=(--audio-dir "$AUDIO_DIR" --wav-dir "$SCR/wav" --out "$OUT_DIR")
+[ -n "${PBS_ARRAY_INDEX:-}" ] && ARGS+=(--shard "$PBS_ARRAY_INDEX/${NSHARDS:?set NSHARDS to the -J size}")
+[ -n "${FILES:-}" ] && ARGS+=(--files $FILES)
+[ -n "${LIMIT:-}" ] && ARGS+=(--limit "$LIMIT")
+
+$VENV_NEMO/bin/python code/diarization/diarize_channel.py sortformer "${ARGS[@]}"
+$VENV_PYA/bin/python code/diarization/diarize_channel.py identify "${ARGS[@]}" --urza "$URZA"
+status=$?
+rm -f "$SCR"
+clean_scratch
+exit $status

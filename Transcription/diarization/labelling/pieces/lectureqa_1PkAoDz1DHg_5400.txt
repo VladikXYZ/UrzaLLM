@@ -1,0 +1,177 @@
+000    0.0 173  0.36 | Takže potom jde o to, když vidím najednou něco, co je v
+001    2.4 176  0.29 | rozporu s tím, co si myslím, že vím, tak jako se ptát
+002    5.1 164  0.34 | proč a být tomu spíš otevřený, než si říct, a to neexistuje,
+003    8.6 163  0.34 | to není, to nejde. Spíš prostě jako se snažit to pochopit, protože
+004   13.2 162  0.39 | jako můžeme si říct, jako jo, to je nějaká výjimka a podobně
+005   15.8 170  0.37 | a přestat to řešit, ale jako i když k nějakému principu, který
+006   18.9 161  0.38 | máme, existuje výjimka, tak ta výjimka stojí minimálně za pozornost. že by
+007   21.6 154  0.39 | ten náš princip třeba byl úplně celý špatně a minimálně jako ten
+008   27.0 161  0.40 | model třeba nebude úplně přesný, nebo je potřeba ho trošku upravit, nebo
+009   30.0 127  0.44 | mu upravit vstupní podmínky, nebo něco v něm.
+010   33.9 115       | Tam je další
+011   34.8 121       | dotaz.
+012   35.3 131  0.38 | Že tento model by byl aplikovatelný na celou spektru zločinů, například návraždu...
+013   42.3 129  0.33 | Který model? Policentrické právo.
+014   74.1 149  0.37 | neumíme, nevíme, jak udělat, aby přestal vraždit bez toho, aby byl někde
+015   78.2 133  0.28 | zavřenej nebo mrtvej.
+016   80.4 162  0.36 | To, co netvrdím, je, že má policentrické právo to řešení ve smyslu
+017   83.8 159  0.42 | jako odnaučíme vrahy vraždit. To si myslím, že neumíme a myslím si,
+018   89.3 158  0.42 | že policentrické právo není klíčem k tomu, že to všechno vyřešíme jako
+019   93.0 141       | dobře.
+020   93.7 171  0.49 | To, co říkám, je, že policentrické právo bude daleko spíše přinášet řešení,
+021  100.0 151  0.41 | které bude lidem vyhovovat než to centrické právo. Právě proto, že to
+022  103.8 150  0.41 | policentrické právo vzniká z nějaký poptávky a nabídky a nevzniká direktivně z
+023  108.7 155  0.46 | hora. Což znamená, že to, co bude přinášet, budou pravděpodobně lepší řešení,
+024  113.4 165  0.46 | ale nebude přinášet ideální řešení, nebude přinášet řešení na všechno,
+025  118.9 147  0.47 | nedokáže pravděpodobně to, že bychom najednou přišli z centrického práva na policentrického,
+026  122.4 148  0.44 | nespůsobí, že umíme zajistit, aby vrah přestal vraždit.
+027  127.4 141  0.42 | Nemyslím si, že tohle dokážeme. ale je možný, že třeba někdy a
+028  134.0 146  0.36 | je možný, že to třeba bude
+029  136.4 114  0.38 | jako i v tomhle světě i kdyby to policentrický práv nebylo že
+030  139.4 133  0.47 | třeba věda a poznání dostoupí tak daleko že budeme třeba už vědět
+031  143.8 112  0.39 | co dělat se sériovými vrahami, aby dál nechtěli vražit nevím to, jo
+032  146.9 130  0.43 | možná třeba na to někdy za 100 let přijdem zatím to nevíme
+033  150.7 154  0.37 | a já, když mluvím o anarchii tak neříkám, jako to je systém,
+034  154.8 123  0.46 | který bude na jednou růžovej ve kterým se nebudou vidět špatný věci,
+035  157.7 119  0.39 | ve kterým nebudou zločiny, ve kterým se nebude vraždit. Určitě tam budou
+036  160.5 136  0.54 | zločiny, určitě se tam bude vraždit, určitě tam bude spousta bezpráví.
+037  166.4 139  0.49 | A myslím si, že neumíme navrhnout zatím žádný systém ani uspořádání společnosti,
+038  172.6 123  0.28 | který by se tomu dokázal vyhnout.
+039  174.8 146  0.39 | To, co já tvrdím, je, že jsem přesvědčený, že čím méně je
+040  178.9 131  0.49 | ta společnost řízená centrálně a ze shora A čím více ty pravidla
+041  182.9 138  0.38 | vznikají ze spoda, tím méně je v ní útlaku, tím více je
+042  187.6 147  0.30 | v ní svobody a tím líp se v ní, podle mě, lidi
+043  192.1 130  0.36 | budou spíš mít, i když to samozřejmě bude mít nějaké výjimky. Ano?
+044  195.6   0       | No
+045  195.9 136       | a
+046  196.0 123  0.33 | čo ta otázka toho zopřímerování a toho formování, že historicky pocit, když
+047  203.3 120  0.29 | jsme byli na té menší výkále a začal se společnost organizovat dostal
+048  206.7 110       | větší a větší
+049  207.3   0       | cokoli.
+050  209.1 109  0.41 | Že, co si o tom myslíš?
+051  212.0 145  0.23 | Je to pravda?
+052  213.6 162  0.48 | Myslím si, že to má podobné, že si to jako můžeme dovolit,
+053  218.5 162  0.51 | takže si můžeme dovolit nějakou neefektivitu. Myslím si, že je to podobné
+054  221.9 146  0.51 | jako třeba, často se dává příklad jako fungujícího v úzovkách socializmu nějaké
+055  227.8 129  0.52 | Švédsko a skandinávské země. A když se podíváme na jeho historii, tak
+056  232.8 133  0.55 | zjistíme, že Švédsko šíleně zbohatlo, když bylo ultrakapitalistickou krajinou a pak si
+057  236.5 135  0.43 | mohlo už dovolit ten socialismus. A já si myslím, že stejně tak
+058  239.5 148  0.35 | my jsme v dost decentralizovaný společnosti vybudovali nějaké bohatství a teď si
+059  246.8 150  0.44 | můžeme dovolit nějakou neefektivitu, můžeme si dovolit nějakou centralizaci a tak to
+060  251.1 106       | děláme.
+061  252.1 141  0.46 | Což mě připomíná k otázce, která tady na začátku padla a někdo
+062  255.2 126  0.47 | se mě ptal a já nevím, kdo to byl.
+063  257.8   0       | Monopoly.
+064  259.5 144  0.40 | Ne, ale k těm se dostaneme taky.
+065  261.0 146       | Proč
+066  261.1 156       | chceme
+067  261.3 148       | víc
+068  262.1   0       | a
+069  262.2 133       | víc
+070  262.5 153  0.26 | regulací? Proč chceme víc a víc regulací? Přesně tak. A já hned,
+071  265.3 162  0.34 | díky za monopoli, já to jsem taky zapomněl a dostanu se k
+072  267.6 141       | těm hned za chvilku.
+073  268.8 167  0.35 | Proč chceme víc a víc regulací? Víc a víc regulací chceme proto,
+074  274.4 140  0.40 | že rozrůstající se stát vytváří lidi, kteří jsou závislí na tom státu.
+075  280.0 130  0.35 | Prostě přijde politik, něco naslibuje lidem.
+076  282.9 109  0.39 | Já vám dám prostě 13., 14., 15. důchody a dám vám tady
+077  287.7 118  0.46 | něco zadarmo a tady vás ochráním proti něčemu. A tohle to všechno
+078  290.7 116       | pro vás udělá.
+079  292.1 140  0.46 | Některý z těch slivů, řekněme, splní a tím způsobí, že vzniknou nějaký
+080  295.9 118  0.54 | závislí lidi na státu, jednak závislí přímo na tom, co se dnes
+081  298.7 127  0.50 | stát dává, a na druhé straně vzniknou další závislí lidi, jako třeba
+082  302.3 122  0.51 | úředníci nebo vůbec nějaký čas, nějaký lidi v tom státu, který vykonávají
+083  307.3 115       | tu agendu.
+084  309.1 151  0.48 | a tyhle všichni lidi, kteří jsou závislejší na tom státu,
+085  313.1 139  0.50 | budou mít tendenci volit, pokud máme všeobecné volební právo, tak budou mít
+086  317.3 147  0.46 | tendenci volit pro další rozširování státu, pro politiky, kteří slibují to tež.
+087  321.8 162  0.46 | Což znamená, že rozširování státu plus všeobecné volební právo, a tohle je
+088  329.0 148  0.49 | důležitý, ta podmínka, když se rozširová stát, jenom třeba kdyby tady byl
+089  332.3 149  0.41 | nějaký monarcha, který by rozširoval stát, tak to samo o sobě nevyvolává
+090  335.3 128  0.49 | potřebu dalšího růstu státu, protože tam není toho hlasování. Prostě Tomáš Rache
+091  339.2 117  0.42 | si to rozhodne, že ho rozšíří a jeho syn si může zase
+092  342.1 134  0.46 | rozhodnout, že ho smrskne. Ale když máme všeobecné volební právo,
+093  347.8 135  0.51 | tak se tohle děje automaticky. Že rozšířování státu vyvolává potřebu po jeho
+094  353.2 132  0.48 | dalším rozšířování. Takže tímhle s tím vzniká vlastně ta nějaká závislostní mentalita
+095  359.1 126  0.47 | a ta závislostní mentalita dál podporuje tu závislostní mentalitu.
+096  365.5 143       | Jako
+097  366.0 166  0.32 | klidně, mluvte, jak potřebujete, já vás nechci…
+098  368.0   0       | Tak
+099  368.1 172       | jsem
+100  368.4 149       | do toho zase jenom,
+101  369.9 122  0.08 | protože ano, toto je nějaká finančná…
+102  374.1 114  0.10 | a něčeho z toho mají, to beru.
+103  377.6 103  0.11 | Ale i teď žák zabil učitelkovi Žáčku, hej, na základní škole, když
+104  385.5 105  0.05 | nečítám nové noviny.
+105  387.1 122  0.05 | A máme právě, to už je jedno, či je politické, Máme právě,
+106  392.9 121 -0.03 | že vražda je v nějakém, hej, je to nezákonné. OK, máme na
+107  397.4 124 -0.01 | to zákon, a teraz sa opozícia, koalícia, všetci, celé spektrum, prosím všeho,
+108  403.8 112  0.04 | novinári se zhodnou, treba to ještě dělej řešit. A opět se volá
+109  408.4 138  0.03 | po reguláci, že
+110  409.7   0       | už
+111  409.8 123  0.15 | máme zadefinované, že vražda je zločin.
+112  412.6 123       | Děkuju moc.
+113  414.4 127  0.08 | Čiže tohle je pre mě fenomén, jako to, že někdo má nějakou
+114  417.7 126  0.06 | dotaci, že rodina žije, že
+115  419.8 146       | je
+116  420.2 156  0.03 | víc a víc, přijde hoci jaký problém, chceme to nakyslat, tým nemůžeme.
+117  424.6 164  0.35 | Tenhle fenomén umím vysvětlit taky, ale máme tady monopoly. A jestli byste
+118  428.9 149  0.49 | si to mohl podržet, já odpovím na monopoly, abych z nich neutekl
+119  431.4 140  0.30 | už po druhý. A pak se vrátíme k tomuhle, kdybyste se zase
+120  435.6 133       | připomněl s tím.
+121  436.4 100       | Já
+122  436.7 123       | jen
+123  436.8 112  0.21 | trošku to expanduji.
+124  438.9 115       | Jo,
+125  439.2 127       | super, expandujte.
+126  439.9 119       | V
+127  440.2 118       | podstatě
+128  440.6 115  0.14 | já chápem, že současné monopoly existují hodně děka tomu, že jsou přísadné
+129  444.7 106       | na šatnice,
+130  445.2 152       | takže
+131  445.7 100       | teda
+132  446.1 103  0.20 | děká tomu, že vytvárají ty regulace a vůbec vstup konkurence na trh.
+133  453.0 109  0.30 | Ale teda vrátím se k tomu rozhovoru, co jsem měl s známým
+134  459.4 113  0.21 | právníkem, že eventuálně by ty korporácie poskytovaly polislužby, to znamená, že poskytovali
+135  467.6 110  0.14 | bezpečnost, nevím čo, a eventuálně lidé tým, že jsou spohodlnějí,
+136  472.9 106  0.11 | leniví, tak prostě budou, hej, půjď, hej, Google místo amerického
+137  476.7   0       | prezidenta, hej,
+138  477.4   0  0.13 | povedzme si to takto.
+139  479.2 159       | Může
+140  479.6 151  0.35 | k tomu dojít, jo, to je jakože důležitý,
+141  483.0 145  0.44 | neříkám, nedojde k tomu, je určitě šance, že k tomu dojde.
+142  486.1 158       | Na druhou stranu,
+143  489.0 175       | jako, jsou
+144  490.8 143  0.42 | dva důvody, proč si myslím, že k tomu nejspíš nedojde, jo.
+145  494.6 186       | První důvod je,
+146  497.0 152  0.23 | Jako, bude řídit Google, a když řekneme dobře, lidi jsou pohodlní, a
+147  500.1 135  0.31 | tak je bude chtít řídit Google, OK.
+148  502.8 151  0.33 | Ale on je určitě, krom Google, bude chtít řídit taky OpenAI.
+149  508.3 149  0.33 | A krom OpenAI je bude chtít řídit taky Microsoft.
+150  511.3 143  0.32 | A krom Microsoftu je bude chtít řídit taky Disney prostě.
+151  515.4 151  0.33 | A teď jako, máme tady, i kdybychom předpokládali, že ty lidi jsou
+152  523.2 130  0.39 | prostě jenom pohodlní a jim jedno to, kdo je řídí, tak pořád
+153  526.5 147       | je tady
+154  528.0 158  0.37 | víc subjektů, který ty lidi chtějí řídit, což znamená, že mezi nima
+155  531.0 142  0.45 | probíhá nějaká soutěž právě o to, kdo je bude řídit,
+156  534.1 146  0.37 | což destabilizuje toho hegemena. To je
+157  538.2  66       | první argument,
+158  539.8 140  0.48 | a ještě pak je druhý, ale klidně řekněte k tomu.
+159  543.6 113  0.19 | Jeden protiargument, který bych se hned zvolil, já dál, že
+160  548.4 112       | geopostate, no ne,
+161  549.4 115       | že
+162  549.5 117       | lokace,
+163  550.0 115  0.22 | kdy někomu patří ta zem, a
+164  553.0 106  0.06 | žijem teda prostě na na bloche, kterou mi prenajíma hlavu, tak v
+165  558.8   0       | podstatě
+166  559.2   0       | pro
+167  559.4 148       | mě
+168  559.7 118  0.20 | nákladnější je jíst do vedlejšího města.
+169  562.6 141  0.45 | Ano samozřejmě. A pokud by ta korporace vlastnila najednou úplně celou tu
+170  567.5 132  0.34 | půdu nebo něco takového, tak by na tom mohla i normálně legitimně
+171  574.5 126  0.36 | určovat pravidla, protože by to bylo její území, který by nakoupila. Ale
+172  580.1 133  0.40 | zase, když by ta korporace začala skupovat pozemky, tak se najde někdo,
+173  585.0 133  0.44 | kdo je nebude chtít prodat a taky se najdou další korporace, které
+174  588.1 130  0.41 | budou mít zájem o nějaké jiné pozemky. Což znamená, že zase jako
+175  591.7 188  0.34 | takhle. Pokud už bychom vycházeli z předpokladu, že prostě celou tu zemi
+176  597.1 160  0.31 | vlastní Google a že prostě všechny pozemky na Slovensku...

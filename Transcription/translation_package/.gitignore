@@ -1,0 +1,4 @@
+# the transcript folders (~2 GB) are a copy from MetaCentrum, not part of the repository
+*
+!.gitignore
+!README.md
